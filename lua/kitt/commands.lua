@@ -1,5 +1,4 @@
 local tpl_grammar = require("kitt.templates.grammar")
-local tpl_grammar_suggestion = require("kitt.templates.grammar_suggestions")
 local tpl_interact = require("kitt.templates.interact_with_content")
 local tpl_minutes = require("kitt.templates.minutes")
 local tpl_recognize_language = require("kitt.templates.recognize_language")
@@ -16,16 +15,16 @@ M.ai_improve_grammar = function()
 end
 
 M.ai_suggest_grammar = function()
-  local content = M.template_sender(tpl_grammar_suggestion, false, M.buffer_helper.current_line())
-  local json_value = vim.fn.json_decode(content)
-  local groups = {}
-  local line_nr = vim.fn.line(".")
-  for _, obj in ipairs(json_value) do
-    local start_pos = obj["start"]
-    local length = obj["end"] - start_pos
-    table.insert(groups, { line_nr, start_pos + 1, length })
-  end
-  vim.fn.matchaddpos("SpellBad", groups)
+  local original = M.buffer_helper.current_line()
+  local suggestion = M.template_sender(tpl_grammar, false, original)
+
+  local split_original = string.gsub(original, " ", "\n")
+  local split_suggestion = string.gsub(suggestion, " ", "\n")
+
+  local indices = vim.diff(split_original, split_suggestion, {result_type = "indices"})
+
+  print(split_suggestion)
+  print(vim.inspect(indices))
 end
 
 M.ai_set_spelllang = function()

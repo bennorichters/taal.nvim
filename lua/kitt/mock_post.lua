@@ -10,12 +10,7 @@ return function(_, opts)
     opts.stream(nil, last)
     opts.stream(nil, done)
   else
-    local content = '"[' ..
-        '{\\"start\\":12,\\"end\\":23,\\"suggestion\\":\\"brighter\\"},' ..
-        '{\\"start\\":24,\\"end\\":28,\\"suggestion\\":\\"than\\"},' ..
-        '{\\"start\\":36,\\"end\\":46,\\"suggestion\\":\\"yesterday\\"}' ..
-        ']"'
-
+    local content = '"The moon is brighter than it was yesterday."'
     return {
       status = 200,
       body = '{ "choices": [ { "message": { "content": ' .. content .. ' } } ] }',
