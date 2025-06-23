@@ -21,7 +21,7 @@ M.ai_suggest_grammar = function()
   local split_original = string.gsub(original, " ", "\n")
   local split_suggestion = string.gsub(suggestion, " ", "\n")
 
-  local indices = vim.diff(split_original, split_suggestion, {result_type = "indices"})
+  local indices = vim.diff(split_original, split_suggestion, { result_type = "indices" })
 
   print(split_suggestion)
   print(vim.inspect(indices))
