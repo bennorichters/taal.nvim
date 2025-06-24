@@ -22,14 +22,24 @@ local function splitIntoWords(text)
   return table.concat(words, "\n"), starts
 end
 
-local function aap(original, suggestion)
+local function change_locations(original, suggestion)
   local org_words, org_starts = splitIntoWords(original)
-  local sug_words, sug_starts = splitIntoWords(suggestion)
+  local sug_words, _ = splitIntoWords(suggestion)
 
   local indices = vim.diff(org_words, sug_words, { result_type = "indices" })
 
-  return indices
+  local result = {}
+  if type(indices) == "table" then
+    for _, start_index in ipairs(indices) do
+      local change_start = org_starts[start_index[1]]
+      local index_end = start_index[1] + start_index[2]
+      local change_end = index_end <= #org_starts and (org_starts[index_end] - 1) or #org_words
+      table.insert(result, { change_start, change_end })
+    end
+  end
+
+  return result
 end
 
-local i = aap("aap noot mies wim zus", "aap noot zus wim jet")
+local i = change_locations("aap noot mies wim zus", "aap noot zus wim jet")
 print(vim.inspect(i))
