@@ -22,9 +22,9 @@ local function splitIntoWords(text)
   return table.concat(words, "\n"), starts
 end
 
-local function change_boundaries(lefts, left_index, length)
-  local change_left = lefts[left_index[1]]
-  local last_left = left_index[1] + left_index[2]
+local function change_boundaries(lefts, left_first, left_last, length)
+  local change_left = lefts[left_first]
+  local last_left = left_first + left_last
   local change_right = last_left <= #lefts and (lefts[last_left] - 1) or length
 
   return change_left, change_right
@@ -41,7 +41,7 @@ M.change_location = function(text1, text2)
   local result = {}
   if type(indices) == "table" then
     for _, left_index in ipairs(indices) do
-      local left1, right1 = change_boundaries(lefts1, left_index, #words1)
+      local left1, right1 = change_boundaries(lefts1, left_index[1], left_index[2], #words1)
 
       table.insert(result, {
         left = left1,
