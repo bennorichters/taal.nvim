@@ -41,11 +41,11 @@ M.change_location = function(text1, text2)
   local result = {}
   if type(indices) == "table" then
     for _, left_index in ipairs(indices) do
-      local change_left, change_right = change_boundaries(lefts1, left_index, #words1)
+      local left1, right1 = change_boundaries(lefts1, left_index, #words1)
 
       table.insert(result, {
-        left = change_left,
-        right = change_right,
+        left = left1,
+        right = right1,
       })
     end
   end
