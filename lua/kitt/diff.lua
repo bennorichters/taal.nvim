@@ -1,4 +1,4 @@
-local function splitIntoWords(text)
+local function split_into_words(text)
   local prev_whitespace = true
   local index = 0
 
@@ -33,8 +33,8 @@ end
 local M = {}
 
 M.change_location = function(text1, text2)
-  local words1, lefts1 = splitIntoWords(text1)
-  local words2, lefts2 = splitIntoWords(text2)
+  local words1, lefts1 = split_into_words(text1)
+  local words2, lefts2 = split_into_words(text2)
 
   local indices = vim.diff(words1, words2, { result_type = "indices" })
 
