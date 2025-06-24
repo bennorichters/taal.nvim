@@ -24,19 +24,19 @@ end
 
 local M = {}
 
-M.change_location = function(original, suggestion)
-  local org_words, org_starts = splitIntoWords(original)
-  local sug_words, _ = splitIntoWords(suggestion)
+M.change_location = function(text1, text2)
+  local words1, lefts1 = splitIntoWords(text1)
+  local words2, _ = splitIntoWords(text2)
 
-  local indices = vim.diff(org_words, sug_words, { result_type = "indices" })
+  local indices = vim.diff(words1, words2, { result_type = "indices" })
 
   local result = {}
   if type(indices) == "table" then
     for _, start_index in ipairs(indices) do
-      local change_start = org_starts[start_index[1]]
+      local change_start = lefts1[start_index[1]]
       local index_end = start_index[1] + start_index[2]
-      local change_end = index_end <= #org_starts and (org_starts[index_end] - 1) or #org_words
-      table.insert(result, { change_start, change_end })
+      local change_end = index_end <= #lefts1 and (lefts1[index_end] - 1) or #words1
+      table.insert(result, { left = change_start, right = change_end })
     end
   end
 
