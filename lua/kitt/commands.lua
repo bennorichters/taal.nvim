@@ -5,11 +5,37 @@ local tpl_recognize_language = require("kitt.templates.recognize_language")
 
 local differ = require("kitt.diff")
 
-local M = {}
+local M = { suggestions = {} }
+
+local function delete_suggestions()
+  for _, c in ipairs(M.suggestions) do
+    vim.fn.matchdelete(c[4])
+  end
+
+  for i = #M.suggestions, 1, -1 do
+    table.remove(M.suggestions, i)
+  end
+end
 
 M.setup = function(buffer_helper, template_sender)
   M.buffer_helper = buffer_helper
   M.template_sender = template_sender
+
+  vim.api.nvim_create_autocmd("InsertEnter", {
+    callback = function() delete_suggestions() end
+  })
+
+  vim.api.nvim_create_autocmd("CursorHold", {
+    callback = function()
+      local line_nr = vim.fn.line(".")
+      local col_nr = vim.fn.col(".")
+      for _, suggestion in ipairs(M.suggestions) do
+        if line_nr == suggestion[1] and col_nr >= suggestion[2] and col_nr <= suggestion[3] then
+          vim.notify(vim.inspect(suggestion))
+        end
+      end
+    end,
+  })
 end
 
 M.ai_improve_grammar = function()
@@ -23,8 +49,10 @@ M.ai_suggest_grammar = function()
   local cl = differ.change_location(original, suggestion)
 
   local line_number = vim.fn.line(".")
+  delete_suggestions()
   for _, c in ipairs(cl) do
-    vim.fn.matchaddpos("SpellBad", { { line_number, c[1], c[2] - c[1] } })
+    local match = vim.fn.matchaddpos("SpellBad", { { line_number, c[1], c[2] - c[1] } })
+    table.insert(M.suggestions, { line_number, c[1], c[2], match })
   end
 end
 
