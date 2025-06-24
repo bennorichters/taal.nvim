@@ -34,7 +34,7 @@ local M = {}
 
 M.change_location = function(text1, text2)
   local words1, lefts1 = splitIntoWords(text1)
-  local words2, _ = splitIntoWords(text2)
+  local words2, lefts2 = splitIntoWords(text2)
 
   local indices = vim.diff(words1, words2, { result_type = "indices" })
 
@@ -42,10 +42,12 @@ M.change_location = function(text1, text2)
   if type(indices) == "table" then
     for _, left_index in ipairs(indices) do
       local left1, right1 = change_boundaries(lefts1, left_index[1], left_index[2], #words1)
+      local left2, right2 = change_boundaries(lefts2, left_index[3], left_index[4], #words2)
 
       table.insert(result, {
         left = left1,
         right = right1,
+        improvement = string.sub(text2, left2, right2),
       })
     end
   end

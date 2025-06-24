@@ -31,7 +31,7 @@ M.setup = function(buffer_helper, template_sender)
         if line_nr == suggestion["line"] and
             col_nr >= suggestion["left"] and
             col_nr < suggestion["right"] then
-          vim.notify(vim.inspect(suggestion))
+          vim.notify(suggestion["improvement"])
         end
       end
     end,
@@ -56,6 +56,7 @@ M.ai_suggest_grammar = function()
       line = line_number,
       left = c["left"],
       right = c["right"],
+      improvement = c["improvement"],
       matchid = id,
     })
   end
