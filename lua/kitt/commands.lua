@@ -30,7 +30,7 @@ M.setup = function(buffer_helper, template_sender)
       for _, suggestion in ipairs(M.suggestions) do
         if line_nr == suggestion["line"] and
             col_nr >= suggestion["left"] and
-            col_nr <= suggestion["right"] then
+            col_nr < suggestion["right"] then
           vim.notify(vim.inspect(suggestion))
         end
       end
