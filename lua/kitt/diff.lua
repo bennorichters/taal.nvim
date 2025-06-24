@@ -1,44 +1,35 @@
-local function wordsRange(text, index_word_start, index_word_end)
+local function splitIntoWords(text)
   local prev_whitespace = true
-  local word_count = 1
-  local result = {}
   local index = 0
-  local to_find = index_word_start
-  for char in string.gmatch(text, ".") do
+
+  local words = {}
+  local starts = {}
+  for char in string.gmatch(text .. " ", ".") do
     index = index + 1
-    if string.match(char, "%s") and not prev_whitespace then
-      prev_whitespace = true
-      word_count = word_count + 1
-    elseif prev_whitespace and word_count == to_find then
-      if to_find == index_word_end + 1 then
-        result["end"] = index - 1
-        return result
+
+    if string.match(char, "%s") then
+      if not prev_whitespace then
+        table.insert(words, string.sub(text, starts[#starts], index - 1))
       end
 
-      result["start"] = index
-      to_find = index_word_end + 1
-    else
+      prev_whitespace = true
+    elseif prev_whitespace then
       prev_whitespace = false
+      table.insert(starts, index)
     end
   end
 
-  if result["start"] then
-    result["end"] = #text + 1
-    return result
-  end
-
-  return nil
+  return table.concat(words, "\n"), starts
 end
 
--- local function aap(original, suggestion)
---   local split_original = string.gsub(original, "%s", "\n") .. "\n"
---   local split_suggestion = string.gsub(suggestion, "%s", "\n") .. "\n"
---
---   local indices = vim.diff(split_original, split_suggestion, { result_type = "indices" })
--- end
---
--- aap()
--- wordsRange()
+local function aap(original, suggestion)
+  local org_words, org_starts = splitIntoWords(original)
+  local sug_words, sug_starts = splitIntoWords(suggestion)
 
-local r = wordsRange("abc def ghi jkl", 2, 4)
-print(vim.inspect(r))
+  local indices = vim.diff(org_words, sug_words, { result_type = "indices" })
+
+  return indices
+end
+
+local i = aap("aap noot mies wim zus", "aap noot zus wim jet")
+print(vim.inspect(i))
