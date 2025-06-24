@@ -30,7 +30,7 @@ M.setup = function(buffer_helper, template_sender)
       for _, suggestion in ipairs(M.suggestions) do
         if line_nr == suggestion["line"] and
             col_nr >= suggestion["left"] and
-            col_nr < suggestion["right"] then
+            col_nr <= suggestion["right"] then
           vim.notify(suggestion["improvement"])
         end
       end
@@ -51,7 +51,8 @@ M.ai_suggest_grammar = function()
   local line_number = vim.fn.line(".")
   delete_suggestions()
   for _, c in ipairs(cl) do
-    local id = vim.fn.matchaddpos("SpellBad", { { line_number, c["left"], c["right"] - c["left"] } })
+    local position = { line_number, c["left"], c["right"] - c["left"] + 1 }
+    local id = vim.fn.matchaddpos("SpellBad", { position })
     table.insert(M.suggestions, {
       line = line_number,
       left = c["left"],
