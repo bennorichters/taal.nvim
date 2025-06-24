@@ -3,6 +3,8 @@ local tpl_interact = require("kitt.templates.interact_with_content")
 local tpl_minutes = require("kitt.templates.minutes")
 local tpl_recognize_language = require("kitt.templates.recognize_language")
 
+local differ = require("kitt.diff")
+
 local M = {}
 
 M.setup = function(buffer_helper, template_sender)
@@ -18,13 +20,12 @@ M.ai_suggest_grammar = function()
   local original = M.buffer_helper.current_line()
   local suggestion = M.template_sender(tpl_grammar, false, original)
 
-  local split_original = string.gsub(original, " ", "\n")
-  local split_suggestion = string.gsub(suggestion, " ", "\n")
+  local cl = differ.change_location(original, suggestion)
 
-  local indices = vim.diff(split_original, split_suggestion, { result_type = "indices" })
-
-  print(split_suggestion)
-  print(vim.inspect(indices))
+  local line_number = vim.fn.line(".")
+  for _, c in ipairs(cl) do
+    vim.fn.matchaddpos("SpellBad", { { line_number, c[1], c[2] - c[1] } })
+  end
 end
 
 M.ai_set_spelllang = function()

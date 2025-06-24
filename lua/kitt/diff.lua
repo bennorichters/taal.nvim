@@ -22,7 +22,9 @@ local function splitIntoWords(text)
   return table.concat(words, "\n"), starts
 end
 
-local function change_locations(original, suggestion)
+local M = {}
+
+M.change_location = function(original, suggestion)
   local org_words, org_starts = splitIntoWords(original)
   local sug_words, _ = splitIntoWords(suggestion)
 
@@ -41,5 +43,7 @@ local function change_locations(original, suggestion)
   return result
 end
 
-local i = change_locations("aap noot mies wim zus", "aap noot zus wim jet")
-print(vim.inspect(i))
+return M
+
+-- local i = change_locations("aap noot mies wim zus", "aap noot zus wim jet")
+-- print(vim.inspect(i))
