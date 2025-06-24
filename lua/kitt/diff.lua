@@ -44,6 +44,3 @@ M.change_location = function(original, suggestion)
 end
 
 return M
-
--- local i = change_locations("aap noot mies wim zus", "aap noot zus wim jet")
--- print(vim.inspect(i))

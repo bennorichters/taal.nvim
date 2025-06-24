@@ -8,8 +8,8 @@ local differ = require("kitt.diff")
 local M = { suggestions = {} }
 
 local function delete_suggestions()
-  for _, c in ipairs(M.suggestions) do
-    vim.fn.matchdelete(c[4])
+  for _, suggestion in ipairs(M.suggestions) do
+    vim.fn.matchdelete(suggestion["matchid"])
   end
 
   for i = #M.suggestions, 1, -1 do
@@ -21,16 +21,16 @@ M.setup = function(buffer_helper, template_sender)
   M.buffer_helper = buffer_helper
   M.template_sender = template_sender
 
-  vim.api.nvim_create_autocmd("InsertEnter", {
-    callback = function() delete_suggestions() end
-  })
+  vim.api.nvim_create_autocmd("InsertEnter", { callback = delete_suggestions })
 
   vim.api.nvim_create_autocmd("CursorHold", {
     callback = function()
       local line_nr = vim.fn.line(".")
       local col_nr = vim.fn.col(".")
       for _, suggestion in ipairs(M.suggestions) do
-        if line_nr == suggestion[1] and col_nr >= suggestion[2] and col_nr <= suggestion[3] then
+        if line_nr == suggestion["line"] and
+            col_nr >= suggestion["left"] and
+            col_nr <= suggestion["right"] then
           vim.notify(vim.inspect(suggestion))
         end
       end
@@ -51,8 +51,13 @@ M.ai_suggest_grammar = function()
   local line_number = vim.fn.line(".")
   delete_suggestions()
   for _, c in ipairs(cl) do
-    local match = vim.fn.matchaddpos("SpellBad", { { line_number, c[1], c[2] - c[1] } })
-    table.insert(M.suggestions, { line_number, c[1], c[2], match })
+    local id = vim.fn.matchaddpos("SpellBad", { { line_number, c[1], c[2] - c[1] } })
+    table.insert(M.suggestions, {
+      line = line_number,
+      left = c[1],
+      right = c[2],
+      matchid = id,
+    })
   end
 end
 
