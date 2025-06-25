@@ -9,7 +9,7 @@ local M = { suggestions = {} }
 
 local function delete_suggestions()
   for _, suggestion in ipairs(M.suggestions) do
-    vim.fn.matchdelete(suggestion["matchid"])
+    vim.fn.matchdelete(suggestion.matchid)
   end
 
   for i = #M.suggestions, 1, -1 do
@@ -28,10 +28,10 @@ M.setup = function(buffer_helper, template_sender)
       local line_nr = vim.fn.line(".")
       local col_nr = vim.fn.col(".")
       for _, suggestion in ipairs(M.suggestions) do
-        if line_nr == suggestion["line"] and
-            col_nr >= suggestion["left"] and
-            col_nr <= suggestion["right"] then
-          vim.notify(suggestion["improvement"])
+        if line_nr == suggestion.line and
+            col_nr >= suggestion.left and
+            col_nr <= suggestion.right then
+          vim.notify(suggestion.improvement)
           return
         end
       end
@@ -72,29 +72,29 @@ M.ai_apply_suggestion = function()
   local applied_index = 0
   for i, sug in ipairs(M.suggestions) do
     if applied_index == 0 and
-        line_nr == sug["line"] and
-        col_nr >= sug["left"] and
-        col_nr < sug["right"] then
+        line_nr == sug.line and
+        col_nr >= sug.left and
+        col_nr < sug.right then
       applied_index = i
       local current_line = M.buffer_helper.current_line()
-      local content = string.sub(current_line, 1, sug["left"] - 1) ..
-          sug["improvement"] ..
-          string.sub(current_line, sug["right"])
+      local content = string.sub(current_line, 1, sug.left - 1) ..
+          sug.improvement ..
+          string.sub(current_line, sug.right)
 
-      vim.api.nvim_buf_set_lines(0, sug["line"] - 1, sug["line"], false, { content })
-      vim.fn.matchdelete(sug["matchid"])
+      vim.api.nvim_buf_set_lines(0, sug.line - 1, sug.line, false, { content })
+      vim.fn.matchdelete(sug.matchid)
 
-      length_diff = sug["right"] - sug["left"] - #sug["improvement"]
+      length_diff = sug.right - sug.left - #sug.improvement
       if length_diff == 0 then
         return
       end
     elseif applied_index > 0 then
-      vim.fn.matchdelete(sug["matchid"])
+      vim.fn.matchdelete(sug.matchid)
 
-      sug["left"] = sug["left"] - length_diff
-      sug["right"] = sug["right"] - length_diff
-      local position = { line_nr, sug["left"], sug["right"] - sug["left"] }
-      sug["matchid"] = vim.fn.matchaddpos("SpellBad", { position })
+      sug.left = sug.left - length_diff
+      sug.right = sug.right - length_diff
+      local position = { line_nr, sug.left, sug.right - sug.left }
+      sug.matchid = vim.fn.matchaddpos("SpellBad", { position })
     end
   end
 
