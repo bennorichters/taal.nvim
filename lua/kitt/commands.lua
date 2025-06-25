@@ -52,7 +52,7 @@ M.ai_suggest_grammar = function()
   local line_number = vim.fn.line(".")
   delete_suggestions()
   for _, c in ipairs(cl) do
-    local position = { line_number, c["left"], c["right"] - c["left"] + 1 }
+    local position = { line_number, c["left"], c["right"] - c["left"] }
     local id = vim.fn.matchaddpos("SpellBad", { position })
     table.insert(M.suggestions, {
       line = line_number,
@@ -74,8 +74,7 @@ M.ai_apply_suggestion = function()
     if fixed_index == 0 and
         line_nr == sug["line"] and
         col_nr >= sug["left"] and
-        col_nr <= sug["right"] then
-
+        col_nr < sug["right"] then
       fixed_index = i
       local current_line = M.buffer_helper.current_line()
       local content = string.sub(current_line, 1, sug["left"] - 1) ..
@@ -90,7 +89,7 @@ M.ai_apply_suggestion = function()
 
       sug["left"] = sug["left"] - length_diff
       sug["right"] = sug["right"] - length_diff
-      local position = { line_nr, sug["left"], sug["right"] - sug["left"] + 1 }
+      local position = { line_nr, sug["left"], sug["right"] - sug["left"] }
       sug["matchid"] = vim.fn.matchaddpos("SpellBad", { position })
     end
   end
