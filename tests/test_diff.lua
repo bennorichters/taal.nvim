@@ -20,7 +20,7 @@ T["diff"]["equal"] = function()
   eq(differ.change_location("  abc  def  ", "  abc  def  "), {})
 end
 
-T["diff"]["aap"] = function()
+T["diff"]["changes"] = function()
   eq(differ.change_location("abc", "xbc"), { { left = 1, right = 4, improvement = "xbc" } })
   eq(differ.change_location("abc def", "xbc def"), { { left = 1, right = 4, improvement = "xbc" } })
   eq(differ.change_location("abc def", "abc xef"), { { left = 5, right = 8, improvement = "xef" } })
