@@ -82,8 +82,12 @@ M.ai_apply_suggestion = function()
           string.sub(current_line, sug["right"] + 1)
 
       vim.api.nvim_buf_set_lines(0, sug["line"] - 1, sug["line"], false, { content })
-      length_diff = sug["right"] - sug["left"] - #sug["improvement"] + 1
       vim.fn.matchdelete(sug["matchid"])
+
+      length_diff = sug["right"] - sug["left"] - #sug["improvement"] + 1
+      if length_diff == 0 then
+        return
+      end
     elseif applied_index > 0 then
       vim.fn.matchdelete(sug["matchid"])
 
