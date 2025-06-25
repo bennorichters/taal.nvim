@@ -52,13 +52,13 @@ M.ai_suggest_grammar = function()
   local line_number = vim.fn.line(".")
   delete_suggestions()
   for _, c in ipairs(cl) do
-    local position = { line_number, c["left"], c["right"] - c["left"] }
+    local position = { line_number, c.left, c.right - c.left }
     local id = vim.fn.matchaddpos("SpellBad", { position })
     table.insert(M.suggestions, {
       line = line_number,
-      left = c["left"],
-      right = c["right"],
-      improvement = c["improvement"],
+      left = c.left,
+      right = c.right,
+      improvement = c.improvement,
       matchid = id,
     })
   end
