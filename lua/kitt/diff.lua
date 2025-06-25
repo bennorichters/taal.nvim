@@ -25,7 +25,7 @@ end
 local function change_boundaries(lefts, left_first, left_last, length)
   local change_left = lefts[left_first]
   local last_left = left_first + left_last
-  local change_right = (last_left <= #lefts and (lefts[last_left] - 1) or length) + 1
+  local change_right = last_left <= #lefts and (lefts[last_left] - 1) or length
 
   return change_left, change_right
 end
