@@ -69,13 +69,13 @@ M.ai_apply_suggestion = function()
   local col_nr = vim.fn.col(".")
 
   local length_diff = 0
-  local fixed_index = 0
+  local applied_index = 0
   for i, sug in ipairs(M.suggestions) do
-    if fixed_index == 0 and
+    if applied_index == 0 and
         line_nr == sug["line"] and
         col_nr >= sug["left"] and
         col_nr < sug["right"] then
-      fixed_index = i
+      applied_index = i
       local current_line = M.buffer_helper.current_line()
       local content = string.sub(current_line, 1, sug["left"] - 1) ..
           sug["improvement"] ..
@@ -84,7 +84,7 @@ M.ai_apply_suggestion = function()
       vim.api.nvim_buf_set_lines(0, sug["line"] - 1, sug["line"], false, { content })
       length_diff = sug["right"] - sug["left"] - #sug["improvement"] + 1
       vim.fn.matchdelete(sug["matchid"])
-    elseif fixed_index > 0 then
+    elseif applied_index > 0 then
       vim.fn.matchdelete(sug["matchid"])
 
       sug["left"] = sug["left"] - length_diff
@@ -94,8 +94,8 @@ M.ai_apply_suggestion = function()
     end
   end
 
-  if fixed_index > 0 then
-    table.remove(M.suggestions, fixed_index)
+  if applied_index > 0 then
+    table.remove(M.suggestions, applied_index)
   end
 end
 
