@@ -25,7 +25,7 @@ end
 local function change_boundaries(lefts, left_first, left_last, length)
   local change_left = lefts[left_first]
   local last_left = left_first + left_last
-  local change_right = last_left <= #lefts and (lefts[last_left] - 1) or length
+  local change_right = last_left <= #lefts and (lefts[last_left] - 1) or (length + 1)
 
   return change_left, change_right
 end
@@ -47,7 +47,7 @@ M.change_location = function(text1, text2)
       table.insert(result, {
         left = left1,
         right = right1,
-        improvement = string.sub(text2, left2, right2),
+        improvement = string.sub(text2, left2, right2 - 1),
       })
     end
   end
