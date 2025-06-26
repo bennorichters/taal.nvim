@@ -32,13 +32,13 @@ M.setup = function(user_cfg)
   local template_sender = template_sender_factory(send_request, config.get().timeout)
 
   commands.setup(buffer_helper, template_sender)
-end
 
-M.ai_improve_grammar = commands.ai_improve_grammar
-M.ai_suggest_grammar = commands.ai_suggest_grammar
-M.ai_apply_suggestion = commands.ai_apply_suggestion
-M.ai_set_spelllang = commands.ai_set_spelllang
-M.ai_write_minutes = commands.ai_write_minutes
-M.ai_interactive = commands.ai_interactive
+  M.ai_improve_grammar = commands.ai_improve_grammar
+  M.ai_suggest_grammar = commands.ai_suggest_grammar
+  M.ai_apply_suggestion = commands.ai_apply_suggestion
+  M.ai_set_spelllang = commands.ai_set_spelllang
+  M.ai_write_minutes = commands.ai_write_minutes
+  M.ai_interactive = commands.ai_interactive
+end
 
 return M
