@@ -1,6 +1,6 @@
-local text_prompt = require("kitt.text_prompt")
-local stream_handler = require("kitt.stream")
 local response_writer = require("kitt.response_writer")
+local stream_handler = require("kitt.stream")
+local text_prompt = require("kitt.text_prompt")
 
 local function encode_text(text)
   local encoded_text = vim.fn.json_encode(text)
@@ -10,7 +10,7 @@ end
 return function(send_request, timeout)
   local send_plain_request = function(body_content)
     local response = send_request(body_content, { timeout = timeout })
-    if (response.status == 200) then
+    if response.status == 200 then
       local response_body = vim.fn.json_decode(response.body)
       local content = response_body.choices[1].message.content
       return content
@@ -23,7 +23,9 @@ return function(send_request, timeout)
     local ui_select = text_prompt.process_buf_text(text_prompt.prompt)
     local rw = response_writer:new()
     local buf = rw:ensure_buf_win()
-    local write = function(content) rw:write(content, buf) end
+    local write = function(content)
+      rw:write(content, buf)
+    end
     local process_stream = stream_handler.process_wrap(stream_handler.parse, ui_select, write)
     local stream = { stream = vim.schedule_wrap(process_stream) }
 
@@ -38,9 +40,7 @@ return function(send_request, timeout)
       table.insert(subts, encode_text(text))
     end
 
-    if stream then
-      template.stream = true
-    end
+    if stream then template.stream = true end
 
     local body_content = string.format(vim.fn.json_encode(template), unpack(subts))
 
