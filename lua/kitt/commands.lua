@@ -28,9 +28,7 @@ M.setup = function(buffer_helper, template_sender)
       local line_nr = vim.fn.line(".")
       local col_nr = vim.fn.col(".")
       for _, suggestion in ipairs(M.suggestions) do
-        if line_nr == suggestion.line and
-            col_nr >= suggestion.left and
-            col_nr <= suggestion.right then
+        if line_nr == suggestion.line and col_nr >= suggestion.left and col_nr <= suggestion.right then
           vim.notify(suggestion.improvement)
           return
         end
@@ -71,23 +69,18 @@ M.ai_apply_suggestion = function()
   local length_diff = 0
   local applied_index = 0
   for i, sug in ipairs(M.suggestions) do
-    if applied_index == 0 and
-        line_nr == sug.line and
-        col_nr >= sug.left and
-        col_nr < sug.right then
+    if applied_index == 0 and line_nr == sug.line and col_nr >= sug.left and col_nr < sug.right then
       applied_index = i
       local current_line = M.buffer_helper.current_line()
-      local content = string.sub(current_line, 1, sug.left - 1) ..
-          sug.improvement ..
-          string.sub(current_line, sug.right)
+      local content = string.sub(current_line, 1, sug.left - 1)
+        .. sug.improvement
+        .. string.sub(current_line, sug.right)
 
       vim.api.nvim_buf_set_lines(0, sug.line - 1, sug.line, false, { content })
       vim.fn.matchdelete(sug.matchid)
 
       length_diff = sug.right - sug.left - #sug.improvement
-      if length_diff == 0 then
-        return
-      end
+      if length_diff == 0 then return end
     elseif applied_index > 0 then
       vim.fn.matchdelete(sug.matchid)
 
@@ -98,16 +91,12 @@ M.ai_apply_suggestion = function()
     end
   end
 
-  if applied_index > 0 then
-    table.remove(M.suggestions, applied_index)
-  end
+  if applied_index > 0 then table.remove(M.suggestions, applied_index) end
 end
 
 M.ai_set_spelllang = function()
   local content = M.template_sender(tpl_recognize_language, false, M.buffer_helper.current_line())
-  if (content) then
-    vim.cmd("set spelllang=" .. content)
-  end
+  if content then vim.cmd("set spelllang=" .. content) end
 end
 
 M.ai_write_minutes = function()
@@ -116,9 +105,7 @@ end
 
 M.ai_interactive = function()
   vim.ui.input({ prompt = "Give instructions: " }, function(command)
-    if command then
-      M.template_sender(tpl_interact, true, command, M.buffer_helper.visual_selection())
-    end
+    if command then M.template_sender(tpl_interact, true, command, M.buffer_helper.visual_selection()) end
   end)
 end
 

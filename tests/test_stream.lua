@@ -22,12 +22,12 @@ end
 
 T["stream"]["process_wrap"] = new_set()
 T["stream"]["process_wrap"]["should_not_write_without_content"] = function()
-  local parse_no_error_no_content = function(_) return false, nil end
+  local parse_no_error_no_content = function(_)
+    return false, nil
+  end
   local ui_select = function() end
   local write = function(content)
-    if not content then
-      error("no content")
-    end
+    if not content then error("no content") end
   end
 
   local f = w(parse_no_error_no_content, ui_select, write)

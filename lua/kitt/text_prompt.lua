@@ -2,7 +2,7 @@ local M = {}
 
 M.prompt = function(target_buffer, target_line, content)
   vim.ui.select({ "replace", "ignore" }, {
-    prompt = "Choose what to do with the generated text"
+    prompt = "Choose what to do with the generated text",
   }, function(choice)
     if choice == "replace" then
       vim.api.nvim_buf_set_lines(target_buffer, target_line, target_line + 1, false, content)
@@ -10,7 +10,6 @@ M.prompt = function(target_buffer, target_line, content)
     end
   end)
 end
-
 
 M.process_buf_text = function(prompt)
   local target_line = vim.fn.line(".") - 1

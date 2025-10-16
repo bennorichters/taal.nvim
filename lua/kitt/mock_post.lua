@@ -13,7 +13,7 @@ return function(_, opts)
     local content = '"The moon is brighter than it was yesterday."'
     return {
       status = 200,
-      body = '{ "choices": [ { "message": { "content": ' .. content .. ' } } ] }',
+      body = '{ "choices": [ { "message": { "content": ' .. content .. " } } ] }",
     }
   end
 end

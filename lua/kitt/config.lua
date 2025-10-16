@@ -1,7 +1,7 @@
 local defaults = {
   log_level = "error",
   post = "curl",
-  timeout = 6000
+  timeout = 6000,
 }
 
 local M = {}

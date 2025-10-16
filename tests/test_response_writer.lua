@@ -5,7 +5,9 @@ local child, T = Helpers.new_child_with_set([[
   rw = rwf:new()
 ]])
 
-local get_lines = function(buf) return child.api.nvim_buf_get_lines(buf, 0, -1, true) end
+local get_lines = function(buf)
+  return child.api.nvim_buf_get_lines(buf, 0, -1, true)
+end
 
 T["response_writer.write"] = function()
   local buf = child.api.nvim_create_buf(true, true)

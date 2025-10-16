@@ -1,8 +1,8 @@
-local config = require("kitt.config")
 local buffer_helper = require("kitt.buffer_helper")
+local commands = require("kitt.commands")
+local config = require("kitt.config")
 local send_request_factory = require("kitt.send_request")
 local template_sender_factory = require("kitt.template_sender")
-local commands = require("kitt.commands")
 
 local log = require("kitt.log")
 

@@ -3,7 +3,8 @@ local eq = MiniTest.expect.equality
 
 local user_text = "The moon is more bright then yesterdate."
 local ai_text = "The moon is brighter then yesterday."
-local child, T = Helpers.new_child_with_set(string.format([[
+local child, T = Helpers.new_child_with_set(string.format(
+  [[
   local buffhelp = {
     current_line = function() return "%s" end
   }
@@ -12,14 +13,19 @@ local child, T = Helpers.new_child_with_set(string.format([[
 
   cmd = require("kitt.commands")
   cmd.setup(buffhelp, tempsend)
-]], user_text, ai_text))
+]],
+  user_text,
+  ai_text
+))
 
 local function contains_spell_bad_highlight(table, start, length)
   for i = 1, #table do
-    if table[i].group == "SpellBad" and
-        table[i].pos1[1] == 1 and
-        table[i].pos1[2] == start and
-        table[i].pos1[3] == length then
+    if
+      table[i].group == "SpellBad"
+      and table[i].pos1[1] == 1
+      and table[i].pos1[2] == start
+      and table[i].pos1[3] == length
+    then
       return true
     end
   end
