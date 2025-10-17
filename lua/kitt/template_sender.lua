@@ -1,3 +1,4 @@
+local log = require("kitt.log")
 local response_writer = require("kitt.response_writer")
 local stream_handler = require("kitt.stream")
 local text_prompt = require("kitt.text_prompt")
@@ -15,7 +16,15 @@ return function(send_request, timeout)
       local content = response_body.choices[1].message.content
       return content
     else
-      print(vim.inspect(response))
+      log.fmt_debug(
+        "response status is not 200. response status=%s. response=%s",
+        response.status,
+        response
+      )
+      vim.notify(
+        string.format("unexpected response from server: %s", vim.inspect(response)),
+        vim.log.levels.ERROR
+      )
     end
   end
 
