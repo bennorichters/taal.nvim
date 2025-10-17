@@ -16,7 +16,7 @@ return function(send_request, timeout)
       local content = response_body.choices[1].message.content
       return content
     else
-      log.fmt_debug(
+      log.fmt_error(
         "response status is not 200. response status=%s. response=%s",
         response.status,
         response
