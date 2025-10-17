@@ -28,7 +28,11 @@ M.setup = function(buffer_helper, template_sender)
       local line_nr = vim.fn.line(".")
       local col_nr = vim.fn.col(".")
       for _, suggestion in ipairs(M.suggestions) do
-        if line_nr == suggestion.line and col_nr >= suggestion.left and col_nr <= suggestion.right then
+        if
+          line_nr == suggestion.line
+          and col_nr >= suggestion.left
+          and col_nr <= suggestion.right
+        then
           vim.notify(suggestion.improvement)
           return
         end
@@ -105,7 +109,9 @@ end
 
 M.ai_interactive = function()
   vim.ui.input({ prompt = "Give instructions: " }, function(command)
-    if command then M.template_sender(tpl_interact, true, command, M.buffer_helper.visual_selection()) end
+    if command then
+      M.template_sender(tpl_interact, true, command, M.buffer_helper.visual_selection())
+    end
   end)
 end
 
