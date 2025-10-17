@@ -1,6 +1,6 @@
-local Helpers = {}
+local M = {}
 
-Helpers.new_child_with_set = function(code)
+M.new_child_with_set = function(code)
   local child = MiniTest.new_child_neovim()
 
   local T = MiniTest.new_set {
@@ -19,10 +19,10 @@ Helpers.new_child_with_set = function(code)
   return child, T
 end
 
-Helpers.disable_log = function()
+M.disable_log = function()
   local log = require("kitt.log")
   log.new({}, true)
   log:disable()
 end
 
-return Helpers
+return M
