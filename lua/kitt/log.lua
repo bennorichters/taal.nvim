@@ -45,7 +45,8 @@ local unpack = unpack or table.unpack
 log.new = function(config, standalone)
   config = vim.tbl_deep_extend("force", default_config, config)
 
-  local outfile = string.format("%s/%s.log", vim.api.nvim_call_function("stdpath", { "data" }), config.plugin)
+  local outfile =
+    string.format("%s/%s.log", vim.api.nvim_call_function("stdpath", { "state" }), config.plugin)
 
   local obj
   if standalone then
@@ -94,9 +95,12 @@ log.new = function(config, standalone)
 
     -- Output to console
     if config.use_console then
-      local console_string = string.format("[%-6s%s] %s: %s", nameupper, os.date("%H:%M:%S"), lineinfo, msg)
+      local console_string =
+        string.format("[%-6s%s] %s: %s", nameupper, os.date("%H:%M:%S"), lineinfo, msg)
 
-      if config.highlights and level_config.hl then vim.cmd(string.format("echohl %s", level_config.hl)) end
+      if config.highlights and level_config.hl then
+        vim.cmd(string.format("echohl %s", level_config.hl))
+      end
 
       local split_console = vim.split(console_string, "\n")
       for _, v in ipairs(split_console) do
