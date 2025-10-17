@@ -10,7 +10,6 @@ return function(post, endpoint, key)
 
     if extra_opts then opts = vim.tbl_deep_extend("error", opts, extra_opts) end
 
-    local result = post(endpoint, opts)
-    return result
+    return post(endpoint, opts)
   end
 end

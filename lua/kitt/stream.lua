@@ -57,6 +57,11 @@ M.process_wrap = function(parse, ui_select, write)
       ui_select()
     elseif content then
       write(content)
+    else
+      vim.notify(
+        string.format("unexpected response from server: %s", vim.inspect(stream_data)),
+        vim.log.levels.ERROR
+      )
     end
   end
 end
