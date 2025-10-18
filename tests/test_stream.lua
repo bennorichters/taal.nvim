@@ -19,7 +19,6 @@ T["stream"]["parser"] = function()
   eq({ p('data: {"choices":[{"delta":{"content":"abc"}}]}') }, { false, nil })
   eq({ p('data: {"choices":[{"delta":{"content":"abc"}}]') }, { false, nil })
 
-
   eq({ p('data: {"type":"response.output_text.delta","delta":"abc"}') }, { false, "abc" })
   eq({ p('data: {"type":"response.output_text.done"}') }, { true, nil })
 end
@@ -31,7 +30,9 @@ T["stream"]["process_wrap"]["should_not_write_without_content"] = function()
   end
   local ui_select = function() end
   local write = function(content)
-    if not content then error("no content") end
+    if not content then
+      error("no content")
+    end
   end
 
   local f = w(parse_no_error_no_content, ui_select, write)

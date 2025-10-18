@@ -25,14 +25,14 @@ local response_body = [===[
 
 return function(_, opts)
   if opts.stream then
-  for i = 1, 5 do
-    opts.stream(nil, string.format(stream_data, i))
-  end
-  opts.stream(nil, stream_done)
+    for i = 1, 5 do
+      opts.stream(nil, string.format(stream_data, i))
+    end
+    opts.stream(nil, stream_done)
   else
-  return {
-    status = 200,
-    body = response_body,
-  }
+    return {
+      status = 200,
+      body = response_body,
+    }
   end
 end

@@ -86,7 +86,9 @@ log.new = function(config, standalone)
 
   local log_at_level = function(level, level_config, message_maker, ...)
     -- Return early if we're below the config.level
-    if level < levels[config.level] then return end
+    if level < levels[config.level] then
+      return
+    end
     local nameupper = level_config.name:upper()
 
     local msg = message_maker(...)
@@ -107,7 +109,9 @@ log.new = function(config, standalone)
         vim.cmd(string.format([[echom "[%s] %s"]], config.plugin, vim.fn.escape(v, '"')))
       end
 
-      if config.highlights and level_config.hl then vim.cmd("echohl NONE") end
+      if config.highlights and level_config.hl then
+        vim.cmd("echohl NONE")
+      end
     end
 
     -- Output to log file

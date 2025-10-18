@@ -8,7 +8,9 @@ return function(post, endpoint, api_key)
       },
     }
 
-    if extra_opts then opts = vim.tbl_deep_extend("error", opts, extra_opts) end
+    if extra_opts then
+      opts = vim.tbl_deep_extend("error", opts, extra_opts)
+    end
 
     return post(endpoint, opts)
   end

@@ -58,7 +58,9 @@ return function(send_request, timeout)
     )
     if response and response.status and response.status == 200 then
       local content = openai_extract_content(response.body)
-      if content then return content end
+      if content then
+        return content
+      end
 
       log.fmt_error("response: %s", vim.inspect(response))
       vim.notify("Error processing response", vim.log.levels.ERROR)
@@ -96,7 +98,9 @@ return function(send_request, timeout)
       table.insert(subts, encode_text(text))
     end
 
-    if stream then template.stream = true end
+    if stream then
+      template.stream = true
+    end
 
     local body_content = string.format(vim.fn.json_encode(template), unpack(subts))
 

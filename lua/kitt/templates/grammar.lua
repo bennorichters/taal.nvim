@@ -1,5 +1,5 @@
 return {
-  model= "gpt-5-nano",
+  model = "gpt-5-nano",
   input = {
     {
       role = "system",

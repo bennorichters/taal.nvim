@@ -85,7 +85,9 @@ M.ai_apply_suggestion = function()
       vim.fn.matchdelete(sug.matchid)
 
       length_diff = sug.right - sug.left - #sug.improvement
-      if length_diff == 0 then return end
+      if length_diff == 0 then
+        return
+      end
     elseif applied_index > 0 then
       vim.fn.matchdelete(sug.matchid)
 
@@ -96,7 +98,9 @@ M.ai_apply_suggestion = function()
     end
   end
 
-  if applied_index > 0 then table.remove(M.suggestions, applied_index) end
+  if applied_index > 0 then
+    table.remove(M.suggestions, applied_index)
+  end
 end
 
 M.ai_set_spelllang = function()

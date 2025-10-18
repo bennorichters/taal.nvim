@@ -5,15 +5,15 @@ local get_lines = function(buf)
   return child.api.nvim_buf_get_lines(buf, 0, -1, true)
 end
 
-local T = MiniTest.new_set {
+local T = MiniTest.new_set({
   hooks = {
     pre_case = function()
-      child.restart { "-u", "scripts/minimal_init.lua" }
+      child.restart({ "-u", "scripts/minimal_init.lua" })
       child.lua("prompt = require('kitt.text_prompt').prompt")
     end,
     post_once = child.stop,
   },
-}
+})
 
 T["prompt"] = function()
   local buf = child.api.nvim_create_buf(true, true)
