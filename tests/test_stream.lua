@@ -13,11 +13,15 @@ T["stream"] = new_set()
 T["stream"]["parser"] = function()
   eq({ p(nil) }, { false, nil })
   eq({ p("") }, { false, nil })
-  eq({ p("data: [DONE]") }, { true, nil })
+  eq({ p("data: [DONE]") }, { false, nil })
   eq({ p("[DONE]") }, { false, nil })
   eq({ p("data: [READY]") }, { false, nil })
-  eq({ p('data: {"choices":[{"delta":{"content":"abc"}}]}') }, { false, "abc" })
+  eq({ p('data: {"choices":[{"delta":{"content":"abc"}}]}') }, { false, nil })
   eq({ p('data: {"choices":[{"delta":{"content":"abc"}}]') }, { false, nil })
+
+
+  eq({ p('data: {"type":"response.output_text.delta","delta":"abc"}') }, { false, "abc" })
+  eq({ p('data: {"type":"response.output_text.done"}') }, { true, nil })
 end
 
 T["stream"]["process_wrap"] = new_set()
