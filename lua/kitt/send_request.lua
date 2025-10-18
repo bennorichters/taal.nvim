@@ -1,10 +1,10 @@
-return function(post, endpoint, key)
+return function(post, endpoint, api_key)
   return function(body_content, extra_opts)
     local opts = {
       body = body_content,
       headers = {
         content_type = "application/json",
-        api_key = key,
+        authorization = api_key,
       },
     }
 
