@@ -50,11 +50,11 @@ M.ai_suggest_grammar = function()
   local original = M.buffer_helper.current_line()
   local ai_improvement = M.template_sender(tpl_grammar, false, original)
 
-  local cl = differ.change_location(original, ai_improvement)
+  local loc = differ.location_of_change(original, ai_improvement)
 
   local line_number = vim.fn.line(".")
   delete_suggestions()
-  for _, c in ipairs(cl) do
+  for _, c in ipairs(loc) do
     local position = { line_number, c.left, c.right - c.left }
     local id = vim.fn.matchaddpos("SpellBad", { position })
     table.insert(M.suggestions, {

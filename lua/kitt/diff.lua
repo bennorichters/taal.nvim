@@ -32,7 +32,7 @@ end
 
 local M = {}
 
-M.change_location = function(text1, text2)
+M.location_of_change = function(text1, text2)
   local words1, lefts1 = split_into_words(text1)
   local words2, lefts2 = split_into_words(text2)
 
