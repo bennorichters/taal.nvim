@@ -8,7 +8,9 @@ local function split_into_words(text)
     index = index + 1
 
     if string.match(char, "%s") then
-      if not prev_whitespace then table.insert(words, string.sub(text, starts[#starts], index - 1)) end
+      if not prev_whitespace then
+        table.insert(words, string.sub(text, starts[#starts], index - 1))
+      end
 
       prev_whitespace = true
     elseif prev_whitespace then
