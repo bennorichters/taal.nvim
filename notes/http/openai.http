@@ -1,10 +1,14 @@
-### testing
+### List all available OpenAI models
+GET https://api.openai.com/v1/models
+Authorization: Bearer {{OPENAI_API_KEY}}
+
+### Grammar 
 POST https://api.openai.com/v1/responses
 Content-Type: application/json
 Authorization: Bearer {{OPENAI_API_KEY}}
 
 {
-  "model": "gpt-5",
+  "model": "gpt-5-nano",
   "input": [
     {
       "content": "Assistant is a language expert designed to help users with grammar and spelling. Improve every text the user sends. Respond in the language the text is written in. Respond with just the improved text, nothing more.",
