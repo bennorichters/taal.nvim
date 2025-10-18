@@ -1,12 +1,12 @@
 return {
   messages = {
     {
-      content = "Format your response in markdown. %s",
       role = "system",
+      content = "Format your response in markdown. %s",
     },
     {
-      content = "%s",
       role = "user",
+      content = "%s",
     },
   },
 }

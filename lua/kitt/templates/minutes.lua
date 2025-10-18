@@ -1,12 +1,12 @@
 return {
   messages = {
     {
-      content = "From the notes you receive write a coherent summary.",
       role = "system",
+      content = "From the notes you receive write a coherent summary.",
     },
     {
-      content = "%s",
       role = "user",
+      content = "%s",
     },
   },
 }

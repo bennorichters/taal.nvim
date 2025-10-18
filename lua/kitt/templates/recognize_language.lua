@@ -1,45 +1,45 @@
 return {
   messages = {
     {
+      role = "system",
       content = "You are a language expert designed to recognize the language of a given text. "
         .. "Your response is the two letter ISO 639-1 code of the language the given text is written in.",
-      role = "system",
     },
     {
+      role = "user",
       content = "vom wasser haben wir's gelernt",
-      role = "user",
     },
     {
+      role = "assistant",
       content = "de",
-      role = "assistant",
     },
     {
+      role = "user",
       content = "Perhaps one did not want to be loved so much as to be understood.",
-      role = "user",
     },
     {
+      role = "assistant",
       content = "en",
-      role = "assistant",
     },
     {
+      role = "user",
       content = "Als je het lelijke niet kunt verbeteren, vernietigen of ontvluchten, is het maar het beste het te bezingen.",
-      role = "user",
     },
     {
+      role = "assistant",
       content = "nl",
-      role = "assistant",
     },
     {
+      role = "user",
       content = "Tedd a kezed homlokomra, mintha kezed kezem volna.",
-      role = "user",
     },
     {
-      content = "hu",
       role = "assistant",
+      content = "hu",
     },
     {
-      content = "%s",
       role = "user",
+      content = "%s",
     },
   },
 }
