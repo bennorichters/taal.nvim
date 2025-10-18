@@ -8,13 +8,60 @@ local function encode_text(text)
   return string.sub(encoded_text, 2, string.len(encoded_text) - 1)
 end
 
+local function openai_extract_content(body)
+  local status, json = pcall(vim.fn.json_decode, body)
+  if not status then
+    log.fmt_error("could not parse body as json", body)
+    return nil
+  end
+
+  if not json.output then
+    log.fmt_error("body doesn't contain json with output: %s", json)
+    return nil
+  end
+
+  if not type(json.output) == "table" then
+    log.fmt_error("output in body is not a table: %s")
+    return nil
+  end
+
+  local result = nil
+  for _, output_el in ipairs(json.output) do
+    if
+      output_el.type
+      and output_el.type == "message"
+      and output_el.content
+      and type(output_el.content) == "table"
+    then
+      for _, content_el in ipairs(output_el.content) do
+        if content_el.type == "output_text" then
+          if result then
+            log.fmt_debug("multiple output_text found in output: %s", body)
+            return nil
+          end
+          result = content_el.text
+        end
+      end
+    end
+  end
+
+  log.fmt_trace("content=%s", result)
+  return result
+end
+
 return function(send_request, timeout)
   local send_plain_request = function(body_content)
     local response = send_request(body_content, { timeout = timeout })
-    if response.status == 200 then
-      local response_body = vim.fn.json_decode(response.body)
-      local content = response_body.choices[1].message.content
-      return content
+    log.fmt_trace(
+      "plain request response: %s",
+      response and response.status and vim.inspect(response) or "---no valid response---"
+    )
+    if response and response.status and response.status == 200 then
+      local content = openai_extract_content(response.body)
+      if content then return content end
+
+      log.fmt_error("response: %s", vim.inspect(response))
+      vim.notify("Error processing response", vim.log.levels.ERROR)
     else
       log.fmt_error(
         "response status is not 200. response status=%s. response=%s",

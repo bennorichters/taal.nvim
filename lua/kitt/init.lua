@@ -25,7 +25,7 @@ M.setup = function(user_cfg)
     error("Unknown 'post' option")
   end
 
-  local endpoint = os.getenv("OPENAI_ENDPOINT")
+  local endpoint = "https://api.openai.com/v1/responses"
   local key = os.getenv("OPENAI_API_KEY")
 
   local send_request = send_request_factory(post, endpoint, key)

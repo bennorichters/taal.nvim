@@ -1,19 +1,38 @@
-local data = 'data: {"choices":[{"delta":{"content":"%d Stream Mock\\n"}}]}'
-local last = 'data: {"choices":[{"delta":{"content":"end"}}]}'
-local done = "data: [DONE]"
+local stream_data = 'data: {"type":"response.output_text.delta","delta":"%s"}'
+local stream_done = 'data: {"type":"response.output_text.done"}'
+local response_body = [===[
+{
+  "id": "0",
+  "output": [
+    {
+      "id": "1",
+      "type": "reasoning"
+    },
+    {
+      "id": "2",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "en"
+        }
+      ]
+    }
+  ]
+}
+]===]
 
 return function(_, opts)
   if opts.stream then
-    for i = 1, 5 do
-      opts.stream(nil, string.format(data, i))
-    end
-    opts.stream(nil, last)
-    opts.stream(nil, done)
+  for i = 1, 5 do
+    opts.stream(nil, string.format(stream_data, i))
+  end
+  opts.stream(nil, stream_done)
   else
-    local content = '"The moon is brighter than it was yesterday."'
-    return {
-      status = 200,
-      body = '{ "choices": [ { "message": { "content": ' .. content .. " } } ] }",
-    }
+  return {
+    status = 200,
+    body = response_body,
+  }
   end
 end

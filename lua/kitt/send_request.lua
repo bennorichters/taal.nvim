@@ -4,7 +4,7 @@ return function(post, endpoint, api_key)
       body = body_content,
       headers = {
         content_type = "application/json",
-        authorization = api_key,
+        authorization = "Bearer " .. api_key,
       },
     }
 

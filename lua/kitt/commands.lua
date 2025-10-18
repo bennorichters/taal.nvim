@@ -1,3 +1,4 @@
+local log = require("kitt.log")
 local tpl_grammar = require("kitt.templates.grammar")
 local tpl_interact = require("kitt.templates.interact_with_content")
 local tpl_minutes = require("kitt.templates.minutes")
@@ -100,7 +101,12 @@ end
 
 M.ai_set_spelllang = function()
   local content = M.template_sender(tpl_recognize_language, false, M.buffer_helper.current_line())
-  if content then vim.cmd("set spelllang=" .. content) end
+  if content then
+    log.fmt_info("set spellang=%s", content)
+    vim.cmd("set spelllang=" .. content)
+  else
+    log.fmt_error("no content returned for setting spellang")
+  end
 end
 
 M.ai_write_minutes = function()
