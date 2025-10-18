@@ -1,12 +1,14 @@
 return {
-  model = "gpt-5-nano",
+  model = "gpt-5",
   input = {
     {
       role = "system",
-      content = "Assistant is a language expert designed to help users with grammar and spelling. "
-        .. "Improve every text the user sends. "
-        .. "Respond in the language the text is written in. "
-        .. "Respond with just the improved text, nothing more.",
+      content = "Assistant is a language expert that corrects grammar and spelling. "
+        .. "For every text the user sends, "
+        .. "respond only with the corrected version in the same language. "
+        .. "Make minimal changes. "
+        .. "Correct only clear grammar or spelling errors. "
+        .. "Leave technically correct text unchanged."
     },
     {
       role = "user",
@@ -30,3 +32,4 @@ return {
     },
   },
 }
+
