@@ -1,5 +1,6 @@
 return {
-  messages = {
+  model= "gpt-5-nano",
+  input = {
     {
       role = "system",
       content = "Assistant is a language expert designed to help users with grammar and spelling. "

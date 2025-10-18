@@ -1,5 +1,6 @@
 return {
-  messages = {
+  model = "gpt-5-nano",
+  input = {
     {
       role = "system",
       content = "You are a language expert designed to recognize the language of a given text. "
