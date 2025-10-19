@@ -1,10 +1,9 @@
+local differ = require("kitt.diff")
 local log = require("kitt.log")
 local tpl_grammar = require("kitt.templates.grammar")
 local tpl_interact = require("kitt.templates.interact_with_content")
 local tpl_minutes = require("kitt.templates.minutes")
 local tpl_recognize_language = require("kitt.templates.recognize_language")
-
-local differ = require("kitt.diff")
 
 local M = { suggestions = {} }
 
