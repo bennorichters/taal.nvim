@@ -12,7 +12,7 @@ M.setup = function(user_cfg)
   config.setup(user_cfg)
   log.new({ level = config.get().log_level }, true)
   log.trace("kitt.nvim log started")
-  log.debug("user config: ", user_cfg)
+  log.fmt_info("user config: %s", user_cfg)
 
   local post
   local cfg_post = config.get().post
