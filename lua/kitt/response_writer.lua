@@ -11,15 +11,18 @@ function M:new(obj)
 end
 
 function M:ensure_buf_win()
-  local buf = vim.api.nvim_create_buf(true, true)
+  local bufnr = vim.api.nvim_create_buf(true, true)
 
   vim.cmd("vsplit")
   local win = vim.api.nvim_get_current_win()
-  vim.api.nvim_win_set_buf(win, buf)
-  vim.wo.wrap = true
-  vim.wo.linebreak = true
+  vim.api.nvim_win_set_buf(win, bufnr)
 
-  return buf
+  vim.bo[bufnr].buftype = "nofile"
+  vim.bo[bufnr].bufhidden = "hide"
+  vim.bo[bufnr].swapfile = false
+  vim.bo[bufnr].filetype = "markdown"
+
+  return bufnr
 end
 
 function M:write(delta, buf)
