@@ -80,7 +80,7 @@ return function(send_request, timeout)
   local send_stream_request = function(body_content)
     local ui_select = text_prompt.process_buf_text(text_prompt.prompt)
     local rw = response_writer:new()
-    local buf = rw:ensure_buf_win()
+    local buf = rw:create_scratch_buffer()
     local write = function(content)
       rw:write(content, buf)
     end

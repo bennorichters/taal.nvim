@@ -10,7 +10,7 @@ function M:new(obj)
   return obj
 end
 
-function M:ensure_buf_win()
+function M:create_scratch_buffer()
   local bufnr = vim.api.nvim_create_buf(true, true)
 
   vim.cmd("vsplit")
