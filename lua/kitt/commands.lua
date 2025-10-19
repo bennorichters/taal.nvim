@@ -34,7 +34,7 @@ M.setup = function(buffer_helper, template_sender)
           and col_nr >= suggestion.a_start
           and col_nr <= suggestion.a_end
         then
-          vim.notify(suggestion.b_word)
+          vim.notify(suggestion.b_text)
           return
         end
       end
@@ -48,9 +48,9 @@ end
 
 M.ai_suggest_grammar = function()
   local original = M.buffer_helper.current_line()
-  local ai_b_word = M.template_sender(tpl_grammar, false, original)
+  local ai_b_text = M.template_sender(tpl_grammar, false, original)
 
-  local loc = differ.diff(original, ai_b_word)
+  local loc = differ.diff(original, ai_b_text)
 
   local line_number = vim.fn.line(".")
   delete_suggestions()
@@ -61,7 +61,7 @@ M.ai_suggest_grammar = function()
       line = line_number,
       a_start = c.a_start,
       a_end = c.a_end,
-      b_word = c.b_word,
+      b_text = c.b_text,
       matchid = id,
     })
   end
@@ -83,13 +83,13 @@ M.ai_apply_suggestion = function()
       applied_index = i
       local current_line = M.buffer_helper.current_line()
       local content = string.sub(current_line, 1, sug.a_start - 1)
-        .. sug.b_word
+        .. sug.b_text
         .. string.sub(current_line, sug.a_end)
 
       vim.api.nvim_buf_set_lines(0, sug.line - 1, sug.line, false, { content })
       vim.fn.matchdelete(sug.matchid)
 
-      length_diff = sug.a_end - sug.a_start - #sug.b_word
+      length_diff = sug.a_end - sug.a_start - #sug.b_text
       if length_diff == 0 then
         return
       end

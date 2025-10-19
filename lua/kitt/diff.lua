@@ -33,24 +33,24 @@ end
 local M = {}
 
 M.diff = function(a, b)
-  local words_a, starts_a = split_into_words(a)
-  local words_b, starts_b = split_into_words(b)
+  local a_words, a_starts = split_into_words(a)
+  local b_words, b_starts = split_into_words(b)
 
-  local indices = vim.diff(words_a, words_b, { result_type = "indices" })
+  local indices = vim.diff(a_words, b_words, { result_type = "indices" })
 
   local result = {}
   if type(indices) == "table" then
     for _, start_index in ipairs(indices) do
-      local a_start, a_end = diff_boundaries(starts_a, start_index[1], start_index[2], #words_a)
-      local b_start, b_end = diff_boundaries(starts_b, start_index[3], start_index[4], #words_b)
+      local a_start, a_end = diff_boundaries(a_starts, start_index[1], start_index[2], #a_words)
+      local b_start, b_end = diff_boundaries(b_starts, start_index[3], start_index[4], #b_words)
 
       table.insert(result, {
         a_start = a_start,
         a_end = a_end,
-        a_word = string.sub(a, a_start, a_end - 1),
+        a_text = string.sub(a, a_start, a_end - 1),
         b_start = b_start,
         b_end = b_end,
-        b_word = string.sub(b, b_start, b_end - 1),
+        b_text = string.sub(b, b_start, b_end - 1),
       })
     end
   end
