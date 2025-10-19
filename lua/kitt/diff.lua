@@ -22,32 +22,32 @@ local function split_into_words(text)
   return table.concat(words, "\n"), starts
 end
 
-local function boundaries_of_change(lefts, left_first, left_last, length)
-  local change_left = lefts[left_first]
-  local last_left = left_first + left_last
-  local change_right = last_left <= #lefts and (lefts[last_left] - 1) or (length + 1)
+local function diff_boundaries(starts, start_first, start_last, length)
+  local diff_start = starts[start_first]
+  local last_start = start_first + start_last
+  local diff_end = last_start <= #starts and (starts[last_start] - 1) or (length + 1)
 
-  return change_left, change_right
+  return diff_start, diff_end
 end
 
 local M = {}
 
-M.location_of_change = function(text1, text2)
-  local words1, lefts1 = split_into_words(text1)
-  local words2, lefts2 = split_into_words(text2)
+M.diff = function(a, b)
+  local words_a, starts_a = split_into_words(a)
+  local words_b, starts_b = split_into_words(b)
 
-  local indices = vim.diff(words1, words2, { result_type = "indices" })
+  local indices = vim.diff(words_a, words_b, { result_type = "indices" })
 
   local result = {}
   if type(indices) == "table" then
-    for _, left_index in ipairs(indices) do
-      local left1, right1 = boundaries_of_change(lefts1, left_index[1], left_index[2], #words1)
-      local left2, right2 = boundaries_of_change(lefts2, left_index[3], left_index[4], #words2)
+    for _, start_index in ipairs(indices) do
+      local a_start, a_end = diff_boundaries(starts_a, start_index[1], start_index[2], #words_a)
+      local b_start, b_end = diff_boundaries(starts_b, start_index[3], start_index[4], #words_b)
 
       table.insert(result, {
-        left = left1,
-        right = right1,
-        improvement = string.sub(text2, left2, right2 - 1),
+        a_start = a_start,
+        a_end = a_end,
+        b_word = string.sub(b, b_start, b_end - 1),
       })
     end
   end

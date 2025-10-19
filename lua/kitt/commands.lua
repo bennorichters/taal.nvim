@@ -31,10 +31,10 @@ M.setup = function(buffer_helper, template_sender)
       for _, suggestion in ipairs(M.suggestions) do
         if
           line_nr == suggestion.line
-          and col_nr >= suggestion.left
-          and col_nr <= suggestion.right
+          and col_nr >= suggestion.a_start
+          and col_nr <= suggestion.a_end
         then
-          vim.notify(suggestion.improvement)
+          vim.notify(suggestion.b_word)
           return
         end
       end
@@ -48,20 +48,20 @@ end
 
 M.ai_suggest_grammar = function()
   local original = M.buffer_helper.current_line()
-  local ai_improvement = M.template_sender(tpl_grammar, false, original)
+  local ai_b_word = M.template_sender(tpl_grammar, false, original)
 
-  local loc = differ.location_of_change(original, ai_improvement)
+  local loc = differ.diff(original, ai_b_word)
 
   local line_number = vim.fn.line(".")
   delete_suggestions()
   for _, c in ipairs(loc) do
-    local position = { line_number, c.left, c.right - c.left }
+    local position = { line_number, c.a_start, c.a_end - c.a_start }
     local id = vim.fn.matchaddpos("SpellBad", { position })
     table.insert(M.suggestions, {
       line = line_number,
-      left = c.left,
-      right = c.right,
-      improvement = c.improvement,
+      a_start = c.a_start,
+      a_end = c.a_end,
+      b_word = c.b_word,
       matchid = id,
     })
   end
@@ -74,26 +74,31 @@ M.ai_apply_suggestion = function()
   local length_diff = 0
   local applied_index = 0
   for i, sug in ipairs(M.suggestions) do
-    if applied_index == 0 and line_nr == sug.line and col_nr >= sug.left and col_nr < sug.right then
+    if
+      applied_index == 0
+      and line_nr == sug.line
+      and col_nr >= sug.a_start
+      and col_nr < sug.a_end
+    then
       applied_index = i
       local current_line = M.buffer_helper.current_line()
-      local content = string.sub(current_line, 1, sug.left - 1)
-        .. sug.improvement
-        .. string.sub(current_line, sug.right)
+      local content = string.sub(current_line, 1, sug.a_start - 1)
+        .. sug.b_word
+        .. string.sub(current_line, sug.a_end)
 
       vim.api.nvim_buf_set_lines(0, sug.line - 1, sug.line, false, { content })
       vim.fn.matchdelete(sug.matchid)
 
-      length_diff = sug.right - sug.left - #sug.improvement
+      length_diff = sug.a_end - sug.a_start - #sug.b_word
       if length_diff == 0 then
         return
       end
     elseif applied_index > 0 then
       vim.fn.matchdelete(sug.matchid)
 
-      sug.left = sug.left - length_diff
-      sug.right = sug.right - length_diff
-      local position = { line_nr, sug.left, sug.right - sug.left }
+      sug.a_start = sug.a_start - length_diff
+      sug.a_end = sug.a_end - length_diff
+      local position = { line_nr, sug.a_start, sug.a_end - sug.a_start }
       sug.matchid = vim.fn.matchaddpos("SpellBad", { position })
     end
   end
