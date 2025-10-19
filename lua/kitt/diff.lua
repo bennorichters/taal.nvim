@@ -47,6 +47,9 @@ M.diff = function(a, b)
       table.insert(result, {
         a_start = a_start,
         a_end = a_end,
+        a_word = string.sub(a, a_start, a_end - 1),
+        b_start = b_start,
+        b_end = b_end,
         b_word = string.sub(b, b_start, b_end - 1),
       })
     end
