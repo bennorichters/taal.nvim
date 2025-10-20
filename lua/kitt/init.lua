@@ -15,7 +15,7 @@ M.setup = function(user_cfg)
   log.fmt_info("user config: %s", user_cfg)
 
   _G.kitt_ns = vim.api.nvim_create_namespace("kitt")
-  vim.api.nvim_set_hl(0, "KittImprovement", { fg = "green" })
+  vim.api.nvim_set_hl(0, "KittImprovement", { bg = "DarkGreen", fg = "White" })
 
   local post
   local cfg_post = config.get().post
