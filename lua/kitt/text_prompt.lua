@@ -15,13 +15,11 @@ M.process_buf_text = function(prompt)
   local target_line = vim.fn.line(".") - 1
   local target_buffer = vim.fn.bufnr()
 
-  local select_with_result = function()
+  return function()
     vim.cmd("redraw")
     local buffer_text = vim.api.nvim_buf_get_lines(0, 0, vim.api.nvim_buf_line_count(0), false)
     prompt(target_buffer, target_line, buffer_text)
   end
-
-  return select_with_result
 end
 
 return M
