@@ -47,9 +47,9 @@ end
 
 M.ai_suggest_grammar = function()
   local original = M.buffer_helper.current_line()
-  local ai_b_text = M.template_sender(tpl_grammar, false, original)
+  local ai_text = M.template_sender(tpl_grammar, false, original)
 
-  local loc = differ.diff(original, ai_b_text)
+  local loc = differ.diff(original, ai_text)
 
   local line_number = vim.fn.line(".")
   delete_suggestions()
