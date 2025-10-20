@@ -32,7 +32,7 @@ M.parse = function(stream_data)
   return false, nil
 end
 
-M.process_wrap = function(parse, ui_select, response_writer)
+M.process_wrap = function(parse, response_writer, done_callback)
   return function(error, stream_data)
     if error then
       local msg = string.format(
@@ -47,7 +47,7 @@ M.process_wrap = function(parse, ui_select, response_writer)
 
     local done, delta = parse(stream_data)
     if done then
-      ui_select()
+      done_callback()
     elseif delta then
       response_writer:write(delta)
     end

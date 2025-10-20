@@ -81,7 +81,7 @@ return function(send_request, timeout)
     local ui_select = text_prompt.process_buf_text(text_prompt.prompt)
     local rw = response_writer:new()
     rw:create_scratch_buffer()
-    local process_stream = stream_handler.process_wrap(stream_handler.parse, ui_select, rw)
+    local process_stream = stream_handler.process_wrap(stream_handler.parse, rw, ui_select)
     local stream = { stream = vim.schedule_wrap(process_stream) }
 
     send_request(body_content, stream)
