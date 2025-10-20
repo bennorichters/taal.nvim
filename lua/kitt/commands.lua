@@ -42,7 +42,18 @@ M.setup = function(buffer_helper, template_sender)
 end
 
 M.ai_improve_grammar = function()
-  M.template_sender.stream(tpl_grammar, function() end, M.buffer_helper.current_line())
+  local bufnr = vim.api.nvim_get_current_buf()
+  local linenr = vim.fn.line(".")
+  local text = M.buffer_helper.current_line()
+
+  local callback = function(scratch_buf, ai_text)
+    M.buffer_helper.apply_diff_hlgroup(
+      { hlgroup = "SpellBad", bufnr = bufnr, linenr = linenr, text = text },
+      { hlgroup = "KittImprovement", bufnr = scratch_buf, linenr = 1, text = ai_text }
+    )
+  end
+
+  M.template_sender.stream(tpl_grammar, callback, text)
 end
 
 M.ai_suggest_grammar = function()
@@ -54,12 +65,12 @@ M.ai_suggest_grammar = function()
   local line_number = vim.fn.line(".")
   delete_suggestions()
   for _, c in ipairs(loc) do
-    local position = { line_number, c.a_start, c.a_end - c.a_start }
+    local position = { line_number, c.a_start + 1, c.a_end - c.a_start}
     local id = vim.fn.matchaddpos("SpellBad", { position })
     table.insert(M.suggestions, {
       line = line_number,
-      a_start = c.a_start,
-      a_end = c.a_end,
+      a_start = c.a_start + 1,
+      a_end = c.a_end + 1,
       b_text = c.b_text,
       matchid = id,
     })
@@ -124,7 +135,12 @@ end
 M.ai_interactive = function()
   vim.ui.input({ prompt = "Give instructions: " }, function(command)
     if command then
-      M.template_sender.stream(tpl_interact, function() end, command, M.buffer_helper.visual_selection())
+      M.template_sender.stream(
+        tpl_interact,
+        function() end,
+        command,
+        M.buffer_helper.visual_selection()
+      )
     end
   end)
 end

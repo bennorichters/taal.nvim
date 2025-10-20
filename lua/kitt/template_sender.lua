@@ -102,7 +102,7 @@ return function(send_request, timeout)
   local M = {}
 
   M.send = function(template, ...)
-    send_plain_request(format_template(template, ...))
+    return send_plain_request(format_template(template, ...))
   end
 
   M.stream = function(template, callback, ...)

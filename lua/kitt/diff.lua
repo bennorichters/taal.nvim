@@ -45,11 +45,11 @@ M.diff = function(a, b)
       local b_start, b_end = diff_boundaries(b_starts, start_index[3], start_index[4], #b_words)
 
       table.insert(result, {
-        a_start = a_start,
-        a_end = a_end,
+        a_start = a_start - 1,
+        a_end = a_end - 1,
         a_text = string.sub(a, a_start, a_end - 1),
-        b_start = b_start,
-        b_end = b_end,
+        b_start = b_start - 1,
+        b_end = b_end - 1,
         b_text = string.sub(b, b_start, b_end - 1),
       })
     end

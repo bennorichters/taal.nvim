@@ -1,6 +1,17 @@
 local differ = require("kitt.diff")
+local log = require("kitt.log")
 
 local function add_hlgroup(hlgroup, bufnr, linenr, x_start, x_end, y_text)
+  log.fmt_trace(
+    "highlightgroup=%s, bufnr=%s, linenr=%s, x_start=%s, x_end=%s, y_text=%s",
+    hlgroup,
+    bufnr,
+    linenr,
+    x_start,
+    x_end,
+    y_text
+  )
+
   local id = vim.api.nvim_buf_set_extmark(
     bufnr,
     _G.kitt_ns,
@@ -41,14 +52,24 @@ M.visual_selection = function()
 end
 
 M.apply_diff_hlgroup = function(a, b)
+  log.trace("a=%s", a)
+  log.trace("b=%s", b)
+
   local a_group_info = {}
   local b_group_info = {}
 
   local locations = differ.diff(a.text, b.text)
 
   for _, loc in ipairs(locations) do
-    table.insert(a_group_info, add_hlgroup(a.hlgroup, loc.a_start, loc.a_end, loc.b_text))
-    table.insert(b_group_info, add_hlgroup(b.hlgroup, loc.b_start, loc.b_end, loc.a_text))
+    log.trace("diff info: %s", loc)
+    table.insert(
+      a_group_info,
+      add_hlgroup(a.hlgroup, a.bufnr, a.linenr, loc.a_start, loc.a_end, loc.b_text)
+    )
+    table.insert(
+      b_group_info,
+      add_hlgroup(b.hlgroup, b.bufnr, b.linenr, loc.b_start, loc.b_end, loc.a_text)
+    )
   end
 
   return a_group_info, b_group_info

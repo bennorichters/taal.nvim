@@ -23,31 +23,31 @@ end
 T["diff"]["changes"] = function()
   eq(
     differ.diff("abc", "xbc"),
-    { { a_start = 1, a_end = 4, a_text = "abc", b_start = 1, b_end = 4, b_text = "xbc" } }
+    { { a_start = 0, a_end = 3, a_text = "abc", b_start = 0, b_end = 3, b_text = "xbc" } }
   )
   eq(
     differ.diff("abc def", "xbc def"),
-    { { a_start = 1, a_end = 4, a_text = "abc", b_start = 1, b_end = 4, b_text = "xbc" } }
+    { { a_start = 0, a_end = 3, a_text = "abc", b_start = 0, b_end = 3, b_text = "xbc" } }
   )
   eq(
     differ.diff("abc def", "abc xef"),
-    { { a_start = 5, a_end = 8, a_text = "def", b_start = 5, b_end = 8, b_text = "xef" } }
+    { { a_start = 4, a_end = 7, a_text = "def", b_start = 4, b_end = 7, b_text = "xef" } }
   )
 
   eq(differ.diff("abc def ghi", "xbc xef xhi"), {
     {
-      a_start = 1,
-      a_end = 12,
+      a_start = 0,
+      a_end = 11,
       a_text = "abc def ghi",
-      b_start = 1,
-      b_end = 12,
+      b_start = 0,
+      b_end = 11,
       b_text = "xbc xef xhi",
     },
   })
 
   eq(differ.diff("abc def ghi", "xbc def xhi"), {
-    { a_start = 1, a_end = 4, a_text = "abc", b_start = 1, b_end = 4, b_text = "xbc" },
-    { a_start = 9, a_end = 12, a_text = "ghi", b_start = 9, b_end = 12, b_text = "xhi" },
+    { a_start = 0, a_end = 3, a_text = "abc", b_start = 0, b_end = 3, b_text = "xbc" },
+    { a_start = 8, a_end = 11, a_text = "ghi", b_start = 8, b_end = 11, b_text = "xhi" },
   })
 end
 

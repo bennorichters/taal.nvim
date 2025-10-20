@@ -47,7 +47,7 @@ M.process_wrap = function(parse, response_writer, done_callback)
 
     local done, delta = parse(stream_data)
     if done then
-      done_callback()
+      done_callback(response_writer.bufnr, response_writer.content)
     elseif delta then
       response_writer:write(delta)
     end
