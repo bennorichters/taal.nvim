@@ -1,7 +1,6 @@
 local log = require("kitt.log")
 local response_writer = require("kitt.response_writer")
 local stream_handler = require("kitt.stream")
-local text_prompt = require("kitt.text_prompt")
 
 local function encode_text(text)
   local encoded_text = vim.fn.json_encode(text)
@@ -78,8 +77,6 @@ return function(send_request, timeout)
   end
 
   local send_stream_request = function(body_content, callback)
-    local ui_select = text_prompt.process_buf_text(text_prompt.prompt)
-    callback = callback or ui_select
     local rw = response_writer:new()
     rw:create_scratch_buffer()
     local process_stream = stream_handler.process_wrap(stream_handler.parse, rw, callback)

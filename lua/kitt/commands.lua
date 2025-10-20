@@ -1,5 +1,6 @@
 local differ = require("kitt.diff")
 local log = require("kitt.log")
+local text_prompt = require("kitt.text_prompt")
 local tpl_grammar = require("kitt.templates.grammar")
 local tpl_interact = require("kitt.templates.interact_with_content")
 local tpl_minutes = require("kitt.templates.minutes")
@@ -46,11 +47,14 @@ M.ai_improve_grammar = function()
   local linenr = vim.fn.line(".")
   local text = M.buffer_helper.current_line()
 
+  local ui_select = text_prompt.process_buf_text(text_prompt.prompt)
   local callback = function(scratch_buf, ai_text)
     M.buffer_helper.apply_diff_hlgroup(
       { hlgroup = "SpellBad", bufnr = bufnr, linenr = linenr, text = text },
       { hlgroup = "KittImprovement", bufnr = scratch_buf, linenr = 1, text = ai_text }
     )
+
+    ui_select()
   end
 
   M.template_sender.stream(tpl_grammar, callback, text)
@@ -65,7 +69,7 @@ M.ai_suggest_grammar = function()
   local line_number = vim.fn.line(".")
   delete_suggestions()
   for _, c in ipairs(loc) do
-    local position = { line_number, c.a_start + 1, c.a_end - c.a_start}
+    local position = { line_number, c.a_start + 1, c.a_end - c.a_start }
     local id = vim.fn.matchaddpos("SpellBad", { position })
     table.insert(M.suggestions, {
       line = line_number,
