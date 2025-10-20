@@ -77,17 +77,18 @@ return function(send_request, timeout)
     end
   end
 
-  local send_stream_request = function(body_content)
+  local send_stream_request = function(body_content, callback)
     local ui_select = text_prompt.process_buf_text(text_prompt.prompt)
+    callback = callback or ui_select
     local rw = response_writer:new()
     rw:create_scratch_buffer()
-    local process_stream = stream_handler.process_wrap(stream_handler.parse, rw, ui_select)
+    local process_stream = stream_handler.process_wrap(stream_handler.parse, rw, callback)
     local stream = { stream = vim.schedule_wrap(process_stream) }
 
     send_request(body_content, stream)
   end
 
-  return function(template, stream, ...)
+  local function format_template(template, ...)
     local subts = {}
     local count = select("#", ...)
     for i = 1, count do
@@ -95,16 +96,19 @@ return function(send_request, timeout)
       table.insert(subts, encode_text(text))
     end
 
-    if stream then
-      template.stream = true
-    end
-
-    local body_content = string.format(vim.fn.json_encode(template), unpack(subts))
-
-    if stream then
-      return send_stream_request(body_content)
-    else
-      return send_plain_request(body_content)
-    end
+    return string.format(vim.fn.json_encode(template), unpack(subts))
   end
+
+  local M = {}
+
+  M.send = function(template, ...)
+    send_plain_request(format_template(template, ...))
+  end
+
+  M.stream = function(template, callback, ...)
+    template.stream = true
+    send_stream_request(format_template(template, ...), callback)
+  end
+
+  return M
 end

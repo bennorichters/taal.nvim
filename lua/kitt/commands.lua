@@ -42,12 +42,12 @@ M.setup = function(buffer_helper, template_sender)
 end
 
 M.ai_improve_grammar = function()
-  M.template_sender(tpl_grammar, true, M.buffer_helper.current_line())
+  M.template_sender.stream(tpl_grammar, function() end, M.buffer_helper.current_line())
 end
 
 M.ai_suggest_grammar = function()
   local original = M.buffer_helper.current_line()
-  local ai_text = M.template_sender(tpl_grammar, false, original)
+  local ai_text = M.template_sender.send(tpl_grammar, original)
 
   local loc = differ.diff(original, ai_text)
 
@@ -108,7 +108,7 @@ M.ai_apply_suggestion = function()
 end
 
 M.ai_set_spelllang = function()
-  local content = M.template_sender(tpl_recognize_language, false, M.buffer_helper.current_line())
+  local content = M.template_sender.send(tpl_recognize_language, M.buffer_helper.current_line())
   if content then
     log.fmt_info("set spellang=%s", content)
     vim.cmd("set spelllang=" .. content)
@@ -118,13 +118,13 @@ M.ai_set_spelllang = function()
 end
 
 M.ai_write_minutes = function()
-  M.template_sender(tpl_minutes, true, M.buffer_helper.visual_selection())
+  M.template_sender.stream(tpl_minutes, function() end, M.buffer_helper.visual_selection())
 end
 
 M.ai_interactive = function()
   vim.ui.input({ prompt = "Give instructions: " }, function(command)
     if command then
-      M.template_sender(tpl_interact, true, command, M.buffer_helper.visual_selection())
+      M.template_sender.stream(tpl_interact, function() end, command, M.buffer_helper.visual_selection())
     end
   end)
 end

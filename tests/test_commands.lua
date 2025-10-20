@@ -9,7 +9,10 @@ local child, T = Helpers.new_child_with_set(string.format(
     current_line = function() return "%s" end
   }
 
-  function tempsend() return "%s" end
+  local tempsend = {
+    stream = function() end,
+    send = function(templace, data) return "%s" end,
+  }
 
   cmd = require("kitt.commands")
   cmd.setup(buffhelp, tempsend)
