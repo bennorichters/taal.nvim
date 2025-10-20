@@ -27,7 +27,7 @@ local function diff_boundaries(starts, start_first, start_last, length)
   local last_start = start_first + start_last
   local diff_end = last_start <= #starts and (starts[last_start] - 1) or (length + 1)
 
-  return diff_start, diff_end
+  return diff_start - 1, diff_end - 1
 end
 
 local M = {}
@@ -45,12 +45,12 @@ M.diff = function(a, b)
       local b_start, b_end = diff_boundaries(b_starts, start_index[3], start_index[4], #b_words)
 
       table.insert(result, {
-        a_start = a_start - 1,
-        a_end = a_end - 1,
-        a_text = string.sub(a, a_start, a_end - 1),
-        b_start = b_start - 1,
-        b_end = b_end - 1,
-        b_text = string.sub(b, b_start, b_end - 1),
+        a_start = a_start,
+        a_end = a_end,
+        a_text = string.sub(a, a_start + 1, a_end),
+        b_start = b_start,
+        b_end = b_end,
+        b_text = string.sub(b, b_start + 1, b_end),
       })
     end
   end
