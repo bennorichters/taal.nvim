@@ -26,7 +26,7 @@ end
 T["stream"]["process_wrap"] = new_set()
 T["stream"]["process_wrap"]["should_not_write_without_content"] = function()
   local parse_no_error_no_content = function(_)
-    return false, false
+    return false, nil
   end
 
   local rw = {}
