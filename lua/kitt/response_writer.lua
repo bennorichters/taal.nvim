@@ -1,6 +1,6 @@
 local log = require("kitt.log")
 
-local M = { line = 0, content = "" }
+local M = { bufnr = -1, line = 0, content = "" }
 
 function M:new(obj)
   obj = obj or {}
@@ -11,27 +11,27 @@ function M:new(obj)
 end
 
 function M:create_scratch_buffer()
-  local bufnr = vim.api.nvim_create_buf(true, true)
+  self.bufnr = vim.api.nvim_create_buf(true, true)
 
   vim.cmd("vsplit")
   local win = vim.api.nvim_get_current_win()
-  vim.api.nvim_win_set_buf(win, bufnr)
+  vim.api.nvim_win_set_buf(win, self.bufnr)
 
-  vim.bo[bufnr].buftype = "nofile"
-  vim.bo[bufnr].bufhidden = "hide"
-  vim.bo[bufnr].swapfile = false
-  vim.bo[bufnr].filetype = "markdown"
+  vim.bo[self.bufnr].buftype = "nofile"
+  vim.bo[self.bufnr].bufhidden = "hide"
+  vim.bo[self.bufnr].swapfile = false
+  vim.bo[self.bufnr].filetype = "markdown"
 
-  return bufnr
+  return self.bufnr
 end
 
-function M:write(delta, buf)
+function M:write(delta)
   log.fmt_trace("response_writer delta=%s", delta)
 
   delta:gsub(".", function(c)
     if c == "\n" then
       log.fmt_trace("response_writer line=%s content=%s", self.line, self.content)
-      vim.api.nvim_buf_set_lines(buf, self.line, -1, false, { self.content })
+      vim.api.nvim_buf_set_lines(self.bufnr, self.line, -1, false, { self.content })
       self.line = self.line + 1
       self.content = ""
     else
@@ -41,7 +41,7 @@ function M:write(delta, buf)
 
   if self.content then
     log.fmt_trace("response_writer -write rest- line=%s content=%s", self.line, self.content)
-    vim.api.nvim_buf_set_lines(buf, self.line, -1, false, { self.content })
+    vim.api.nvim_buf_set_lines(self.bufnr, self.line, -1, false, { self.content })
   end
 end
 

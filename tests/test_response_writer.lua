@@ -3,6 +3,7 @@ local eq = MiniTest.expect.equality
 local child, T = Helpers.new_child_with_set([[
   rwf = require("kitt.response_writer")
   rw = rwf:new()
+  rw:create_scratch_buffer()
 ]])
 
 local get_lines = function(buf)
@@ -10,15 +11,15 @@ local get_lines = function(buf)
 end
 
 T["response_writer.write"] = function()
-  local buf = child.api.nvim_create_buf(true, true)
+  local buf = child.lua_get("rw.bufnr")
 
-  child.lua("rw:write('abc', " .. buf .. ")")
+  child.lua("rw:write('abc')")
   eq(get_lines(buf), { "abc" })
 
-  child.lua("rw:write('def', " .. buf .. ")")
+  child.lua("rw:write('def')")
   eq(get_lines(buf), { "abcdef" })
 
-  child.lua("rw:write('g\\nhi', " .. buf .. ")")
+  child.lua("rw:write('g\\nhi')")
   eq(get_lines(buf), { "abcdefg", "hi" })
 end
 
