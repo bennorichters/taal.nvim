@@ -48,6 +48,17 @@ local function openai_extract_content(body)
   return result
 end
 
+local function format_template(template, ...)
+  local subts = {}
+  local count = select("#", ...)
+  for i = 1, count do
+    local text = select(i, ...)
+    table.insert(subts, encode_text(text))
+  end
+
+  return string.format(vim.fn.json_encode(template), unpack(subts))
+end
+
 return function(send_request, timeout)
   local send_plain_request = function(body_content)
     local response = send_request(body_content, { timeout = timeout })
@@ -83,17 +94,6 @@ return function(send_request, timeout)
     local stream = { stream = vim.schedule_wrap(process_stream) }
 
     send_request(body_content, stream)
-  end
-
-  local function format_template(template, ...)
-    local subts = {}
-    local count = select("#", ...)
-    for i = 1, count do
-      local text = select(i, ...)
-      table.insert(subts, encode_text(text))
-    end
-
-    return string.format(vim.fn.json_encode(template), unpack(subts))
   end
 
   local M = {}
