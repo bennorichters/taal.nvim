@@ -5,11 +5,9 @@ local function split_into_words(text)
   local words = {}
   local starts = {}
   for char in string.gmatch(text .. " ", ".") do
-    index = index + 1
-
     if string.match(char, "%s") then
       if not prev_whitespace then
-        table.insert(words, string.sub(text, starts[#starts], index - 1))
+        table.insert(words, string.sub(text, starts[#starts] + 1, index))
       end
 
       prev_whitespace = true
@@ -17,6 +15,8 @@ local function split_into_words(text)
       prev_whitespace = false
       table.insert(starts, index)
     end
+
+    index = index + 1
   end
 
   return table.concat(words, "\n"), starts
@@ -25,9 +25,9 @@ end
 local function diff_boundaries(starts, start_first, start_last, length)
   local diff_start = starts[start_first]
   local last_start = start_first + start_last
-  local diff_end = last_start <= #starts and (starts[last_start] - 1) or (length + 1)
+  local diff_end = last_start <= #starts and (starts[last_start] - 1) or length
 
-  return diff_start - 1, diff_end - 1
+  return diff_start, diff_end
 end
 
 local M = {}
