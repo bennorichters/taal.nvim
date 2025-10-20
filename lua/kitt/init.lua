@@ -14,6 +14,8 @@ M.setup = function(user_cfg)
   log.trace("kitt.nvim log started")
   log.fmt_info("user config: %s", user_cfg)
 
+  _G.kitt_ns = vim.api.nvim_create_namespace("kitt")
+
   local post
   local cfg_post = config.get().post
   if cfg_post == "curl" then
