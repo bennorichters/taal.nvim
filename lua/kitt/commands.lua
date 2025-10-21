@@ -50,8 +50,8 @@ M.ai_improve_grammar = function()
   local ui_select = text_prompt.process_buf_text(text_prompt.prompt)
   local callback = function(scratch_buf, ai_text)
     M.buffer_helper.apply_diff_hlgroup(
-      { hlgroup = "KittIssue", bufnr = bufnr, linenr = linenr, text = text },
-      { hlgroup = "KittImprovement", bufnr = scratch_buf, linenr = 1, text = ai_text }
+      { hl_group = "KittIssue", bufnr = bufnr, linenr = linenr, text = text },
+      { hl_group = "KittImprovement", bufnr = scratch_buf, linenr = 1, text = ai_text }
     )
 
     ui_select()

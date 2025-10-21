@@ -1,7 +1,7 @@
 local differ = require("kitt.diff")
 local log = require("kitt.log")
 
-local function add_hlgroup(bufnr, linenr, hl_group, hl_start, hl_end, diff_text)
+local function add_hl_group(bufnr, linenr, hl_group, hl_start, hl_end, diff_text)
   log.fmt_trace(
     "bufnr=%s, linenr=%s, highlightgroup=%s, hl_start=%s, hl_end=%s, diff_text=%s",
     bufnr,
@@ -64,11 +64,11 @@ M.apply_diff_hlgroup = function(a, b)
     log.trace("diff info: %s", loc)
     table.insert(
       a_group_info,
-      add_hlgroup(a.bufnr, a.linenr, a.hlgroup, loc.a_start, loc.a_end, loc.b_text)
+      add_hl_group(a.bufnr, a.linenr, a.hl_group, loc.a_start, loc.a_end, loc.b_text)
     )
     table.insert(
       b_group_info,
-      add_hlgroup(b.bufnr, b.linenr, b.hlgroup, loc.b_start, loc.b_end, loc.a_text)
+      add_hl_group(b.bufnr, b.linenr, b.hl_group, loc.b_start, loc.b_end, loc.a_text)
     )
   end
 
