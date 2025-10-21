@@ -45,7 +45,7 @@ end
 M.ai_improve_grammar = function()
   local bufnr = vim.api.nvim_get_current_buf()
   local linenr = vim.fn.line(".")
-  local text = M.buffer_helper.current_line()
+  local text = M.buffer_helper.text_under_cursor()
 
   local ui_select = text_prompt.process_buf_text(text_prompt.prompt)
   local callback = function(scratch_buf, ai_text)
@@ -61,7 +61,7 @@ M.ai_improve_grammar = function()
 end
 
 M.ai_suggest_grammar = function()
-  local original = M.buffer_helper.current_line()
+  local original = M.buffer_helper.text_under_cursor()
   local ai_text = M.template_sender.send(tpl_grammar, original)
 
   local loc = differ.diff(original, ai_text)
@@ -95,10 +95,10 @@ M.ai_apply_suggestion = function()
       and col_nr < sug.a_end
     then
       applied_index = i
-      local current_line = M.buffer_helper.current_line()
-      local content = string.sub(current_line, 1, sug.a_start - 1)
+      local current_text = M.buffer_helper.text_under_cursor()
+      local content = string.sub(current_text, 1, sug.a_start - 1)
         .. sug.b_text
-        .. string.sub(current_line, sug.a_end)
+        .. string.sub(current_text, sug.a_end)
 
       vim.api.nvim_buf_set_lines(0, sug.line - 1, sug.line, false, { content })
       vim.fn.matchdelete(sug.matchid)
@@ -123,10 +123,10 @@ M.ai_apply_suggestion = function()
 end
 
 M.ai_set_spelllang = function()
-  local content = M.template_sender.send(tpl_recognize_language, M.buffer_helper.current_line())
-  if content then
-    log.fmt_info("set spellang=%s", content)
-    vim.cmd("set spelllang=" .. content)
+  local code = M.template_sender.send(tpl_recognize_language, M.buffer_helper.text_under_cursor())
+  if code then
+    log.fmt_info("set spellang=%s", code)
+    vim.cmd("set spelllang=" .. code)
   else
     log.fmt_error("no content returned for setting spellang")
   end

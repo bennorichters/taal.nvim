@@ -6,7 +6,7 @@ local ai_text = "The moon is brighter then yesterday."
 local child, T = Helpers.new_child_with_set(string.format(
   [[
   local buffhelp = {
-    current_line = function() return "%s" end
+    text_under_cursor = function() return "%s" end
   }
 
   local tempsend = {

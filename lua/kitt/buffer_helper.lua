@@ -31,7 +31,7 @@ end
 
 local M = {}
 
-M.current_line = function()
+M.text_under_cursor = function()
   local line_number = vim.fn.line(".")
   return vim.api.nvim_buf_get_lines(0, line_number - 1, line_number, false)[1]
 end
