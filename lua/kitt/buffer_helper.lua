@@ -1,30 +1,30 @@
 local differ = require("kitt.diff")
 local log = require("kitt.log")
 
-local function add_hlgroup(hlgroup, bufnr, linenr, x_start, x_end, y_text)
+local function add_hlgroup(bufnr, linenr, hl_group, hl_start, hl_end, diff_text)
   log.fmt_trace(
-    "highlightgroup=%s, bufnr=%s, linenr=%s, x_start=%s, x_end=%s, y_text=%s",
-    hlgroup,
+    "bufnr=%s, linenr=%s, highlightgroup=%s, hl_start=%s, hl_end=%s, diff_text=%s",
     bufnr,
     linenr,
-    x_start,
-    x_end,
-    y_text
+    hl_group,
+    hl_start,
+    hl_end,
+    diff_text
   )
 
   local id = vim.api.nvim_buf_set_extmark(
     bufnr,
     _G.kitt_ns,
     linenr - 1,
-    x_start,
-    { end_row = linenr - 1, end_col = x_end, hl_group = hlgroup }
+    hl_start,
+    { end_row = linenr - 1, end_col = hl_end, hl_group = hl_group }
   )
 
   return {
     line = linenr,
-    a_start = x_start,
-    a_end = x_end,
-    b_text = y_text,
+    a_start = hl_start,
+    a_end = hl_end,
+    b_text = diff_text,
     matchid = id,
   }
 end
@@ -64,11 +64,11 @@ M.apply_diff_hlgroup = function(a, b)
     log.trace("diff info: %s", loc)
     table.insert(
       a_group_info,
-      add_hlgroup(a.hlgroup, a.bufnr, a.linenr, loc.a_start, loc.a_end, loc.b_text)
+      add_hlgroup(a.bufnr, a.linenr, a.hlgroup, loc.a_start, loc.a_end, loc.b_text)
     )
     table.insert(
       b_group_info,
-      add_hlgroup(b.hlgroup, b.bufnr, b.linenr, loc.b_start, loc.b_end, loc.a_text)
+      add_hlgroup(b.bufnr, b.linenr, b.hlgroup, loc.b_start, loc.b_end, loc.a_text)
     )
   end
 
