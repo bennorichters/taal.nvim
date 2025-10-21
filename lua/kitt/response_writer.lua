@@ -43,6 +43,8 @@ function M:write(delta)
     log.fmt_trace("response_writer -write rest- line=%s content=%s", self.line, self.content)
     vim.api.nvim_buf_set_lines(self.bufnr, self.line, -1, false, { self.content })
   end
+
+  vim.api.nvim__redraw({ buf = self.bufnr, flush = true })
 end
 
 return M

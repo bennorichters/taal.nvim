@@ -11,9 +11,15 @@ M.parse = function(stream_data)
     return false, nil
   end
 
-  local status, json = pcall(vim.fn.json_decode, string.sub(stream_data, #start_data + 1))
+  local data_part = string.sub(stream_data, #start_data + 1)
+  local status, json = pcall(vim.fn.json_decode, data_part)
 
-  if not (status and json.type) then
+  if not status then
+    log.fmt_trace("Could not parse json: %s", data_part)
+    return false, nil
+  end
+
+  if not json.type then
     log.fmt_trace("doesn't contain json with type")
     return false, nil
   end
