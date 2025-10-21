@@ -51,7 +51,7 @@ M.visual_selection = function()
   return table.concat(lines, "\n")
 end
 
-M.apply_diff_hlgroup = function(a, b)
+M.apply_diff_hl_groups = function(a, b)
   log.trace("a=%s", a)
   log.trace("b=%s", b)
 
