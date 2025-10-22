@@ -6,15 +6,32 @@ local tpl_interact = require("kitt.templates.interact_with_content")
 local tpl_minutes = require("kitt.templates.minutes")
 local tpl_recognize_language = require("kitt.templates.recognize_language")
 
-local M = { suggestions = {} }
+local M = { diff_info = {} }
 
 local function delete_suggestions()
-  for _, suggestion in ipairs(M.suggestions) do
-    vim.fn.matchdelete(suggestion.matchid)
+  for _, ele in ipairs(M.diff_info) do
+    vim.fn.matchdelete(ele.matchid)
   end
 
-  for i = #M.suggestions, 1, -1 do
-    table.remove(M.suggestions, i)
+  for i = #M.diff_info, 1, -1 do
+    table.remove(M.diff_info, i)
+  end
+end
+
+local function apply_suggestions()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local line_nr = vim.fn.line(".")
+  local col_nr = vim.fn.col(".")
+  for _, ele in ipairs(M.diff_info) do
+    if
+      bufnr == ele.bufnr
+      and line_nr == ele.linenr
+      and col_nr >= ele.a_start
+      and col_nr <= ele.a_end
+    then
+      vim.notify(ele.b_text)
+      return
+    end
   end
 end
 
@@ -23,23 +40,7 @@ M.setup = function(buffer_helper, template_sender)
   M.template_sender = template_sender
 
   vim.api.nvim_create_autocmd("InsertEnter", { callback = delete_suggestions })
-
-  vim.api.nvim_create_autocmd("CursorHold", {
-    callback = function()
-      local line_nr = vim.fn.line(".")
-      local col_nr = vim.fn.col(".")
-      for _, suggestion in ipairs(M.suggestions) do
-        if
-          line_nr == suggestion.line
-          and col_nr >= suggestion.a_start
-          and col_nr <= suggestion.a_end
-        then
-          vim.notify(suggestion.b_text)
-          return
-        end
-      end
-    end,
-  })
+  vim.api.nvim_create_autocmd("CursorHold", { callback = apply_suggestions })
 end
 
 M.ai_improve_grammar = function()
@@ -49,7 +50,7 @@ M.ai_improve_grammar = function()
 
   local ui_select = text_prompt.process_buf_text(text_prompt.prompt)
   local callback = function(scratch_buf, ai_text)
-    M.buffer_helper.apply_diff_hl_groups(
+    M.diff_info = M.buffer_helper.apply_diff_hl_groups(
       { hl_group = "KittIssue", bufnr = bufnr, linenr = linenr, text = text },
       { hl_group = "KittImprovement", bufnr = scratch_buf, linenr = 1, text = ai_text }
     )
@@ -57,6 +58,7 @@ M.ai_improve_grammar = function()
     ui_select()
   end
 
+  delete_suggestions()
   M.template_sender.stream(tpl_grammar, callback, text)
 end
 
@@ -71,7 +73,7 @@ M.ai_suggest_grammar = function()
   for _, c in ipairs(loc) do
     local position = { line_number, c.a_start + 1, c.a_end - c.a_start }
     local id = vim.fn.matchaddpos("SpellBad", { position })
-    table.insert(M.suggestions, {
+    table.insert(M.diff_info, {
       line = line_number,
       a_start = c.a_start + 1,
       a_end = c.a_end + 1,
@@ -82,43 +84,51 @@ M.ai_suggest_grammar = function()
 end
 
 M.ai_apply_suggestion = function()
+  local bufnr = vim.api.nvim_get_current_buf()
   local line_nr = vim.fn.line(".")
   local col_nr = vim.fn.col(".")
 
   local length_diff = 0
   local applied_index = 0
-  for i, sug in ipairs(M.suggestions) do
-    if
-      applied_index == 0
-      and line_nr == sug.line
-      and col_nr >= sug.a_start
-      and col_nr < sug.a_end
-    then
-      applied_index = i
-      local current_text = M.buffer_helper.text_under_cursor()
-      local content = string.sub(current_text, 1, sug.a_start - 1)
-        .. sug.b_text
-        .. string.sub(current_text, sug.a_end)
+  for i, info in ipairs(M.diff_info) do
+    if bufnr == info.bufnr then
+      if
+        applied_index == 0
+        and line_nr == info.linenr
+        and col_nr >= info.a_start
+        and col_nr < info.a_end
+      then
+        applied_index = i
+        local current_text = M.buffer_helper.text_under_cursor()
+        local content = string.sub(current_text, 1, info.a_start)
+          .. info.b_text
+          .. string.sub(current_text, info.a_end + 1)
 
-      vim.api.nvim_buf_set_lines(0, sug.line - 1, sug.line, false, { content })
-      vim.fn.matchdelete(sug.matchid)
+        vim.api.nvim_buf_set_lines(0, info.linenr - 1, info.linenr, false, { content })
+        vim.api.nvim_buf_del_extmark(bufnr, _G.kitt_ns, info.matchid)
 
-      length_diff = sug.a_end - sug.a_start - #sug.b_text
-      if length_diff == 0 then
-        return
+        length_diff = info.a_end - info.a_start - #info.b_text
+        if length_diff == 0 then
+          return
+        end
+      elseif applied_index > 0 then
+        vim.api.nvim_buf_del_extmark(bufnr, _G.kitt_ns, info.matchid)
+
+        info.a_start = info.a_start - length_diff
+        info.a_end = info.a_end - length_diff
+        info.matchid = vim.api.nvim_buf_set_extmark(
+          bufnr,
+          _G.kitt_ns,
+          line_nr - 1,
+          info.a_start,
+          { end_row = line_nr - 1, end_col = info.a_end, hl_group = "KittIssue" }
+        )
       end
-    elseif applied_index > 0 then
-      vim.fn.matchdelete(sug.matchid)
-
-      sug.a_start = sug.a_start - length_diff
-      sug.a_end = sug.a_end - length_diff
-      local position = { line_nr, sug.a_start, sug.a_end - sug.a_start }
-      sug.matchid = vim.fn.matchaddpos("SpellBad", { position })
     end
   end
 
   if applied_index > 0 then
-    table.remove(M.suggestions, applied_index)
+    table.remove(M.diff_info, applied_index)
   end
 end
 

@@ -21,7 +21,8 @@ local function add_hl_group(bufnr, linenr, hl_group, hl_start, hl_end, diff_text
   )
 
   return {
-    line = linenr,
+    bufnr = bufnr,
+    linenr = linenr,
     a_start = hl_start,
     a_end = hl_end,
     b_text = diff_text,
@@ -55,24 +56,23 @@ M.apply_diff_hl_groups = function(a, b)
   log.trace("a=%s", a)
   log.trace("b=%s", b)
 
-  local a_group_info = {}
-  local b_group_info = {}
+  local diff_info = {}
 
   local locations = differ.diff(a.text, b.text)
 
   for _, loc in ipairs(locations) do
     log.trace("diff info: %s", loc)
     table.insert(
-      a_group_info,
+      diff_info,
       add_hl_group(a.bufnr, a.linenr, a.hl_group, loc.a_start, loc.a_end, loc.b_text)
     )
     table.insert(
-      b_group_info,
+      diff_info,
       add_hl_group(b.bufnr, b.linenr, b.hl_group, loc.b_start, loc.b_end, loc.a_text)
     )
   end
 
-  return a_group_info, b_group_info
+  return diff_info
 end
 
 return M
