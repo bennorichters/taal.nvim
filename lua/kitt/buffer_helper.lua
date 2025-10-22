@@ -1,33 +1,16 @@
 local differ = require("kitt.diff")
 local log = require("kitt.log")
 
-local function add_hl_group(buf_nr, line_nr, hl_group, hl_start, hl_end, diff_text)
-  log.fmt_trace(
-    "buf_nr=%s, line_nr=%s, highlightgroup=%s, hl_start=%s, hl_end=%s, diff_text=%s",
-    buf_nr,
-    line_nr,
-    hl_group,
-    hl_start,
-    hl_end,
-    diff_text
-  )
+local function add_hl_group(hl_group, info)
+  log.fmt_trace("highlightgroup=%s, info=%s", hl_group, info)
 
-  local id = vim.api.nvim_buf_set_extmark(
-    buf_nr,
+  return vim.api.nvim_buf_set_extmark(
+    info.buf_nr,
     _G.kitt_ns,
-    line_nr - 1,
-    hl_start,
-    { end_row = line_nr - 1, end_col = hl_end, hl_group = hl_group }
+    info.line_nr - 1,
+    info.col_start,
+    { end_row = info.line_nr - 1, end_col = info.col_end, hl_group = hl_group }
   )
-
-  return {
-    buf_nr = buf_nr,
-    line_nr = line_nr,
-    a_start = hl_start,
-    a_end = hl_end,
-    b_text = diff_text,
-    extmark_id = id,
-  }
 end
 
 local M = {}
@@ -57,19 +40,30 @@ M.apply_diff_hl_groups = function(a, b)
   log.trace("b=%s", b)
 
   local diff_info = {}
-
   local locations = differ.diff(a.text, b.text)
 
   for _, loc in ipairs(locations) do
     log.trace("diff info: %s", loc)
-    table.insert(
-      diff_info,
-      add_hl_group(a.buf_nr, a.line_nr, a.hl_group, loc.a_start, loc.a_end, loc.b_text)
-    )
-    table.insert(
-      diff_info,
-      add_hl_group(b.buf_nr, b.line_nr, b.hl_group, loc.b_start, loc.b_end, loc.a_text)
-    )
+
+    local info_a = {
+      buf_nr = a.buf_nr,
+      line_nr = a.line_nr,
+      col_start = loc.a_start,
+      col_end = loc.a_end,
+      alt_text = loc.b_text,
+    }
+    info_a.extmark_id = add_hl_group(a.hl_group, info_a)
+    table.insert(diff_info, info_a)
+
+    local info_b = {
+      buf_nr = b.buf_nr,
+      line_nr = b.line_nr,
+      col_start = loc.b_start,
+      col_end = loc.b_end,
+      alt_text = loc.a_text,
+    }
+    info_b.extmark_id = add_hl_group(b.hl_group, info_b)
+    table.insert(diff_info, info_b)
   end
 
   return diff_info

@@ -29,10 +29,10 @@ local function apply_suggestions()
     if
       info.buf_nr == buf_nr
       and info.line_nr == line_nr
-      and info.a_start <= col_nr
-      and info.a_end >= col_nr
+      and info.col_start <= col_nr
+      and info.col_end >= col_nr
     then
-      vim.notify(info.b_text)
+      vim.notify(info.alt_text)
       return
     end
   end
@@ -98,33 +98,33 @@ M.ai_apply_suggestion = function()
       if
         applied_index == 0
         and info.line_nr == line_nr
-        and info.a_start <= col_nr
-        and info.a_end > col_nr
+        and info.col_start <= col_nr
+        and info.col_end > col_nr
       then
         applied_index = i
         local current_text = M.buffer_helper.text_under_cursor()
-        local content = string.sub(current_text, 1, info.a_start)
-          .. info.b_text
-          .. string.sub(current_text, info.a_end + 1)
+        local content = string.sub(current_text, 1, info.col_start)
+          .. info.alt_text
+          .. string.sub(current_text, info.col_end + 1)
 
         vim.api.nvim_buf_set_lines(0, info.line_nr - 1, info.line_nr, false, { content })
         vim.api.nvim_buf_del_extmark(buf_nr, _G.kitt_ns, info.extmark_id)
 
-        length_diff = info.a_end - info.a_start - #info.b_text
+        length_diff = info.col_end - info.col_start - #info.alt_text
         if length_diff == 0 then
           return
         end
       elseif applied_index > 0 then
         vim.api.nvim_buf_del_extmark(buf_nr, _G.kitt_ns, info.extmark_id)
 
-        info.a_start = info.a_start - length_diff
-        info.a_end = info.a_end - length_diff
+        info.col_start = info.col_start - length_diff
+        info.col_end = info.col_end - length_diff
         info.extmark_id = vim.api.nvim_buf_set_extmark(
           buf_nr,
           _G.kitt_ns,
           line_nr - 1,
-          info.a_start,
-          { end_row = line_nr - 1, end_col = info.a_end, hl_group = "KittIssue" }
+          info.col_start,
+          { end_row = line_nr - 1, end_col = info.col_end, hl_group = "KittIssue" }
         )
       end
     end
