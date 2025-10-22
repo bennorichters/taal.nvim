@@ -9,8 +9,11 @@ local tpl_recognize_language = require("kitt.templates.recognize_language")
 local M = { diff_info = {} }
 
 local function delete_suggestions()
-  for _, ele in ipairs(M.diff_info) do
-    vim.fn.matchdelete(ele.matchid)
+  local buf_nr = vim.api.nvim_get_current_buf()
+  for _, info in ipairs(M.diff_info) do
+    if info.buf_nr == buf_nr then
+      vim.api.nvim_buf_del_extmark(buf_nr, _G.kitt_ns, info.extmark_id)
+    end
   end
 
   for i = #M.diff_info, 1, -1 do
@@ -19,17 +22,17 @@ local function delete_suggestions()
 end
 
 local function apply_suggestions()
-  local bufnr = vim.api.nvim_get_current_buf()
+  local buf_nr = vim.api.nvim_get_current_buf()
   local line_nr = vim.fn.line(".")
   local col_nr = vim.fn.col(".")
-  for _, ele in ipairs(M.diff_info) do
+  for _, info in ipairs(M.diff_info) do
     if
-      bufnr == ele.bufnr
-      and line_nr == ele.linenr
-      and col_nr >= ele.a_start
-      and col_nr <= ele.a_end
+      info.buf_nr == buf_nr
+      and info.line_nr == line_nr
+      and info.a_start <= col_nr
+      and info.a_end >= col_nr
     then
-      vim.notify(ele.b_text)
+      vim.notify(info.b_text)
       return
     end
   end
@@ -44,15 +47,15 @@ M.setup = function(buffer_helper, template_sender)
 end
 
 M.ai_improve_grammar = function()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local linenr = vim.fn.line(".")
+  local buf_nr = vim.api.nvim_get_current_buf()
+  local line_nr = vim.fn.line(".")
   local text = M.buffer_helper.text_under_cursor()
 
   local ui_select = text_prompt.process_buf_text(text_prompt.prompt)
   local callback = function(scratch_buf, ai_text)
     M.diff_info = M.buffer_helper.apply_diff_hl_groups(
-      { hl_group = "KittIssue", bufnr = bufnr, linenr = linenr, text = text },
-      { hl_group = "KittImprovement", bufnr = scratch_buf, linenr = 1, text = ai_text }
+      { hl_group = "KittIssue", buf_nr = buf_nr, line_nr = line_nr, text = text },
+      { hl_group = "KittImprovement", buf_nr = scratch_buf, line_nr = 1, text = ai_text }
     )
 
     ui_select()
@@ -78,25 +81,25 @@ M.ai_suggest_grammar = function()
       a_start = c.a_start + 1,
       a_end = c.a_end + 1,
       b_text = c.b_text,
-      matchid = id,
+      extmark_id = id,
     })
   end
 end
 
 M.ai_apply_suggestion = function()
-  local bufnr = vim.api.nvim_get_current_buf()
+  local buf_nr = vim.api.nvim_get_current_buf()
   local line_nr = vim.fn.line(".")
   local col_nr = vim.fn.col(".")
 
   local length_diff = 0
   local applied_index = 0
   for i, info in ipairs(M.diff_info) do
-    if bufnr == info.bufnr then
+    if info.buf_nr == buf_nr then
       if
         applied_index == 0
-        and line_nr == info.linenr
-        and col_nr >= info.a_start
-        and col_nr < info.a_end
+        and info.line_nr == line_nr
+        and info.a_start <= col_nr
+        and info.a_end > col_nr
       then
         applied_index = i
         local current_text = M.buffer_helper.text_under_cursor()
@@ -104,20 +107,20 @@ M.ai_apply_suggestion = function()
           .. info.b_text
           .. string.sub(current_text, info.a_end + 1)
 
-        vim.api.nvim_buf_set_lines(0, info.linenr - 1, info.linenr, false, { content })
-        vim.api.nvim_buf_del_extmark(bufnr, _G.kitt_ns, info.matchid)
+        vim.api.nvim_buf_set_lines(0, info.line_nr - 1, info.line_nr, false, { content })
+        vim.api.nvim_buf_del_extmark(buf_nr, _G.kitt_ns, info.extmark_id)
 
         length_diff = info.a_end - info.a_start - #info.b_text
         if length_diff == 0 then
           return
         end
       elseif applied_index > 0 then
-        vim.api.nvim_buf_del_extmark(bufnr, _G.kitt_ns, info.matchid)
+        vim.api.nvim_buf_del_extmark(buf_nr, _G.kitt_ns, info.extmark_id)
 
         info.a_start = info.a_start - length_diff
         info.a_end = info.a_end - length_diff
-        info.matchid = vim.api.nvim_buf_set_extmark(
-          bufnr,
+        info.extmark_id = vim.api.nvim_buf_set_extmark(
+          buf_nr,
           _G.kitt_ns,
           line_nr - 1,
           info.a_start,
