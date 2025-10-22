@@ -1,19 +1,19 @@
 local differ = require("kitt.diff")
 local log = require("kitt.log")
 
-local function add_hl_group(hl_group, info)
-  log.fmt_trace("highlightgroup=%s, info=%s", hl_group, info)
+local M = {}
+
+M.add_hl_group = function(info)
+  log.fmt_trace("info=%s", info)
 
   return vim.api.nvim_buf_set_extmark(
     info.buf_nr,
     _G.kitt_ns,
     info.line_nr - 1,
     info.col_start,
-    { end_row = info.line_nr - 1, end_col = info.col_end, hl_group = hl_group }
+    { end_row = info.line_nr - 1, end_col = info.col_end, hl_group = info.hl_group }
   )
 end
-
-local M = {}
 
 M.text_under_cursor = function()
   local line_number = vim.fn.line(".")
@@ -50,9 +50,10 @@ M.apply_diff_hl_groups = function(a, b)
       line_nr = a.line_nr,
       col_start = loc.a_start,
       col_end = loc.a_end,
+      hl_group = a.hl_group,
       alt_text = loc.b_text,
     }
-    info_a.extmark_id = add_hl_group(a.hl_group, info_a)
+    info_a.extmark_id = M.add_hl_group(info_a)
     table.insert(diff_info, info_a)
 
     local info_b = {
@@ -60,9 +61,10 @@ M.apply_diff_hl_groups = function(a, b)
       line_nr = b.line_nr,
       col_start = loc.b_start,
       col_end = loc.b_end,
+      hl_group = b.hl_group,
       alt_text = loc.a_text,
     }
-    info_b.extmark_id = add_hl_group(b.hl_group, info_b)
+    info_b.extmark_id = M.add_hl_group(info_b)
     table.insert(diff_info, info_b)
   end
 

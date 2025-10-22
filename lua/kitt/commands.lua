@@ -94,13 +94,8 @@ M.ai_apply_suggestion = function()
   local length_diff = 0
   local applied_index = 0
   for i, info in ipairs(M.diff_info) do
-    if info.buf_nr == buf_nr then
-      if
-        applied_index == 0
-        and info.line_nr == line_nr
-        and info.col_start <= col_nr
-        and info.col_end > col_nr
-      then
+    if info.buf_nr == buf_nr and info.line_nr == line_nr then
+      if applied_index == 0 and info.col_start <= col_nr and info.col_end > col_nr then
         applied_index = i
         local current_text = M.buffer_helper.text_under_cursor()
         local content = string.sub(current_text, 1, info.col_start)
@@ -119,13 +114,7 @@ M.ai_apply_suggestion = function()
 
         info.col_start = info.col_start - length_diff
         info.col_end = info.col_end - length_diff
-        info.extmark_id = vim.api.nvim_buf_set_extmark(
-          buf_nr,
-          _G.kitt_ns,
-          line_nr - 1,
-          info.col_start,
-          { end_row = line_nr - 1, end_col = info.col_end, hl_group = "KittIssue" }
-        )
+        info.extmark_id = M.buffer_helper.add_hl_group(info)
       end
     end
   end
