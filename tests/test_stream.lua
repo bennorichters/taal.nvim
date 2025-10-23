@@ -1,4 +1,4 @@
-require("tests.helpers").disable_log()
+require("tests.helpers").enable_log()
 
 local new_set = MiniTest.new_set
 local eq = MiniTest.expect.equality

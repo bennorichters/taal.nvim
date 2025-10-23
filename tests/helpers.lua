@@ -8,8 +8,8 @@ M.new_child_with_set = function(code)
       pre_case = function()
         child.restart({ "-u", "scripts/minimal_init.lua" })
         child.lua("log = require('kitt.log')")
-        child.lua("log.new({}, true)")
-        child.lua("log:disable()")
+        child.lua("log.new({ level = 'trace'}, true)")
+        child.lua("log.trace('test log started in child process')")
         child.lua(code)
       end,
       post_once = child.stop,
@@ -19,10 +19,10 @@ M.new_child_with_set = function(code)
   return child, T
 end
 
-M.disable_log = function()
+M.enable_log = function()
   local log = require("kitt.log")
-  log.new({}, true)
-  log:disable()
+  log.new({ level = "trace" }, true)
+  log.trace("test log started")
 end
 
 return M
