@@ -38,6 +38,44 @@ local function apply_suggestions()
   end
 end
 
+local function apply_diff_hl_groups(a, b)
+  log.trace("apply_diff_hl_groups a=%s", a)
+  log.trace("apply_diff_hl_groups b=%s", b)
+
+  local diff_info = {}
+  local locations = differ.diff(a.text, b.text)
+
+  for _, loc in ipairs(locations) do
+    log.trace("diff info: %s", loc)
+
+    local info_a = {
+      buf_nr = a.buf_nr,
+      line_nr = a.line_nr,
+      col_start = loc.a_start,
+      col_end = loc.a_end,
+      hl_group = a.hl_group,
+      alt_text = loc.b_text,
+    }
+    info_a.extmark_id = M.buffer_helper.add_hl_group(info_a)
+    table.insert(diff_info, info_a)
+
+    if b.buf_nr then
+      local info_b = {
+        buf_nr = b.buf_nr,
+        line_nr = b.line_nr,
+        col_start = loc.b_start,
+        col_end = loc.b_end,
+        hl_group = b.hl_group,
+        alt_text = loc.a_text,
+      }
+      info_b.extmark_id = M.buffer_helper.add_hl_group(info_b)
+      table.insert(diff_info, info_b)
+    end
+  end
+
+  return diff_info
+end
+
 M.setup = function(buffer_helper, template_sender)
   M.buffer_helper = buffer_helper
   M.template_sender = template_sender
@@ -53,7 +91,7 @@ M.ai_improve_grammar = function()
 
   local ui_select = text_prompt.process_buf_text(text_prompt.prompt)
   local callback = function(scratch_buf, ai_text)
-    M.diff_info = M.buffer_helper.apply_diff_hl_groups(
+    M.diff_info = apply_diff_hl_groups(
       { hl_group = "KittIssue", buf_nr = buf_nr, line_nr = line_nr, text = text },
       { hl_group = "KittImprovement", buf_nr = scratch_buf, line_nr = 1, text = ai_text }
     )
@@ -69,21 +107,13 @@ M.ai_suggest_grammar = function()
   local original = M.buffer_helper.text_under_cursor()
   local ai_text = M.template_sender.send(tpl_grammar, original)
 
-  local loc = differ.diff(original, ai_text)
-
-  local line_number = vim.fn.line(".")
+  local buf_nr = vim.api.nvim_get_current_buf()
+  local line_nr = vim.fn.line(".")
   delete_suggestions()
-  for _, c in ipairs(loc) do
-    local position = { line_number, c.a_start + 1, c.a_end - c.a_start }
-    local id = vim.fn.matchaddpos("SpellBad", { position })
-    table.insert(M.diff_info, {
-      line = line_number,
-      a_start = c.a_start + 1,
-      a_end = c.a_end + 1,
-      b_text = c.b_text,
-      extmark_id = id,
-    })
-  end
+  M.diff_info = apply_diff_hl_groups(
+    { hl_group = "KittIssue", buf_nr = buf_nr, line_nr = line_nr, text = original },
+    { text = ai_text }
+  )
 end
 
 M.ai_apply_suggestion = function()
