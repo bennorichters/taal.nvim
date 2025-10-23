@@ -17,8 +17,8 @@ local child, T = Helpers.new_child_with_set(string.format(
     send = function(template, data) return ai_text end,
   }
 
-  noot = require("kitt.commands")
-  noot.setup(buffhelp, tempsend)
+  cmd = require("kitt.commands")
+  cmd.setup(buffhelp, tempsend)
 ]],
   user_text,
   ai_text
@@ -27,10 +27,10 @@ local child, T = Helpers.new_child_with_set(string.format(
 T["ai_suggest_grammar"] = function()
   local buf = vim.api.nvim_get_current_buf()
 
-  child.lua("noot.ai_suggest_grammar()")
-  child.lua("log.fmt_trace('diff_info: %s', noot.diff_info[1])")
+  child.lua("cmd.ai_suggest_grammar()")
+  child.lua("log.fmt_trace('diff_info: %s', cmd.diff_info[1])")
 
-  eq(child.lua_get("noot.diff_info"), {
+  eq(child.lua_get("cmd.diff_info"), {
     {
       buf_nr = buf,
       line_nr = 1,
