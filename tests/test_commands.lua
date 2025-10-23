@@ -26,10 +26,7 @@ local child, T = Helpers.new_child_with_set(string.format(
 
 T["ai_suggest_grammar"] = function()
   local buf = vim.api.nvim_get_current_buf()
-
   child.lua("cmd.ai_suggest_grammar()")
-  child.lua("log.fmt_trace('diff_info: %s', cmd.diff_info[1])")
-
   eq(child.lua_get("cmd.diff_info"), {
     {
       buf_nr = buf,
