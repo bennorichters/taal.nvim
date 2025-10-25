@@ -23,9 +23,7 @@ local child, T = Helpers.new_child_with_set(string.format(
   local tempsend = {
     stream = function(template, callback)
       check.template = template
-      vim.ui.select = function() 
-        check.select_called = true
-      end
+      vim.ui.select = function() check.select_called = true end
       callback(scratch_buf, ai_text)
     end,
     send = function(template, data) return ai_text end,
