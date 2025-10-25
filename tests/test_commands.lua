@@ -13,7 +13,13 @@ local child, T = Helpers.new_child_with_set(string.format(
   }
 
   local tempsend = {
-    stream = function() end,
+    stream = function(_template, callback)
+      -- local old_select = vim.ui.select
+      -- vim.ui.select = function()
+      -- end
+      -- callback(42, ai_text)
+      -- vim.ui.select = old_select
+    end,
     send = function(template, data) return ai_text end,
   }
 
@@ -23,6 +29,13 @@ local child, T = Helpers.new_child_with_set(string.format(
   user_text,
   ai_text
 ))
+
+T["ai_improve_grammar"] = function()
+  local ui_select = false
+
+  child.lua("cmd.ai_improve_grammar()")
+  eq(ui_select, true)
+end
 
 T["ai_suggest_grammar"] = function()
   local buf = vim.api.nvim_get_current_buf()

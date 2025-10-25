@@ -1,6 +1,15 @@
+local log = require("kitt.log")
+
 local M = {}
 
 M.prompt = function(target_buffer, target_line, content)
+  log.fmt_trace(
+    "prompt: target_buffer=%s, target_line=%s, content=%s",
+    target_buffer,
+    target_line,
+    content
+  )
+
   vim.ui.select({ "replace", "ignore" }, {
     prompt = "Choose what to do with the generated text",
   }, function(choice)

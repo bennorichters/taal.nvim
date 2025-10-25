@@ -89,8 +89,11 @@ M.ai_improve_grammar = function()
   local line_nr = vim.fn.line(".")
   local text = M.buffer_helper.text_under_cursor()
 
+  log.fmt_trace("ai_improve_grammar. buf_nr=%s, line_nr=%s, text=%s", buf_nr, line_nr, text)
+
   local ui_select = text_prompt.process_buf_text()
   local callback = function(scratch_buf, ai_text)
+    log.fmt_trace("ai_improve_grammar-callback scratch_buf=%s, ai_text=%s", scratch_buf, ai_text)
     M.diff_info = apply_diff_hl_groups(
       { hl_group = "KittIssue", buf_nr = buf_nr, line_nr = line_nr, text = text },
       { hl_group = "KittImprovement", buf_nr = scratch_buf, line_nr = 1, text = ai_text }
