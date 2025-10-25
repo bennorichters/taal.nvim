@@ -12,7 +12,7 @@ local function delete_suggestions()
   local buf_nr = vim.api.nvim_get_current_buf()
   for _, info in ipairs(M.diff_info) do
     if info.buf_nr == buf_nr then
-      vim.api.nvim_buf_del_extmark(buf_nr, _G.kitt_ns, info.extmark_id)
+      M.buffer_helper.delete_hl_group(buf_nr, info.extmark_id)
     end
   end
 
@@ -136,14 +136,14 @@ M.ai_apply_suggestion = function()
           .. string.sub(current_text, info.col_end + 1)
 
         vim.api.nvim_buf_set_lines(0, info.line_nr - 1, info.line_nr, false, { content })
-        vim.api.nvim_buf_del_extmark(buf_nr, _G.kitt_ns, info.extmark_id)
+        M.buffer_helper.delete_hl_group(buf_nr, info.extmark_id)
 
         length_diff = info.col_end - info.col_start - #info.alt_text
         if length_diff == 0 then
           return
         end
       elseif applied_index > 0 then
-        vim.api.nvim_buf_del_extmark(buf_nr, _G.kitt_ns, info.extmark_id)
+        M.buffer_helper.delete_hl_group(buf_nr, info.extmark_id)
 
         info.col_start = info.col_start - length_diff
         info.col_end = info.col_end - length_diff

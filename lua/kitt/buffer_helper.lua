@@ -2,16 +2,26 @@ local log = require("kitt.log")
 
 local M = {}
 
+M.setup = function()
+  M.kitt_ns = vim.api.nvim_create_namespace("kitt")
+  vim.api.nvim_set_hl(0, "KittIssue", { bg = "DarkRed", fg = "White" })
+  vim.api.nvim_set_hl(0, "KittImprovement", { bg = "DarkGreen", fg = "White" })
+end
+
 M.add_hl_group = function(info)
   log.fmt_trace("add_hl_group info=%s", info)
 
   return vim.api.nvim_buf_set_extmark(
     info.buf_nr,
-    _G.kitt_ns,
+    M.kitt_ns,
     info.line_nr - 1,
     info.col_start,
     { end_row = info.line_nr - 1, end_col = info.col_end, hl_group = info.hl_group }
   )
+end
+
+M.delete_hl_group = function(buf_nr, extmark_id)
+  vim.api.nvim_buf_del_extmark(buf_nr, M.kitt_ns, extmark_id)
 end
 
 M.text_under_cursor = function()

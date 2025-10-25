@@ -14,10 +14,6 @@ M.setup = function(user_cfg)
   log.trace("kitt.nvim log started")
   log.fmt_info("user config: %s", user_cfg)
 
-  _G.kitt_ns = vim.api.nvim_create_namespace("kitt")
-  vim.api.nvim_set_hl(0, "KittIssue", { bg = "DarkRed", fg = "White" })
-  vim.api.nvim_set_hl(0, "KittImprovement", { bg = "DarkGreen", fg = "White" })
-
   local post
   local cfg_post = config.get().post
   if cfg_post == "curl" then
@@ -34,6 +30,8 @@ M.setup = function(user_cfg)
 
   local send_request = send_request_factory(post, endpoint, key)
   local template_sender = template_sender_factory(send_request, config.get().timeout)
+
+  buffer_helper.setup()
 
   commands.setup(buffer_helper, template_sender)
 
