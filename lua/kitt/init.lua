@@ -32,7 +32,6 @@ M.setup = function(user_cfg)
   local template_sender = template_sender_factory(send_request, config.get().timeout)
 
   buffer_helper.setup()
-
   commands.setup(buffer_helper, template_sender)
 
   M.ai_improve_grammar = commands.ai_improve_grammar
