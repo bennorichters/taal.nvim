@@ -1,19 +1,12 @@
-local child = MiniTest.new_child_neovim()
+local Helpers = require("tests.helpers")
 local eq = MiniTest.expect.equality
+local child, T = Helpers.new_child_with_set([[
+  prompt = require('kitt.text_prompt').prompt
+]])
 
 local get_lines = function(buf)
   return child.api.nvim_buf_get_lines(buf, 0, -1, true)
 end
-
-local T = MiniTest.new_set({
-  hooks = {
-    pre_case = function()
-      child.restart({ "-u", "scripts/minimal_init.lua" })
-      child.lua("prompt = require('kitt.text_prompt').prompt")
-    end,
-    post_once = child.stop,
-  },
-})
 
 T["prompt"] = function()
   local buf = child.api.nvim_create_buf(true, true)
