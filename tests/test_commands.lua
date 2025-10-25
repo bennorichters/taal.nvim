@@ -1,7 +1,6 @@
 local Helpers = require("tests.helpers")
 local tpl_grammar = require("kitt.templates.grammar")
 local eq = MiniTest.expect.equality
-local scratch_buf = 42
 local child, T = Helpers.new_child_with_set([[
   mock = require("tests.mock")
   cmd = require("kitt.commands")
@@ -12,8 +11,11 @@ T["ai_improve_grammar"] = function()
   local buf = vim.api.nvim_get_current_buf()
 
   child.lua("cmd.ai_improve_grammar()")
+
   eq(child.lua_get("mock.check.template"), tpl_grammar)
   eq(child.lua_get("mock.check.select_called"), true)
+
+  local scratch_buf = child.lua_get("mock.values.scratch_buf")
 
   eq(child.lua_get("cmd.diff_info"), {
     {

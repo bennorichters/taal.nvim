@@ -1,17 +1,19 @@
 local M = {}
 
-local ai_text = "The moon is brighter then yesterday."
-local user_text = "The moon is more bright then yesterdate."
-local scratch_buf = 42
+M.values = {
+  ai_text = "The moon is brighter then yesterday.",
+  user_text = "The moon is more bright then yesterdate.",
+  scratch_buf = 42,
+}
 
 M.check = {}
 
 M.buffhelp = {
   add_hl_group = function()
-    return scratch_buf
+    return M.values.scratch_buf
   end,
   text_under_cursor = function()
-    return user_text
+    return M.values.user_text
   end,
 }
 
@@ -22,10 +24,10 @@ M.post = {
     vim.ui.select = function()
       M.check.select_called = true
     end
-    callback(scratch_buf, ai_text)
+    callback(M.values.scratch_buf, M.values.ai_text)
   end,
   send = function()
-    return ai_text
+    return M.values.ai_text
   end,
 }
 
