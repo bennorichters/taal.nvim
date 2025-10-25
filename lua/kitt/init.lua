@@ -1,14 +1,13 @@
-local buffer_helper = require("kitt.buffer_helper")
-local commands = require("kitt.commands")
-local config = require("kitt.config")
-local send_request_factory = require("kitt.send_request")
-local template_sender_factory = require("kitt.template_sender")
-
-local log = require("kitt.log")
-
 local M = {}
 
 M.setup = function(user_cfg)
+  local buffer_helper = require("kitt.buffer_helper")
+  local commands = require("kitt.commands")
+  local config = require("kitt.config")
+  local log = require("kitt.log")
+  local send_request_factory = require("kitt.send_request")
+  local template_sender_factory = require("kitt.template_sender")
+
   config.setup(user_cfg)
   log.new({ level = config.get().log_level }, true)
   log.trace("kitt.nvim log started")
@@ -21,7 +20,7 @@ M.setup = function(user_cfg)
   elseif cfg_post == "mock" then
     post = require("kitt.mock_post")
   else
-    log.fmt_error("Unknown 'post' option: %s",  cfg_post)
+    log.fmt_error("Unknown 'post' option: %s", cfg_post)
     error("Unknown 'post' option")
   end
 
