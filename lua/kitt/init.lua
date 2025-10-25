@@ -21,7 +21,7 @@ M.setup = function(user_cfg)
   elseif cfg_post == "mock" then
     post = require("kitt.mock_post")
   else
-    log.fmt_error("Unknown 'post' option: " .. cfg_post)
+    log.fmt_error("Unknown 'post' option: %s",  cfg_post)
     error("Unknown 'post' option")
   end
 
