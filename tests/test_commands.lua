@@ -6,6 +6,7 @@ local child, T = Helpers.new_child_with_set(string.format(
   [[
   local user_text = "%s"
   local ai_text = "%s"
+  select_called = false
 
   local buffhelp = {
     add_hl_group = function(info) return 42 end,
@@ -14,11 +15,10 @@ local child, T = Helpers.new_child_with_set(string.format(
 
   local tempsend = {
     stream = function(_template, callback)
-      -- local old_select = vim.ui.select
-      -- vim.ui.select = function()
-      -- end
-      -- callback(42, ai_text)
-      -- vim.ui.select = old_select
+      vim.ui.select = function()
+        select_called = true
+      end
+      callback(42, ai_text)
     end,
     send = function(template, data) return ai_text end,
   }
@@ -31,10 +31,8 @@ local child, T = Helpers.new_child_with_set(string.format(
 ))
 
 T["ai_improve_grammar"] = function()
-  local ui_select = false
-
   child.lua("cmd.ai_improve_grammar()")
-  -- eq(ui_select, true)
+  eq(child.lua_get("select_called"), true)
 end
 
 T["ai_suggest_grammar"] = function()
