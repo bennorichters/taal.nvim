@@ -3,7 +3,6 @@ local log = require("kitt.log")
 local text_prompt = require("kitt.text_prompt")
 local tpl_grammar = require("kitt.templates.grammar")
 local tpl_interact = require("kitt.templates.interact_with_content")
-local tpl_minutes = require("kitt.templates.minutes")
 local tpl_recognize_language = require("kitt.templates.recognize_language")
 
 local M = { diff_info = {} }
@@ -165,10 +164,6 @@ M.ai_set_spelllang = function()
   else
     log.fmt_error("no content returned for setting spellang")
   end
-end
-
-M.ai_write_minutes = function()
-  M.template_sender.stream(function() end, tpl_minutes, M.buffer_helper.visual_selection())
 end
 
 M.ai_interactive = function()
