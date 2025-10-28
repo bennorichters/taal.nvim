@@ -1,0 +1,22 @@
+### Testing
+POST http://localhost:11434/api/generate
+Content-Type: application/json
+
+{
+  "model": "gemma3",
+  "prompt": "Who is Charles Dickens?"
+}
+
+### Testing chat
+POST http://localhost:11434/api/chat
+Content-Type: application/json
+
+{
+  "model": "gemma3",
+  "messages": [
+    {
+      "role": "user",
+      "content": "why is the sky blue?"
+    }
+  ]
+}
