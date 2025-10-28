@@ -6,6 +6,7 @@ return function(post, endpoint, api_key)
         content_type = "application/json",
         authorization = "Bearer " .. api_key,
       },
+      raw = { "--tcp-nodelay", "--no-buffer" },
     }
 
     if extra_opts then
