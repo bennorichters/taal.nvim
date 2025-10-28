@@ -5,7 +5,7 @@ local eq = MiniTest.expect.equality
 local stream = require("kitt.stream")
 
 local p = stream.parse
-local w = stream.on_stream_chunk
+local w = stream.on_chunk
 
 local T = new_set()
 T["stream"] = new_set()

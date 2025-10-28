@@ -38,7 +38,7 @@ M.parse = function(stream_data)
   return false, nil
 end
 
-M.on_stream_chunk = function(parse, response_writer, done_callback)
+M.on_chunk = function(parse, response_writer, done_callback)
   return function(error, stream_data)
     if error then
       local msg = string.format(

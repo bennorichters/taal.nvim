@@ -97,9 +97,9 @@ return function(send_request, timeout)
     local rw = response_writer:new()
     rw:create_scratch_buffer()
 
-    local on_stream_chunk = stream_handler.on_stream_chunk(stream_handler.parse, rw, callback)
+    local on_chunk = stream_handler.on_chunk(stream_handler.parse, rw, callback)
     local extra_opts = {
-      stream = vim.schedule_wrap(on_stream_chunk),
+      stream = vim.schedule_wrap(on_chunk),
       raw = { "--tcp-nodelay", "--no-buffer" },
     }
 
