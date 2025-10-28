@@ -103,7 +103,7 @@ M.ai_improve_grammar = function()
   end
 
   delete_suggestions()
-  M.template_sender.stream(tpl_grammar, callback, text)
+  M.template_sender.stream(callback, tpl_grammar, text)
 end
 
 M.ai_suggest_grammar = function()
@@ -168,15 +168,15 @@ M.ai_set_spelllang = function()
 end
 
 M.ai_write_minutes = function()
-  M.template_sender.stream(tpl_minutes, function() end, M.buffer_helper.visual_selection())
+  M.template_sender.stream(function() end, tpl_minutes, M.buffer_helper.visual_selection())
 end
 
 M.ai_interactive = function()
   vim.ui.input({ prompt = "Give instructions: " }, function(command)
     if command then
       M.template_sender.stream(
-        tpl_interact,
         function() end,
+        tpl_interact,
         command,
         M.buffer_helper.visual_selection()
       )

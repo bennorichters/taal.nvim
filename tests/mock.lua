@@ -18,7 +18,7 @@ M.buffhelp = {
 }
 
 M.post = {
-  stream = function(template, callback)
+  stream = function(callback, template)
     M.check.template = template
     ---@diagnostic disable-next-line: duplicate-set-field
     vim.ui.select = function()

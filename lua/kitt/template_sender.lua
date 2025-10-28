@@ -90,13 +90,13 @@ return function(send_request, timeout)
     end
   end
 
-  M.stream = function(template, callback, ...)
+  M.stream = function(callback, template, ...)
+    template.stream = true
     local body_content = format_template(template, ...)
 
     local rw = response_writer:new()
     rw:create_scratch_buffer()
 
-    template.stream = true
     local process_stream = stream_handler.process_wrap(stream_handler.parse, rw, callback)
     local extra_opts = {
       stream = vim.schedule_wrap(process_stream),
