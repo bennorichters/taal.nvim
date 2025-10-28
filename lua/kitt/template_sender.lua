@@ -60,7 +60,10 @@ local function format_template(template, ...)
 end
 
 return function(send_request, timeout)
-  local send_plain_request = function(body_content)
+  local M = {}
+
+  M.send = function(template, ...)
+    local body_content = format_template(template, ...)
     local response = send_request(body_content, { timeout = timeout })
     log.fmt_trace(
       "plain request response: %s",
@@ -87,24 +90,20 @@ return function(send_request, timeout)
     end
   end
 
-  local send_stream_request = function(body_content, callback)
+  M.stream = function(template, callback, ...)
+    local body_content = format_template(template, ...)
+
     local rw = response_writer:new()
     rw:create_scratch_buffer()
-    local process_stream = stream_handler.process_wrap(stream_handler.parse, rw, callback)
-    local stream = { stream = vim.schedule_wrap(process_stream) }
 
-    send_request(body_content, stream)
-  end
-
-  local M = {}
-
-  M.send = function(template, ...)
-    return send_plain_request(format_template(template, ...))
-  end
-
-  M.stream = function(template, callback, ...)
     template.stream = true
-    send_stream_request(format_template(template, ...), callback)
+    local process_stream = stream_handler.process_wrap(stream_handler.parse, rw, callback)
+    local extra_opts = {
+      stream = vim.schedule_wrap(process_stream),
+      raw = { "--tcp-nodelay", "--no-buffer" },
+    }
+
+    send_request(body_content, extra_opts)
   end
 
   return M
