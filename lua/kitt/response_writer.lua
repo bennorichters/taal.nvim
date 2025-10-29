@@ -5,9 +5,7 @@ M.__index = M
 
 function M:new(obj)
   obj = obj or {}
-  setmetatable(obj, self)
-
-  return obj
+  return setmetatable(obj, self)
 end
 
 function M:create_scratch_buffer()
