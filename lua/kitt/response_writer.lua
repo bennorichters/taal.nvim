@@ -1,11 +1,11 @@
 local log = require("kitt.log")
 
 local M = { bufnr = -1, line = 0, content = "" }
+M.__index = M
 
 function M:new(obj)
   obj = obj or {}
   setmetatable(obj, self)
-  self.__index = self
 
   return obj
 end
