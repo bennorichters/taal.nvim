@@ -3,9 +3,8 @@ local log = require("kitt.log")
 local M = { bufnr = -1, line = 0, content = "" }
 M.__index = M
 
-function M:new(obj)
-  obj = obj or {}
-  return setmetatable(obj, self)
+function M:new()
+  return setmetatable({}, self)
 end
 
 function M:create_scratch_buffer()
