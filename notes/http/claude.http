@@ -1,0 +1,13 @@
+### Hello world
+POST https://api.anthropic.com/v1/messages
+Content-Type: application/json
+anthropic-version: 2023-06-01
+x-api-key: {{CLAUDE_API_KEY}}
+
+{
+    "model": "claude-sonnet-4-20250514",
+    "max_tokens": 1024,
+    "messages": [
+        {"role": "user", "content": "Hello, world"}
+    ]
+}
