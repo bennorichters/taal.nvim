@@ -13,6 +13,7 @@ Content-Type: application/json
 
 {
   "model": "gemma3",
+  "stream": false,
   "messages": [
     {
       "role": "user",
@@ -27,10 +28,11 @@ Content-Type: application/json
 
 {
   "model": "gemma3",
-  "input": [
+  "stream": false,
+  "messages": [
     {
       "role": "system",
-      "content": "Assistant is a language expert designed to help users with grammar and spelling. Improve every text the user sends. Respond in the language the text is written in. Respond with just the improved text, nothing more."
+      "content": "Assistant is a language expert designed to help users with grammar and spelling. Assistant improves every text the user sends. Assistant responds in the language the text is written in. Assistant responds with just the improved text, nothing more."
     },
     {
       "role": "user",

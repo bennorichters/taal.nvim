@@ -1,10 +1,7 @@
 local function convert(template)
   local result = {
     model = "gemma3",
-    input = { {
-      role = "system",
-      content = template.system,
-    } },
+    input = { { role = "system", content = template.system } },
   }
 
   for _, example in ipairs(template.examples) do
@@ -25,6 +22,14 @@ M.template_stream = function(template)
   local result = convert(template)
   result.stream = true
   return result
+end
+
+M.parse = function(response)
+  return response
+end
+
+M.parse_stream = function(response)
+  return response
 end
 
 return M

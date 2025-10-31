@@ -35,4 +35,7 @@ T["adapters.ollama"]["template_stream"] = function()
   eq(adapter.template_stream(template), expected_stream)
 end
 
+T["adapters.ollama"]["parse"] = function()
+end
+
 return T
