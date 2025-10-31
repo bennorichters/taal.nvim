@@ -1,6 +1,4 @@
-M = {}
-
-M.template_stream = function(template)
+local function convert(template)
   local result = {
     model = "gemma3",
     input = { {
@@ -14,6 +12,18 @@ M.template_stream = function(template)
     table.insert(result.input, { role = "assistant", content = example.assistant })
   end
 
+  return result
+end
+
+M = {}
+
+M.template = function(template)
+  return convert(template)
+end
+
+M.template_stream = function(template)
+  local result = convert(template)
+  result.stream = true
   return result
 end
 
