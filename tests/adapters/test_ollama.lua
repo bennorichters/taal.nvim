@@ -38,8 +38,6 @@ end
 T["adapters.ollama"]["parse"] = function()
   local response = [[
     {
-      "model": "a model",
-      "created_at": "some date",
       "message": {
         "role": "assistant",
         "content": "42"
@@ -60,8 +58,6 @@ end
 T["adapters.ollama"]["parse.content_not_done"] = function()
   local stream_data = [[
     {
-      "model": "gemma3",
-      "created_at": "2025-10-31T16:55:38.60156Z",
       "message": {
           "role": "assistant",
           "content": "42"
@@ -77,8 +73,6 @@ end
 T["adapters.ollama"]["parse.empty_content_not_done"] = function()
   local stream_data = [[
     {
-      "model": "gemma3",
-      "created_at": "2025-10-31T16:55:38.60156Z",
       "message": {
           "role": "assistant",
           "content": ""
@@ -94,8 +88,6 @@ end
 T["adapters.ollama"]["parse.content_done"] = function()
   local stream_data = [[
     {
-      "model": "gemma3",
-      "created_at": "2025-10-31T16:55:38.60156Z",
       "message": {
           "role": "assistant",
           "content": "."
