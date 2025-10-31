@@ -1,4 +1,3 @@
-local log = require("kitt.log")
 local new_set = MiniTest.new_set
 local eq = MiniTest.expect.equality
 local adapter = require("kitt.adapters.ollama")
