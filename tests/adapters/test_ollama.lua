@@ -35,6 +35,10 @@ T["adapters.ollama"]["template_stream"] = function()
   eq(adapter.template_stream(template), expected_stream)
 end
 
+T["adapters.ollama"]["post_headers"] = function()
+  eq(M.post_headers(), { headers = { content_type = "application/json" } })
+end
+
 T["adapters.ollama"]["parse"] = function()
   local response = [[
     {

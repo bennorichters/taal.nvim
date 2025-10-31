@@ -26,6 +26,10 @@ M.template_stream = function(template)
   return result
 end
 
+M.post_headers = function()
+  return { headers = { content_type = "application/json" } }
+end
+
 M.parse = function(json)
   if not (json.message and json.message.content) then
     log.fmt_error("json does not have message.content: json=%s", json)
