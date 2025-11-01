@@ -1,12 +1,5 @@
--- log.lua
---
--- Inspired by rxi/log.lua
--- Modified by tjdevries and can be found at github.com/tjdevries/vlog.nvim
---
--- This library is free software; you can redistribute it and/or modify it
--- under the terms of the MIT license. See LICENSE for details.
-
--- User configuration section
+-- Copied from: https://github.com/tjdevries/vlog.nvim/pull/5
+-- Adaped to own needs
 local default_config = {
   -- Name of the plugin. Prepended to log messages
   plugin = "kitt",
