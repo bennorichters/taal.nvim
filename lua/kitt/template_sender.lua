@@ -1,9 +1,10 @@
 local log = require("kitt.log")
 local response_writer = require("kitt.response_writer")
 
-local function encode_text(text)
-  local encoded_text = vim.fn.json_encode(text)
-  return string.sub(encoded_text, 2, string.len(encoded_text) - 1)
+local function format_template(template, user_input)
+  local json = vim.fn.json_encode(user_input)
+  local stripped = string.sub(json, 2, string.len(json) - 1)
+  return string.format(vim.fn.json_encode(template), stripped)
 end
 
 local function on_chunk_wrap(parse, writer, done_callback)
@@ -30,17 +31,6 @@ local function on_chunk_wrap(parse, writer, done_callback)
   end
 end
 
-local function format_template(template, ...)
-  local subts = {}
-  local count = select("#", ...)
-  for i = 1, count do
-    local text = select(i, ...)
-    table.insert(subts, encode_text(text))
-  end
-
-  return string.format(vim.fn.json_encode(template), unpack(subts))
-end
-
 return function(adapter, post, timeout)
   local function send_request(body_content, extra_opts)
     log.fmt_trace(
@@ -64,9 +54,9 @@ return function(adapter, post, timeout)
 
   local M = {}
 
-  M.send = function(template, ...)
+  M.send = function(template, user_input)
     local adapter_template = adapter.template(template)
-    local body_content = format_template(adapter_template, ...)
+    local body_content = format_template(adapter_template, user_input)
 
     local response = send_request(body_content, { timeout = timeout })
     log.fmt_trace(
@@ -101,9 +91,9 @@ return function(adapter, post, timeout)
     end
   end
 
-  M.stream = function(callback, template, ...)
+  M.stream = function(callback, template, user_input)
     local adapter_template = adapter.template_stream(template)
-    local body_content = format_template(adapter_template, ...)
+    local body_content = format_template(adapter_template, user_input)
 
     local writer = response_writer:new()
     writer:create_scratch_buffer()
