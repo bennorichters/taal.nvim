@@ -1,7 +1,6 @@
 local M = {}
 
 M.setup = function(user_cfg)
-  local adapter = require("kitt.adapters.claude")
   local buffer_helper = require("kitt.buffer_helper")
   local commands = require("kitt.commands")
   local config = require("kitt.config")
@@ -14,6 +13,8 @@ M.setup = function(user_cfg)
   log.new({ level = config.get().log_level }, true)
   log.trace("kitt.nvim log started")
   log.fmt_info("user config: %s", user_cfg)
+
+  local adapter = config.get_adapter()
 
   local template_sender =
     template_sender_factory(adapter, post, response_writer, config.get().timeout)
