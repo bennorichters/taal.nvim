@@ -6,6 +6,7 @@ M.setup = function(user_cfg)
   local commands = require("kitt.commands")
   local config = require("kitt.config")
   local log = require("kitt.log")
+  local post = require("plenary.curl").post
   local response_writer = require("kitt.response_writer")
   local template_sender_factory = require("kitt.template_sender")
 
@@ -13,17 +14,6 @@ M.setup = function(user_cfg)
   log.new({ level = config.get().log_level }, true)
   log.trace("kitt.nvim log started")
   log.fmt_info("user config: %s", user_cfg)
-
-  local post
-  local cfg_post = config.get().post
-  if cfg_post == "curl" then
-    post = require("plenary.curl").post
-  elseif cfg_post == "mock" then
-    post = require("kitt.mock_post")
-  else
-    log.fmt_error("Unknown 'post' option: %s", cfg_post)
-    error("Unknown 'post' option")
-  end
 
   local template_sender =
     template_sender_factory(adapter, post, response_writer, config.get().timeout)
