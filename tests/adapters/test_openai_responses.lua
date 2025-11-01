@@ -6,13 +6,73 @@ local T = new_set()
 
 T["adapters.openai_responses"] = new_set()
 
+T["adapters.openai_responses"]["endpoint"] = function()
+  eq(adapter.endpoint, "https://api.openai.com/v1/responses")
+end
+
+local template = {
+  system = "a",
+  examples = {
+    { user = "b", assistant = "c" },
+    { user = "d", assistant = "e" },
+  },
+}
+
+local expected = {
+  model = "gpt-5-nano",
+  input = {
+    { role = "system", content = "a" },
+    { role = "user", content = "b" },
+    { role = "assistant", content = "c" },
+    { role = "user", content = "d" },
+    { role = "assistant", content = "e" },
+    { role = "user", content = "%s" },
+  },
+}
+
 T["adapters.openai_responses"]["template"] = function()
+  eq(adapter.template(template), expected)
 end
 
 T["adapters.openai_responses"]["template_stream"] = function()
+  local transformed = adapter.template(template)
+  transformed.stream = true
+  eq(adapter.template_stream(template), transformed)
 end
 
 T["adapters.openai_responses"]["post_headers"] = function()
+  local old_env_api_key = os.getenv("OPENAI_API_KEY")
+  vim.fn.setenv("OPENAI_API_KEY", "test_key")
+
+  eq(adapter.post_headers(), {
+    headers = {
+      content_type = "application/json",
+      authorization = "Bearer " .. "test_key",
+    },
+  })
+
+  if old_env_api_key then
+    vim.fn.setenv("OPENAI_API_KEY", old_env_api_key)
+  end
+end
+
+T["adapters.openai_responses"]["parse"] = function()
+  local p = adapter.parse
+
+  eq(
+    adapter.parse({
+      output = {
+        { type = "reasoning" },
+        {
+          type = "message",
+          content = {
+            { type = "output_text", text = "42" },
+          },
+        },
+      },
+    }),
+    "42"
+  )
 end
 
 T["adapters.openai_responses"]["parse_stream"] = function()
@@ -30,17 +90,4 @@ T["adapters.openai_responses"]["parse_stream"] = function()
   eq({ p('data: {"type":"response.output_text.done"}') }, { true, nil })
 end
 
-T["adapters.openai_responses"]["parse_stream.no_content"] = function()
-end
-
-T["adapters.openai_responses"]["parse_stream.content_not_done"] = function()
-end
-
-T["adapters.openai_responses"]["parse_stream.empty_content_not_done"] = function()
-end
-
-T["adapters.openai_responses"]["parse_stream.content_done"] = function()
-end
-
 return T
-

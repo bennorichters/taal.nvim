@@ -1,12 +1,41 @@
 local log = require("kitt.log")
 local start_data = "data: "
 
+local function transform_template(template)
+  local result = {
+    model = "gpt-5-nano",
+    input = { { role = "system", content = template.system } },
+  }
+
+  if template.examples then
+    for _, example in ipairs(template.examples) do
+      table.insert(result.input, { role = "user", content = example.user })
+      table.insert(result.input, { role = "assistant", content = example.assistant })
+    end
+  end
+
+  table.insert(result.input, { role = "user", content = "%s" })
+
+  return result
+end
+
 return {
-  post_headers = function() end,
+  endpoint = "https://api.openai.com/v1/responses",
 
-  template = function(template) end,
+  post_headers = function()
+    local key = os.getenv("OPENAI_API_KEY")
+    return { headers = { content_type = "application/json", authorization = "Bearer " .. key } }
+  end,
 
-  template_stream = function(template) end,
+  template = function(template)
+    return transform_template(template)
+  end,
+
+  template_stream = function(template)
+    local result = transform_template(template)
+    result.stream = true
+    return result
+  end,
 
   parse = function(json)
     if not json.output then
