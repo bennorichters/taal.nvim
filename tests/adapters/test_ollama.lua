@@ -29,12 +29,15 @@ local expected = {
 }
 
 T["adapters.ollama"]["template"] = function()
-  eq(adapter.template(template), expected)
+  local expected_copy = vim.deepcopy(expected)
+  expected_copy.stream = false
+  eq(adapter.template(template), expected_copy)
 end
 
 T["adapters.ollama"]["template_no_examples"] = function()
   eq(adapter.template({ system = "a" }), {
     model = "gemma3",
+    stream = false,
     messages = {
       { role = "system", content = "a" },
       { role = "user", content = "%s" },

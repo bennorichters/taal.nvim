@@ -74,7 +74,14 @@ return function(adapter, post, timeout)
       response and response.status and vim.inspect(response) or "---no valid response---"
     )
     if response and response.status and response.status == 200 then
-      local content = adapter.parse(response.body)
+      local status, json = pcall(vim.fn.json_decode, response.body)
+
+      if not status then
+        log.fmt_error("Could not parse json: %s", response.body or "--no body--")
+        return nil
+      end
+
+      local content = adapter.parse(json)
       if content then
         return content
       end

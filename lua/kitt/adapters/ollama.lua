@@ -22,7 +22,9 @@ return {
   endpoint = "http://localhost:11434/api/chat",
 
   template = function(template)
-    return convert(template)
+    local result = convert(template)
+    result.stream = false
+    return result
   end,
 
   template_stream = function(template)
