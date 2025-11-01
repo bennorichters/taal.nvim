@@ -6,6 +6,7 @@ M.setup = function(user_cfg)
   local commands = require("kitt.commands")
   local config = require("kitt.config")
   local log = require("kitt.log")
+  local response_writer = require("kitt.response_writer")
   local template_sender_factory = require("kitt.template_sender")
 
   config.setup(user_cfg)
@@ -24,7 +25,8 @@ M.setup = function(user_cfg)
     error("Unknown 'post' option")
   end
 
-  local template_sender = template_sender_factory(adapter, post, config.get().timeout)
+  local template_sender =
+    template_sender_factory(adapter, post, response_writer, config.get().timeout)
 
   buffer_helper.setup()
   commands.setup(buffer_helper, template_sender)

@@ -1,5 +1,4 @@
 local log = require("kitt.log")
-local response_writer = require("kitt.response_writer")
 
 local function format_template(template, user_input)
   local json = vim.fn.json_encode(user_input)
@@ -7,7 +6,7 @@ local function format_template(template, user_input)
   return string.format(vim.fn.json_encode(template), stripped)
 end
 
-local function on_chunk_wrap(parse, writer, done_callback)
+local function on_chunk_wrap(parse_stream, writer, done_callback)
   return function(error, stream_data)
     if error then
       local msg = string.format(
@@ -22,7 +21,7 @@ local function on_chunk_wrap(parse, writer, done_callback)
 
     log.fmt_trace("on_chunk: stream_data=%s", stream_data or "--no stream_data--")
 
-    local done, delta = parse(stream_data)
+    local done, delta = parse_stream(stream_data)
     if done then
       done_callback(writer.bufnr, writer.content)
     elseif delta then
@@ -31,7 +30,7 @@ local function on_chunk_wrap(parse, writer, done_callback)
   end
 end
 
-return function(adapter, post, timeout)
+return function(adapter, post, response_writer, timeout)
   local function send_request(body_content, extra_opts)
     log.fmt_trace(
       "posting with endpoint=%s, extra_opts=%s, body=%s",
