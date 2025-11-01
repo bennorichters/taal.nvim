@@ -74,9 +74,6 @@ T["template_sender"]["stream"] = function()
   end
 
   local ResponseWriter = {
-    bufnr = -1,
-    line = 0,
-    content = "",
     new = function()
       return {
         create_scratch_buffer = function() end,
