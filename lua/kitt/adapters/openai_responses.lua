@@ -2,11 +2,11 @@ local log = require("kitt.log")
 local start_data = "data: "
 
 return {
+  post_headers = function() end,
+
   template = function(template) end,
 
   template_stream = function(template) end,
-
-  post_headers = function() end,
 
   parse = function(json)
     if not json.output then

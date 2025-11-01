@@ -21,6 +21,10 @@ end
 return {
   endpoint = "http://localhost:11434/api/chat",
 
+  post_headers = function()
+    return { headers = { content_type = "application/json" } }
+  end,
+
   template = function(template)
     local result = convert(template)
     result.stream = false
@@ -31,10 +35,6 @@ return {
     local result = convert(template)
     result.stream = true
     return result
-  end,
-
-  post_headers = function()
-    return { headers = { content_type = "application/json" } }
   end,
 
   parse = function(json)
