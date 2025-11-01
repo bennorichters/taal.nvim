@@ -169,12 +169,8 @@ end
 M.ai_interactive = function()
   vim.ui.input({ prompt = "Give instructions: " }, function(command)
     if command then
-      M.template_sender.stream(
-        function() end,
-        tpl_interact,
-        command,
-        M.buffer_helper.visual_selection()
-      )
+      local template_subs = command .. "\n\n" .. M.buffer_helper.visual_selection()
+      M.template_sender.stream(function() end, tpl_interact, template_subs)
     end
   end)
 end

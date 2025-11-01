@@ -1,3 +1,5 @@
+require("tests.helpers").enable_log()
+
 local new_set = MiniTest.new_set
 local eq = MiniTest.expect.equality
 local adapter = require("kitt.adapters.ollama")
@@ -16,17 +18,28 @@ local template = {
 
 local expected = {
   model = "gemma3",
-  input = {
+  messages = {
     { role = "system", content = "a" },
     { role = "user", content = "b" },
     { role = "assistant", content = "c" },
     { role = "user", content = "d" },
     { role = "assistant", content = "e" },
+    { role = "user", content = "%s" },
   },
 }
 
 T["adapters.ollama"]["template"] = function()
   eq(adapter.template(template), expected)
+end
+
+T["adapters.ollama"]["template_no_examples"] = function()
+  eq(adapter.template({ system = "a" }), {
+    model = "gemma3",
+    messages = {
+      { role = "system", content = "a" },
+      { role = "user", content = "%s" },
+    },
+  })
 end
 
 T["adapters.ollama"]["template_stream"] = function()
@@ -36,7 +49,7 @@ T["adapters.ollama"]["template_stream"] = function()
 end
 
 T["adapters.ollama"]["post_headers"] = function()
-  eq(M.post_headers(), { headers = { content_type = "application/json" } })
+  eq(adapter.post_headers(), { headers = { content_type = "application/json" } })
 end
 
 T["adapters.ollama"]["parse"] = function()

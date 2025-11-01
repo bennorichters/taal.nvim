@@ -2,6 +2,8 @@ local new_set = MiniTest.new_set
 local eq = MiniTest.expect.equality
 local differ = require("kitt.diff")
 
+-- TODO: test for empty texts
+
 local T = new_set()
 
 T["diff"] = new_set()

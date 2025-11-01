@@ -1,11 +1,11 @@
 local M = {}
 
 M.setup = function(user_cfg)
+  local adapter = require("kitt.adapters.ollama")
   local buffer_helper = require("kitt.buffer_helper")
   local commands = require("kitt.commands")
   local config = require("kitt.config")
   local log = require("kitt.log")
-  local send_request_factory = require("kitt.send_request")
   local template_sender_factory = require("kitt.template_sender")
 
   config.setup(user_cfg)
@@ -24,11 +24,7 @@ M.setup = function(user_cfg)
     error("Unknown 'post' option")
   end
 
-  local endpoint = "https://api.openai.com/v1/responses"
-  local key = os.getenv("OPENAI_API_KEY")
-
-  local send_request = send_request_factory(post, endpoint, key)
-  local template_sender = template_sender_factory(send_request, config.get().timeout)
+  local template_sender = template_sender_factory(adapter, post, config.get().timeout)
 
   buffer_helper.setup()
   commands.setup(buffer_helper, template_sender)
@@ -37,7 +33,6 @@ M.setup = function(user_cfg)
   M.ai_suggest_grammar = commands.ai_suggest_grammar
   M.ai_apply_suggestion = commands.ai_apply_suggestion
   M.ai_set_spelllang = commands.ai_set_spelllang
-  M.ai_write_minutes = commands.ai_write_minutes
   M.ai_interactive = commands.ai_interactive
 end
 

@@ -1,51 +1,33 @@
 local log = require("kitt.log")
 local response_writer = require("kitt.response_writer")
-local stream_handler = require("kitt.stream")
 
 local function encode_text(text)
   local encoded_text = vim.fn.json_encode(text)
   return string.sub(encoded_text, 2, string.len(encoded_text) - 1)
 end
 
-local function openai_extract_content(body)
-  local status, json = pcall(vim.fn.json_decode, body)
-  if not status then
-    log.fmt_error("could not parse body as json", body)
-    return nil
-  end
+local function on_chunk_wrap(parse, writer, done_callback)
+  return function(error, stream_data)
+    if error then
+      local msg = string.format(
+        "error in stream call back: error=%s, stream_data=%s",
+        error,
+        vim.inspect(stream_data)
+      )
+      log.fmt_error(msg)
+      vim.notify(msg, vim.log.levels.ERROR)
+      return
+    end
 
-  if not json.output then
-    log.fmt_error("body doesn't contain json with output: %s", json)
-    return nil
-  end
+    log.fmt_trace("on_chunk: stream_data=%s", stream_data or "--no stream_data--")
 
-  if not type(json.output) == "table" then
-    log.fmt_error("output in body is not a table: %s")
-    return nil
-  end
-
-  local result = nil
-  for _, output_el in ipairs(json.output) do
-    if
-      output_el.type
-      and output_el.type == "message"
-      and output_el.content
-      and type(output_el.content) == "table"
-    then
-      for _, content_el in ipairs(output_el.content) do
-        if content_el.type == "output_text" then
-          if result then
-            log.fmt_debug("multiple output_text found in output: %s", body)
-            return nil
-          end
-          result = content_el.text
-        end
-      end
+    local done, delta = parse(stream_data)
+    if done then
+      done_callback(writer.bufnr, writer.content)
+    elseif delta then
+      writer:write(delta)
     end
   end
-
-  log.fmt_trace("content=%s", result)
-  return result
 end
 
 local function format_template(template, ...)
@@ -59,18 +41,40 @@ local function format_template(template, ...)
   return string.format(vim.fn.json_encode(template), unpack(subts))
 end
 
-return function(send_request, timeout)
+return function(adapter, post, timeout)
+  local function send_request(body_content, extra_opts)
+    log.fmt_trace(
+      "posting with endpoint=%s, extra_opts=%s, body=%s",
+      adapter.endpoint,
+      extra_opts,
+      body_content
+    )
+
+    local opts = {
+      body = body_content,
+      headers = adapter.post_headers().headers,
+    }
+
+    if extra_opts then
+      opts = vim.tbl_deep_extend("error", opts, extra_opts)
+    end
+
+    return post(adapter.endpoint, opts)
+  end
+
   local M = {}
 
   M.send = function(template, ...)
-    local body_content = format_template(template, ...)
+    local adapter_template = adapter.template(template)
+    local body_content = format_template(adapter_template, ...)
+
     local response = send_request(body_content, { timeout = timeout })
     log.fmt_trace(
       "plain request response: %s",
       response and response.status and vim.inspect(response) or "---no valid response---"
     )
     if response and response.status and response.status == 200 then
-      local content = openai_extract_content(response.body)
+      local content = adapter.parse(response.body)
       if content then
         return content
       end
@@ -91,13 +95,13 @@ return function(send_request, timeout)
   end
 
   M.stream = function(callback, template, ...)
-    template.stream = true
-    local body_content = format_template(template, ...)
+    local adapter_template = adapter.template_stream(template)
+    local body_content = format_template(adapter_template, ...)
 
-    local rw = response_writer:new()
-    rw:create_scratch_buffer()
+    local writer = response_writer:new()
+    writer:create_scratch_buffer()
 
-    local on_chunk = stream_handler.on_chunk(stream_handler.parse, rw, callback)
+    local on_chunk = on_chunk_wrap(adapter.parse_stream, writer, callback)
     local extra_opts = {
       stream = vim.schedule_wrap(on_chunk),
       raw = { "--tcp-nodelay", "--no-buffer" },
