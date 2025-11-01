@@ -83,7 +83,7 @@ M.setup = function(buffer_helper, template_sender)
   vim.api.nvim_create_autocmd("CursorHold", { callback = apply_suggestions })
 end
 
-M.ai_improve_grammar = function()
+M.improve_grammar = function()
   local buf_nr = vim.api.nvim_get_current_buf()
   local line_nr = vim.fn.line(".")
   local text = M.buffer_helper.text_under_cursor()
@@ -105,7 +105,7 @@ M.ai_improve_grammar = function()
   M.template_sender.stream(tpl_grammar, text, callback)
 end
 
-M.ai_suggest_grammar = function()
+M.suggest_grammar = function()
   local original = M.buffer_helper.text_under_cursor()
   local ai_text = M.template_sender.send(tpl_grammar, original)
 
@@ -118,7 +118,7 @@ M.ai_suggest_grammar = function()
   )
 end
 
-M.ai_apply_suggestion = function()
+M.apply_suggestion = function()
   local buf_nr = vim.api.nvim_get_current_buf()
   local line_nr = vim.fn.line(".")
   local col_nr = vim.fn.col(".")
@@ -156,7 +156,7 @@ M.ai_apply_suggestion = function()
   end
 end
 
-M.ai_set_spelllang = function()
+M.set_spelllang = function()
   local code = M.template_sender.send(tpl_recognize_language, M.buffer_helper.text_under_cursor())
   if code then
     log.fmt_info("set spellang=%s", code)
@@ -166,7 +166,7 @@ M.ai_set_spelllang = function()
   end
 end
 
-M.ai_interactive = function()
+M.interactive = function()
   vim.ui.input({ prompt = "Give instructions: " }, function(command)
     if command then
       local template_subs = command .. "\n\n" .. M.buffer_helper.visual_selection()

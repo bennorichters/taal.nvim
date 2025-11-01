@@ -7,10 +7,10 @@ local child, T = Helpers.new_child_with_set([[
   cmd.setup(mock.buffhelp, mock.post)
 ]])
 
-T["ai_improve_grammar"] = function()
+T["improve_grammar"] = function()
   local buf = vim.api.nvim_get_current_buf()
 
-  child.lua("cmd.ai_improve_grammar()")
+  child.lua("cmd.improve_grammar()")
 
   eq(child.lua_get("mock.check.template"), tpl_grammar)
   eq(child.lua_get("mock.check.select_called"), true)
@@ -57,9 +57,9 @@ T["ai_improve_grammar"] = function()
   })
 end
 
-T["ai_suggest_grammar"] = function()
+T["suggest_grammar"] = function()
   local buf = vim.api.nvim_get_current_buf()
-  child.lua("cmd.ai_suggest_grammar()")
+  child.lua("cmd.suggest_grammar()")
   eq(child.lua_get("cmd.diff_info"), {
     {
       buf_nr = buf,

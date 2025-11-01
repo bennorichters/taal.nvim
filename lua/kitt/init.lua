@@ -22,11 +22,11 @@ M.setup = function(user_cfg)
   buffer_helper.setup()
   commands.setup(buffer_helper, template_sender)
 
-  M.ai_improve_grammar = commands.ai_improve_grammar
-  M.ai_suggest_grammar = commands.ai_suggest_grammar
-  M.ai_apply_suggestion = commands.ai_apply_suggestion
-  M.ai_set_spelllang = commands.ai_set_spelllang
-  M.ai_interactive = commands.ai_interactive
+  M.improve_grammar = commands.improve_grammar
+  M.suggest_grammar = commands.suggest_grammar
+  M.apply_suggestion = commands.apply_suggestion
+  M.set_spelllang = commands.set_spelllang
+  M.interactive = commands.interactive
 end
 
 return M
