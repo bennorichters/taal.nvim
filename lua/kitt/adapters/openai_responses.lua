@@ -73,8 +73,6 @@ return {
   end,
 
   parse_stream = function(stream_data)
-    log.fmt_trace("stream_data=%s", stream_data or "---no data received---")
-
     if not (stream_data and string.sub(stream_data, 1, #start_data) == start_data) then
       log.fmt_trace("doesn't start with %s", start_data)
       return false, nil

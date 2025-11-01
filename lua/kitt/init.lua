@@ -1,7 +1,7 @@
 local M = {}
 
 M.setup = function(user_cfg)
-  local adapter = require("kitt.adapters.openai_responses")
+  local adapter = require("kitt.adapters.claude")
   local buffer_helper = require("kitt.buffer_helper")
   local commands = require("kitt.commands")
   local config = require("kitt.config")

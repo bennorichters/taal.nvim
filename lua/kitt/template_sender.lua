@@ -59,7 +59,7 @@ return function(adapter, post, response_writer, timeout)
 
     local response = send_request(body_content, { timeout = timeout })
     log.fmt_trace(
-      "send response: %s",
+      "sent response: %s",
       response and response.status and vim.inspect(response) or "---no valid response---"
     )
     if response and response.status and response.status == 200 then
