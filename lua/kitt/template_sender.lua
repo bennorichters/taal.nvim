@@ -60,7 +60,7 @@ return function(adapter, post, timeout)
 
     local response = send_request(body_content, { timeout = timeout })
     log.fmt_trace(
-      "plain request response: %s",
+      "send response: %s",
       response and response.status and vim.inspect(response) or "---no valid response---"
     )
     if response and response.status and response.status == 200 then
@@ -91,7 +91,7 @@ return function(adapter, post, timeout)
     end
   end
 
-  M.stream = function(callback, template, user_input)
+  M.stream = function(template, user_input, callback)
     local adapter_template = adapter.template_stream(template)
     local body_content = format_template(adapter_template, user_input)
 

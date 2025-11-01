@@ -102,7 +102,7 @@ M.ai_improve_grammar = function()
   end
 
   delete_suggestions()
-  M.template_sender.stream(callback, tpl_grammar, text)
+  M.template_sender.stream(tpl_grammar, text, callback)
 end
 
 M.ai_suggest_grammar = function()
@@ -170,7 +170,7 @@ M.ai_interactive = function()
   vim.ui.input({ prompt = "Give instructions: " }, function(command)
     if command then
       local template_subs = command .. "\n\n" .. M.buffer_helper.visual_selection()
-      M.template_sender.stream(function() end, tpl_interact, template_subs)
+      M.template_sender.stream(tpl_interact, template_subs, nil)
     end
   end)
 end
