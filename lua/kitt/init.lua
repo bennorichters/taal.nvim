@@ -26,7 +26,7 @@ M.setup = function(user_cfg)
   M.suggest_grammar = commands.suggest_grammar
   M.apply_suggestion = commands.apply_suggestion
   M.set_spelllang = commands.set_spelllang
-  M.interactive = commands.interactive
+  M.interact = commands.interact
 end
 
 return M

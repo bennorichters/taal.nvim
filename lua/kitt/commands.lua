@@ -166,7 +166,7 @@ M.set_spelllang = function()
   end
 end
 
-M.interactive = function()
+M.interact = function()
   vim.ui.input({ prompt = "Give instructions: " }, function(command)
     if command then
       local template_subs = command .. "\n\n" .. M.buffer_helper.visual_selection()
