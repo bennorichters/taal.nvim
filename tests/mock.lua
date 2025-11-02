@@ -17,8 +17,8 @@ M.buffhelp = {
   end,
 }
 
-M.post = {
-  stream = function(template, _, callback)
+M.template_sender = {
+  stream = function(_, template, _, callback)
     M.check.template = template
     ---@diagnostic disable-next-line: duplicate-set-field
     vim.ui.select = function()
@@ -29,6 +29,25 @@ M.post = {
   send = function()
     return M.values.ai_text
   end,
+}
+
+M.adapter_model = {
+  improve_grammar = {
+    adapter = "",
+    model = "",
+  },
+  suggest_grammar = {
+    adapter = "",
+    model = "",
+  },
+  set_spellang = {
+    adapter = "",
+    model = "",
+  },
+  interact = {
+    adapter = "",
+    model = "",
+  },
 }
 
 return M

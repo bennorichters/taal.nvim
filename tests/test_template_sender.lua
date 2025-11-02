@@ -42,8 +42,8 @@ T["template_sender"]["send"] = function()
     return { status = 200, body = "{}" }
   end
 
-  local ts = require("kitt.template_sender")(adapter, post, nil, 10)
-  eq(ts.send(), "42")
+  local ts = require("kitt.template_sender")(post, nil, 10)
+  eq(ts.send({ adapter = adapter, model = "m" }), "42")
   eq(post_called, true)
 end
 
@@ -95,8 +95,8 @@ T["template_sender"]["stream"] = function()
     end
   end
 
-  local ts = require("kitt.template_sender")(adapter, post, ResponseWriter, 10)
-  ts.stream(nil, nil, call_back)
+  local ts = require("kitt.template_sender")(post, ResponseWriter, 10)
+  ts.stream({ adapter = adapter, model = "m" }, nil, nil, call_back)
 
   eq(call_back_check, true)
   vim.schedule_wrap = orig_schedule_wrap

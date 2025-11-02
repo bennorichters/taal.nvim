@@ -1,8 +1,8 @@
 local log = require("kitt.log")
 
-local function convert(template)
+local function convert(template, model)
   local result = {
-    model = "gemma3",
+    model = model,
     messages = { { role = "system", content = template.system } },
   }
 
@@ -25,14 +25,14 @@ return {
     return { headers = { content_type = "application/json" } }
   end,
 
-  template = function(template)
-    local result = convert(template)
+  template = function(template, model)
+    local result = convert(template, model)
     result.stream = false
     return result
   end,
 
-  template_stream = function(template)
-    local result = convert(template)
+  template_stream = function(template, model)
+    local result = convert(template, model)
     result.stream = true
     return result
   end,

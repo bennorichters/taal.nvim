@@ -4,7 +4,7 @@ local eq = MiniTest.expect.equality
 local child, T = Helpers.new_child_with_set([[
   mock = require("tests.mock")
   cmd = require("kitt.commands")
-  cmd.setup(mock.buffhelp, mock.post)
+  cmd.setup(mock.buffhelp, mock.template_sender, mock.adapter_model)
 ]])
 
 T["improve_grammar"] = function()

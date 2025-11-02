@@ -1,9 +1,9 @@
 local log = require("kitt.log")
 local start_data = "data: "
 
-local function transform_template(template)
+local function transform_template(template, model)
   local result = {
-    model = "gpt-5-nano",
+    model = model,
     input = { { role = "system", content = template.system } },
   }
 
@@ -27,12 +27,12 @@ return {
     return { headers = { content_type = "application/json", authorization = "Bearer " .. key } }
   end,
 
-  template = function(template)
-    return transform_template(template)
+  template = function(template, model)
+    return transform_template(template, model)
   end,
 
-  template_stream = function(template)
-    local result = transform_template(template)
+  template_stream = function(template, model)
+    local result = transform_template(template, model)
     result.stream = true
     return result
   end,

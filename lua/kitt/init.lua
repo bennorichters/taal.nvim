@@ -14,19 +14,19 @@ M.setup = function(user_cfg)
   log.trace("kitt.nvim log started")
   log.fmt_info("user config: %s", user_cfg)
 
-  local adapter = config.get_adapter()
-
   local template_sender =
-    template_sender_factory(adapter, post, response_writer, config.get().timeout)
+    template_sender_factory(post, response_writer, config.get().timeout)
 
   buffer_helper.setup()
-  commands.setup(buffer_helper, template_sender)
+  commands.setup(buffer_helper, template_sender, config.command_adapter_model())
 
   M.improve_grammar = commands.improve_grammar
   M.suggest_grammar = commands.suggest_grammar
   M.apply_suggestion = commands.apply_suggestion
   M.set_spelllang = commands.set_spelllang
   M.interact = commands.interact
+
+  vim.api.nvim_create_user_command("KittImproveGrammar", M.improve_grammar, {})
 end
 
 return M

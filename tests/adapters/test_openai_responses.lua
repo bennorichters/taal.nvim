@@ -19,7 +19,7 @@ local template = {
 }
 
 local expected = {
-  model = "gpt-5-nano",
+  model = "m",
   input = {
     { role = "system", content = "a" },
     { role = "user", content = "b" },
@@ -31,13 +31,13 @@ local expected = {
 }
 
 T["adapters.openai_responses"]["template"] = function()
-  eq(adapter.template(template), expected)
+  eq(adapter.template(template, "m"), expected)
 end
 
 T["adapters.openai_responses"]["template_stream"] = function()
-  local transformed = adapter.template(template)
-  transformed.stream = true
-  eq(adapter.template_stream(template), transformed)
+  local expected_stream = vim.deepcopy(expected)
+  expected_stream.stream = true
+  eq(adapter.template_stream(template, "m"), expected_stream)
 end
 
 T["adapters.openai_responses"]["post_headers"] = function()

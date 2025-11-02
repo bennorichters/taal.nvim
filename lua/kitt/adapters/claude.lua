@@ -1,9 +1,9 @@
 local log = require("kitt.log")
 local start_data = "data: "
 
-local function convert(template)
+local function convert(template, model)
   local result = {
-    model = "claude-sonnet-4-20250514",
+    model = model,
     max_tokens = 1024,
     system = template.system,
     messages = {},
@@ -35,12 +35,12 @@ return {
     }
   end,
 
-  template = function(template)
-    return convert(template)
+  template = function(template, model)
+    return convert(template, model)
   end,
 
-  template_stream = function(template)
-    local result = convert(template)
+  template_stream = function(template, model)
+    local result = convert(template, model)
     result.stream = true
     return result
   end,

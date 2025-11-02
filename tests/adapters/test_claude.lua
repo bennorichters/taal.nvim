@@ -21,7 +21,7 @@ local template = {
 }
 
 local expected = {
-  model = "claude-sonnet-4-20250514",
+  model = "m",
   max_tokens = 1024,
   system = "a",
   messages = {
@@ -34,12 +34,12 @@ local expected = {
 }
 
 T["adapters.claude"]["template"] = function()
-  return expected
+  eq(adapter.template(template, "m"), expected)
 end
 
 T["adapters.claude"]["template_no_examples"] = function()
-  eq(adapter.template({ system = "a" }), {
-    model = "claude-sonnet-4-20250514",
+  eq(adapter.template({ system = "a" }, "m"), {
+    model = "m",
     max_tokens = 1024,
     system = "a",
     messages = {
@@ -51,7 +51,7 @@ end
 T["adapters.claude"]["template_stream"] = function()
   local expected_stream = vim.deepcopy(expected)
   expected_stream.stream = true
-  eq(adapter.template_stream(template), expected_stream)
+  eq(adapter.template_stream(template, "m"), expected_stream)
 end
 
 T["adapters.claude"]["post_headers"] = function()
