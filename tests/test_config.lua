@@ -1,3 +1,5 @@
+require("tests.helpers").enable_log()
+
 local new_set = MiniTest.new_set
 local expect, eq = MiniTest.expect, MiniTest.expect.equality
 local config = require("kitt.config")
@@ -46,6 +48,13 @@ T["config"]["setup.change_timeout"] = function()
   config.setup({ timeout = 10 })
   local expected = vim.fn.deepcopy(defaults)
   expected.timeout = 10
+  eq(config.settings, expected)
+end
+
+T["config"]["setup.adapter.improve_grammar"] = function()
+  config.setup({ commands = { improve_grammar = { adapter = "claude" } } })
+  local expected = vim.fn.deepcopy(defaults)
+  expected.commands.improve_grammar.adapter = "claude"
   eq(config.settings, expected)
 end
 
