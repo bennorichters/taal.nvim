@@ -33,7 +33,7 @@ local defaults = {
   },
 }
 
-local function validate_adapter(adapter)
+local function is_adapter_supported(adapter)
   if not supported_adapters[adapter] then
     local message = string.format("unsupported adapter %s", adapter)
     log.error(message)
@@ -43,32 +43,35 @@ local function validate_adapter(adapter)
   return true
 end
 
-local M = {}
-
-M.setup = function(config)
-  if
-    not config
-    or (not config.adapter or validate_adapter(config.adapter))
+local function validate_adapters(config)
+    return not config
+    or (not config.adapter or is_adapter_supported(config.adapter))
       and (not config.commands
         or (
           (
             not (config.commands.improve_grammar and config.commands.improve_grammar.adapter)
-            or validate_adapter( config.commands.improve_grammar.adapter)
+            or is_adapter_supported(config.commands.improve_grammar.adapter)
           )
         )
         and (
             not (config.commands.suggest_grammar and config.commands.suggest_grammar.adapter)
-            or validate_adapter( config.commands.suggest_grammar.adapter)
+            or is_adapter_supported(config.commands.suggest_grammar.adapter)
         )
         and (
             not (config.commands.set_spellang and config.commands.set_spellang.adapter)
-            or validate_adapter( config.commands.set_spellang.adapter)
+            or is_adapter_supported(config.commands.set_spellang.adapter)
         )
         and (
             not (config.commands.interact and config.commands.interact.adapter)
-            or validate_adapter( config.commands.interact.adapter)
+            or is_adapter_supported(config.commands.interact.adapter)
         )
      )
+end
+
+local M = {}
+
+M.setup = function(config)
+  if validate_adapters(config)
   then
     M.settings = vim.tbl_deep_extend("force", defaults, config or {})
   end
