@@ -1,5 +1,3 @@
-local log = require("kitt.log")
-
 local supported_adapters = {
   claude = true,
   ollama = true,
@@ -35,9 +33,7 @@ local defaults = {
 
 local function is_adapter_supported(adapter)
   if not supported_adapters[adapter] then
-    local message = string.format("unsupported adapter %s", adapter)
-    log.error(message)
-    error(message)
+    error("unsupported adapter: " .. adapter)
   end
 
   return true
@@ -72,11 +68,9 @@ end
 local M = {}
 
 M.setup = function(config)
-  if not validate_adapters(config) then
-    error("invalid adapters in config")
+  if validate_adapters(config) then
+    M.settings = vim.tbl_deep_extend("force", defaults, config or {})
   end
-
-  M.settings = vim.tbl_deep_extend("force", defaults, config or {})
 end
 
 M.command_adapter_model = function()
