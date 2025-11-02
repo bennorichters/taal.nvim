@@ -177,7 +177,7 @@ M.interact = function()
   vim.ui.input({ prompt = "Give instructions: " }, function(command)
     if command then
       local template_subs = command .. "\n\n" .. M.buffer_helper.visual_selection()
-      M.template_sender.stream(M.adapter_model["interact"], tpl_interact, template_subs, nil)
+      M.template_sender.stream(M.adapter_model["interact"], tpl_interact, template_subs)
     end
   end)
 end
