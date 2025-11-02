@@ -32,6 +32,10 @@ end
 
 local M = {}
 
+---Computes a word-by-word diff between two texts.
+---@param a string The first text to compare
+---@param b string The second text to compare
+---@return table<integer, {a_start: integer, a_end: integer, a_text: string, b_start: integer, b_end: integer, b_text: string}> result A list of diff regions, where each region contains start/end positions (0-indexed) and text content for both input strings
 M.diff = function(a, b)
   local a_words, a_starts = split_into_words(a)
   local b_words, b_starts = split_into_words(b)
