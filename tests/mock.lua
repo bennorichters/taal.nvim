@@ -1,12 +1,18 @@
-local M = {}
-
-M.values = {
+local original_values = {
   ai_text = "The moon is brighter then yesterday.",
   user_text = "The moon is more bright then yesterdate.",
   scratch_buf = 42,
+  extmark_id = 100,
 }
 
-M.check = {}
+local M = {}
+
+M.reset = function()
+  M.values = vim.deepcopy(original_values)
+  M.check = {}
+end
+
+M.reset()
 
 M.buffhelp = {
   current_buffer_nr = function()
@@ -19,9 +25,13 @@ M.buffhelp = {
     M.check.add_hl_group_info = M.check.add_hl_group_info or {}
     local copy = vim.deepcopy(info)
     table.insert(M.check.add_hl_group_info, copy)
-    return M.values.scratch_buf
+    M.values.extmark_id = M.values.extmark_id + 1
+    return M.values.extmark_id
   end,
-  delete_hl_group = function() end,
+  delete_hl_group = function(buffer_nr, extmark_id)
+    M.check.delete_hl_group_info = M.check.delete_hl_group_info or {}
+    table.insert(M.check.delete_hl_group_info, { buffer_nr, extmark_id })
+  end,
   text_under_cursor = function()
     return M.values.user_text
   end,
