@@ -17,6 +17,7 @@ local function get_info1(buf)
     col_start = 12,
     hl_group = "KittIssue",
     line_nr = 1,
+    extmark_id = 42,
   }
 end
 local function get_info2(buf)
@@ -27,6 +28,7 @@ local function get_info2(buf)
     col_start = 12,
     hl_group = "KittImprovement",
     line_nr = 1,
+    extmark_id = 42,
   }
 end
 local function get_info3(buf)
@@ -37,6 +39,7 @@ local function get_info3(buf)
     col_start = 29,
     hl_group = "KittIssue",
     line_nr = 1,
+    extmark_id = 42,
   }
 end
 local function get_info4(buf)
@@ -47,6 +50,7 @@ local function get_info4(buf)
     col_start = 26,
     hl_group = "KittImprovement",
     line_nr = 1,
+    extmark_id = 42,
   }
 end
 
@@ -65,14 +69,13 @@ T["improve_grammar"] = function()
   local info3 = get_info3(buf)
   local info4 = get_info4(scratch_buf)
 
-  eq(mock.check.add_hl_group_info, { info1, info2, info3, info4 })
-
-  info1.extmark_id = 42
-  info2.extmark_id = 42
-  info3.extmark_id = 42
-  info4.extmark_id = 42
-
   eq(cmd.diff_info, { info1, info2, info3, info4 })
+
+  info1.extmark_id = nil
+  info2.extmark_id = nil
+  info3.extmark_id = nil
+  info4.extmark_id = nil
+  eq(mock.check.add_hl_group_info, { info1, info2, info3, info4 })
 end
 
 T["suggest_grammar"] = function()
@@ -80,9 +83,7 @@ T["suggest_grammar"] = function()
   cmd.suggest_grammar()
 
   local info1 = get_info1(buf)
-  info1.extmark_id = 42
   local info3 = get_info3(buf)
-  info3.extmark_id = 42
 
   eq(cmd.diff_info, { info1, info3 })
 end
