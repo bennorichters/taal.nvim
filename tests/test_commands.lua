@@ -17,44 +17,47 @@ T["improve_grammar"] = function()
 
   local scratch_buf = child.lua_get("mock.values.scratch_buf")
 
-  eq(child.lua_get("cmd.diff_info"), {
-    {
-      alt_text = "brighter",
-      buf_nr = buf,
-      col_end = 23,
-      col_start = 12,
-      extmark_id = 42,
-      hl_group = "KittIssue",
-      line_nr = 1,
-    },
-    {
-      alt_text = "more bright",
-      buf_nr = scratch_buf,
-      col_end = 20,
-      col_start = 12,
-      extmark_id = 42,
-      hl_group = "KittImprovement",
-      line_nr = 1,
-    },
-    {
-      alt_text = "yesterday.",
-      buf_nr = buf,
-      col_end = 40,
-      col_start = 29,
-      extmark_id = 42,
-      hl_group = "KittIssue",
-      line_nr = 1,
-    },
-    {
-      alt_text = "yesterdate.",
-      buf_nr = scratch_buf,
-      col_end = 36,
-      col_start = 26,
-      extmark_id = 42,
-      hl_group = "KittImprovement",
-      line_nr = 1,
-    },
-  })
+  local info1 = {
+    alt_text = "brighter",
+    buf_nr = buf,
+    col_end = 23,
+    col_start = 12,
+    hl_group = "KittIssue",
+    line_nr = 1,
+  }
+  local info2 = {
+    alt_text = "more bright",
+    buf_nr = scratch_buf,
+    col_end = 20,
+    col_start = 12,
+    hl_group = "KittImprovement",
+    line_nr = 1,
+  }
+  local info3 = {
+    alt_text = "yesterday.",
+    buf_nr = buf,
+    col_end = 40,
+    col_start = 29,
+    hl_group = "KittIssue",
+    line_nr = 1,
+  }
+  local info4 = {
+    alt_text = "yesterdate.",
+    buf_nr = scratch_buf,
+    col_end = 36,
+    col_start = 26,
+    hl_group = "KittImprovement",
+    line_nr = 1,
+  }
+
+  eq(child.lua_get("mock.check.add_hl_group_info"), { info1, info2, info3, info4 })
+
+  info1.extmark_id = 42
+  info2.extmark_id = 42
+  info3.extmark_id = 42
+  info4.extmark_id = 42
+
+  eq(child.lua_get("cmd.diff_info"), { info1, info2, info3, info4 })
 end
 
 T["suggest_grammar"] = function()

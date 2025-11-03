@@ -9,7 +9,10 @@ M.values = {
 M.check = {}
 
 M.buffhelp = {
-  add_hl_group = function()
+  add_hl_group = function(info)
+    M.check.add_hl_group_info = M.check.add_hl_group_info or {}
+    local copy = vim.deepcopy(info)
+    table.insert(M.check.add_hl_group_info, copy)
     return M.values.scratch_buf
   end,
   text_under_cursor = function()
