@@ -15,8 +15,7 @@ M.setup = function(user_cfg)
   log.trace("kitt.nvim log started")
   log.fmt_info("user config: %s", user_cfg)
 
-  local template_sender =
-    template_sender_factory(post, response_writer, config.settings.timeout)
+  local template_sender = template_sender_factory(post, response_writer, config.settings.timeout)
 
   buffer_helper.setup()
   commands.setup(buffer_helper, template_sender, config.command_adapter_model())
@@ -25,7 +24,7 @@ M.setup = function(user_cfg)
   vim.api.nvim_create_user_command("KittSuggestGrammar", commands.suggest_grammar, {})
   vim.api.nvim_create_user_command("KittApplySuggestion", commands.apply_suggestion, {})
   vim.api.nvim_create_user_command("KittSetSpelllang", commands.set_spelllang, {})
-  vim.api.nvim_create_user_command("KittInteract", commands.interact, {})
+  vim.api.nvim_create_user_command("KittInteract", commands.interact, { range = true })
 end
 
 return M
