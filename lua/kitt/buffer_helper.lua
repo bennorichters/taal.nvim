@@ -4,6 +4,7 @@ local M = {}
 
 M.setup = function()
   M.namespace = vim.api.nvim_create_namespace("kitt")
+  log.fmt_trace("buffer_helper.setup kitt namespace=%s", M.namespace)
   vim.api.nvim_set_hl(0, "KittIssue", { bg = "DarkRed", fg = "White" })
   vim.api.nvim_set_hl(0, "KittImprovement", { bg = "DarkGreen", fg = "White" })
 end
@@ -21,19 +22,35 @@ M.current_column_nr = function()
 end
 
 M.add_hl_group = function(info)
-  log.fmt_trace("add_hl_group info=%s", info)
-
-  return vim.api.nvim_buf_set_extmark(
+  local extmark_id = vim.api.nvim_buf_set_extmark(
     info.buf_nr,
     M.namespace,
     info.line_nr - 1,
     info.col_start,
     { end_row = info.line_nr - 1, end_col = info.col_end, hl_group = info.hl_group }
   )
+
+  log.fmt_trace(
+    "add_hl_group info=%s, namespace=%s, created extmark_id=%s",
+    info,
+    M.namespace,
+    extmark_id
+  )
+
+  return extmark_id
 end
 
 M.delete_hl_group = function(buf_nr, extmark_id)
+  log.fmt_trace(
+    "delete_hl_group namespace=%s, buf_nr=%s, extmark_id=%s",
+    M.namespace,
+    buf_nr,
+    extmark_id
+  )
   vim.api.nvim_buf_del_extmark(buf_nr, M.namespace, extmark_id)
+  local remaining_marks =
+    vim.api.nvim_buf_get_extmarks(buf_nr, M.namespace, 0, -1, { details = true })
+  log.fmt_trace("delete_hl_group remaining_marks=%s", remaining_marks)
 end
 
 M.text_under_cursor = function()
