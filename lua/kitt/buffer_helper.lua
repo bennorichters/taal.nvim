@@ -8,6 +8,18 @@ M.setup = function()
   vim.api.nvim_set_hl(0, "KittImprovement", { bg = "DarkGreen", fg = "White" })
 end
 
+M.current_buffer_nr = function()
+  return vim.api.nvim_get_current_buf()
+end
+
+M.current_line_nr = function()
+  return vim.fn.line(".")
+end
+
+M.current_column_nr = function()
+  return vim.fn.col(".")
+end
+
 M.add_hl_group = function(info)
   log.fmt_trace("add_hl_group info=%s", info)
 
@@ -42,6 +54,10 @@ M.visual_selection = function()
   end
 
   return table.concat(lines, "\n")
+end
+
+M.set_lines = function(line_nr, content)
+  vim.api.nvim_buf_set_lines(0, line_nr - 1, line_nr, false, { content })
 end
 
 return M

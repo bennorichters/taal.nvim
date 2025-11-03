@@ -8,7 +8,7 @@ local tpl_recognize_language = require("kitt.templates.recognize_language")
 local M = { diff_info = {} }
 
 local function delete_suggestions()
-  local buf_nr = vim.api.nvim_get_current_buf()
+  local buf_nr = M.buffer_helper.current_buffer_nr()
   for _, info in ipairs(M.diff_info) do
     if info.buf_nr == buf_nr then
       M.buffer_helper.delete_hl_group(buf_nr, info.extmark_id)
@@ -21,9 +21,9 @@ local function delete_suggestions()
 end
 
 local function show_suggestion()
-  local buf_nr = vim.api.nvim_get_current_buf()
-  local line_nr = vim.fn.line(".")
-  local col_nr = vim.fn.col(".")
+  local buf_nr = M.buffer_helper.current_buffer_nr()
+  local line_nr = M.buffer_helper.current_line_nr()
+  local col_nr = M.buffer_helper.current_column_nr()
   for _, info in ipairs(M.diff_info) do
     if
       info.buf_nr == buf_nr
@@ -87,8 +87,8 @@ M.setup = function(buffer_helper, template_sender, adapter_model)
 end
 
 M.improve_grammar = function()
-  local buf_nr = vim.api.nvim_get_current_buf()
-  local line_nr = vim.fn.line(".")
+  local buf_nr = M.buffer_helper.current_buffer_nr()
+  local line_nr = M.buffer_helper.current_line_nr()
   local text = M.buffer_helper.text_under_cursor()
 
   log.fmt_trace("ai_improve_grammar. buf_nr=%s, line_nr=%s, text=%s", buf_nr, line_nr, text)
@@ -112,8 +112,8 @@ M.suggest_grammar = function()
   local original = M.buffer_helper.text_under_cursor()
   local ai_text = M.template_sender.send(M.adapter_model["suggest_grammar"], tpl_grammar, original)
 
-  local buf_nr = vim.api.nvim_get_current_buf()
-  local line_nr = vim.fn.line(".")
+  local buf_nr = M.buffer_helper.current_buffer_nr()
+  local line_nr = M.buffer_helper.current_line_nr()
   delete_suggestions()
   M.diff_info = apply_diff_hl_groups(
     { hl_group = "KittIssue", buf_nr = buf_nr, line_nr = line_nr, text = original },
@@ -122,9 +122,9 @@ M.suggest_grammar = function()
 end
 
 M.apply_suggestion = function()
-  local buf_nr = vim.api.nvim_get_current_buf()
-  local line_nr = vim.fn.line(".")
-  local col_nr = vim.fn.col(".")
+  local buf_nr = M.buffer_helper.current_buffer_nr()
+  local line_nr = M.buffer_helper.current_line_nr()
+  local col_nr = M.buffer_helper.current_column_nr()
 
   local length_diff = 0
   local applied_index = 0
@@ -137,7 +137,7 @@ M.apply_suggestion = function()
           .. info.alt_text
           .. string.sub(current_text, info.col_end + 1)
 
-        vim.api.nvim_buf_set_lines(0, info.line_nr - 1, info.line_nr, false, { content })
+        M.buffer_helper.set_lines(info.line_nr, content)
         M.buffer_helper.delete_hl_group(buf_nr, info.extmark_id)
 
         length_diff = info.col_end - info.col_start - #info.alt_text
@@ -177,6 +177,7 @@ M.interact = function()
   vim.ui.input({ prompt = "Give instructions: " }, function(command)
     if command then
       local template_subs = command .. "\n\n" .. M.buffer_helper.visual_selection()
+      log.fmt_trace("interact content=%s", template_subs)
       M.template_sender.stream(M.adapter_model["interact"], tpl_interact, template_subs)
     end
   end)

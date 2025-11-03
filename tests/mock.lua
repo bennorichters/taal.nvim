@@ -9,12 +9,19 @@ M.values = {
 M.check = {}
 
 M.buffhelp = {
+  current_buffer_nr = function()
+    return 1
+  end,
+  current_line_nr = function()
+    return 1
+  end,
   add_hl_group = function(info)
     M.check.add_hl_group_info = M.check.add_hl_group_info or {}
     local copy = vim.deepcopy(info)
     table.insert(M.check.add_hl_group_info, copy)
     return M.values.scratch_buf
   end,
+  delete_hl_group = function() end,
   text_under_cursor = function()
     return M.values.user_text
   end,
