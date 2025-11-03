@@ -71,6 +71,7 @@ T["improve_grammar"] = function()
 
   eq(cmd.diff_info, { info1, info2, info3, info4 })
 
+  -- the extmark_id wasn't yet set when add_hl_group_info was called
   info1.extmark_id = nil
   info2.extmark_id = nil
   info3.extmark_id = nil
