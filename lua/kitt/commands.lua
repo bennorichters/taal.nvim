@@ -146,7 +146,6 @@ M.apply_suggestion = function()
         end
       elseif applied_index > 0 then
         M.buffer_helper.delete_hl_group(buf_nr, info.extmark_id)
-
         info.col_start = info.col_start - length_diff
         info.col_end = info.col_end - length_diff
         info.extmark_id = M.buffer_helper.add_hl_group(info)

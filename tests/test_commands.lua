@@ -7,7 +7,11 @@ local mock = require("tests.mock")
 cmd.setup(mock.buffhelp, mock.template_sender, mock.adapter_model)
 
 Helpers.enable_log()
-T = MiniTest.new_set()
+T = MiniTest.new_set({ hooks = {
+  post_case = function()
+    mock.check = {}
+  end,
+} })
 
 local function get_info1(buf)
   return {
@@ -80,15 +84,42 @@ T["improve_grammar"] = function()
 end
 
 T["suggest_grammar"] = function()
-  local buf = vim.api.nvim_get_current_buf()
   cmd.suggest_grammar()
 
-  local info1 = get_info1(buf)
-  local info3 = get_info3(buf)
+  local buf_nr = mock.buffhelp.current_buffer_nr()
+  local info1 = get_info1(buf_nr)
+  local info3 = get_info3(buf_nr)
 
   eq(cmd.diff_info, { info1, info3 })
 end
 
-T["apply_suggestion"] = function() end
+T["apply_suggestion"] = function()
+  mock.buffhelp.current_column_nr = function()
+    return 15
+  end
+
+  local buf_nr = mock.buffhelp.current_buffer_nr()
+  local info1 = get_info1(buf_nr)
+  local info3 = get_info3(buf_nr)
+
+  cmd.diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
+
+  cmd.apply_suggestion()
+
+  local info3_updated = {
+    alt_text = "yesterday.",
+    buf_nr = 1,
+    col_end = 37,
+    col_start = 26,
+    extmark_id = 42,
+    hl_group = "KittIssue",
+    line_nr = 1,
+  }
+
+  eq(cmd.diff_info, { info3_updated })
+  eq(mock.check.add_hl_group_info, { info3_updated })
+
+  mock.buffhelp.current_column_nr = nil
+end
 
 return T

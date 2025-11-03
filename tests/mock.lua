@@ -25,6 +25,7 @@ M.buffhelp = {
   text_under_cursor = function()
     return M.values.user_text
   end,
+  set_lines = function() end,
 }
 
 M.template_sender = {
