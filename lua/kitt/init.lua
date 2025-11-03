@@ -10,6 +10,7 @@ M.setup = function(user_cfg)
   local template_sender_factory = require("kitt.template_sender")
 
   config.setup(user_cfg)
+
   log.new({ level = config.settings.log_level }, true)
   log.trace("kitt.nvim log started")
   log.fmt_info("user config: %s", user_cfg)
@@ -20,13 +21,11 @@ M.setup = function(user_cfg)
   buffer_helper.setup()
   commands.setup(buffer_helper, template_sender, config.command_adapter_model())
 
-  M.improve_grammar = commands.improve_grammar
-  M.suggest_grammar = commands.suggest_grammar
-  M.apply_suggestion = commands.apply_suggestion
-  M.set_spelllang = commands.set_spelllang
-  M.interact = commands.interact
-
-  vim.api.nvim_create_user_command("KittImproveGrammar", M.improve_grammar, {})
+  vim.api.nvim_create_user_command("KittImproveGrammar", commands.improve_grammar, {})
+  vim.api.nvim_create_user_command("KittSuggestGrammar", commands.suggest_grammar, {})
+  vim.api.nvim_create_user_command("KittApplySuggestion", commands.apply_suggestion, {})
+  vim.api.nvim_create_user_command("KittSetSpelllang", commands.set_spelllang, {})
+  vim.api.nvim_create_user_command("KittInteract", commands.interact, {})
 end
 
 return M
