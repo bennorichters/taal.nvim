@@ -14,6 +14,11 @@ end
 
 M.reset()
 
+M.add_check_value = function(key, value)
+  M.check[key] = M.check[key] or {}
+  table.insert(M.check[key], vim.deepcopy(value))
+end
+
 M.buffhelp = {
   current_buffer_nr = function()
     return 1
@@ -22,20 +27,20 @@ M.buffhelp = {
     return 1
   end,
   add_hl_group = function(info)
-    M.check.add_hl_group_info = M.check.add_hl_group_info or {}
-    local copy = vim.deepcopy(info)
-    table.insert(M.check.add_hl_group_info, copy)
+    M.add_check_value("add_hl_group_info", info)
     M.values.extmark_id = M.values.extmark_id + 1
     return M.values.extmark_id
   end,
-  delete_hl_group = function(buffer_nr, extmark_id)
-    M.check.delete_hl_group_info = M.check.delete_hl_group_info or {}
-    table.insert(M.check.delete_hl_group_info, { buffer_nr, extmark_id })
+  delete_hl_group = function(...)
+    M.add_check_value("delete_hl_group_info", { ... })
   end,
   text_under_cursor = function()
     return M.values.user_text
   end,
   set_lines = function() end,
+  replace_text = function(...)
+    M.add_check_value("replace_text_info", { ... })
+  end,
 }
 
 M.template_sender = {

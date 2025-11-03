@@ -124,6 +124,11 @@ T["apply_suggestion.apply_to_first_word"] = function()
   info3_updated.extmark_id = 101
   eq(cmd.diff_info, { info3_updated })
 
+  eq(
+    mock.check.replace_text_info,
+    { { buf_nr, 1, info1.col_start, info1.col_end, info1.alt_text } }
+  )
+
   mock.buffhelp.current_column_nr = nil
 end
 
@@ -149,6 +154,11 @@ T["apply_suggestion.apply_to_second_word"] = function()
 
   -- delete_hl_group should have been called once
   eq(mock.check.delete_hl_group_info, { { 1, 52 } })
+
+  eq(
+    mock.check.replace_text_info,
+    { { buf_nr, 1, info3.col_start, info3.col_end, info3.alt_text } }
+  )
 
   mock.buffhelp.current_column_nr = nil
 end

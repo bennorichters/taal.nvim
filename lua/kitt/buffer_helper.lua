@@ -77,4 +77,8 @@ M.set_lines = function(line_nr, content)
   vim.api.nvim_buf_set_lines(0, line_nr - 1, line_nr, false, { content })
 end
 
+M.replace_text = function(buf_nr, line_nr, col_start, col_end, text)
+  vim.api.nvim_buf_set_text(buf_nr, line_nr - 1, col_start, line_nr - 1, col_end, { text })
+end
+
 return M

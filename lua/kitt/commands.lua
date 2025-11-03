@@ -132,17 +132,12 @@ M.apply_suggestion = function()
     if info.buf_nr == buf_nr and info.line_nr == line_nr then
       if applied_index == 0 and info.col_start <= col_nr and info.col_end > col_nr then
         applied_index = i
-        local current_text = M.buffer_helper.text_under_cursor()
-        local content = string.sub(current_text, 1, info.col_start)
-          .. info.alt_text
-          .. string.sub(current_text, info.col_end + 1)
-
-        M.buffer_helper.set_lines(info.line_nr, content)
+        M.buffer_helper.replace_text(buf_nr, line_nr, info.col_start, info.col_end, info.alt_text)
         M.buffer_helper.delete_hl_group(buf_nr, info.extmark_id)
 
         length_diff = info.col_end - info.col_start - #info.alt_text
         if length_diff == 0 then
-          return
+          break
         end
       elseif applied_index > 0 then
         M.buffer_helper.delete_hl_group(buf_nr, info.extmark_id)
