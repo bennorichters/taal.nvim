@@ -20,7 +20,7 @@ local function delete_suggestions()
   end
 end
 
-local function apply_suggestions()
+local function show_suggestion()
   local buf_nr = vim.api.nvim_get_current_buf()
   local line_nr = vim.fn.line(".")
   local col_nr = vim.fn.col(".")
@@ -83,7 +83,7 @@ M.setup = function(buffer_helper, template_sender, adapter_model)
   log.fmt_trace("commands.setup. adapter_model=%s", adapter_model)
 
   vim.api.nvim_create_autocmd("InsertEnter", { callback = delete_suggestions })
-  vim.api.nvim_create_autocmd("CursorHold", { callback = apply_suggestions })
+  vim.api.nvim_create_autocmd("CursorHold", { callback = show_suggestion })
 end
 
 M.improve_grammar = function()
