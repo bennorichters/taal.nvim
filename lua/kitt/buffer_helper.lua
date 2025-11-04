@@ -65,11 +65,11 @@ M.visual_selection = function()
     return nil
   end
 
-  local pos_v = vim.fn.getpos("v")
-  local start_line, start_col = pos_v[2] - 1, pos_v[3] - 1
+  local pos_visual_start = vim.fn.getpos("v")
+  local start_line, start_col = pos_visual_start[2] - 1, pos_visual_start[3] - 1
 
-  local cursor_pos = vim.fn.getpos(".")
-  local end_line, end_col = cursor_pos[2] - 1, cursor_pos[3] - 1
+  local pos_cursor = vim.fn.getpos(".")
+  local end_line, end_col = pos_cursor[2] - 1, pos_cursor[3] - 1
 
   if end_line < start_line then
     start_line, start_col, end_line, end_col = end_line, end_col, start_line, start_col
