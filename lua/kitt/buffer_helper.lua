@@ -59,18 +59,37 @@ M.text_under_cursor = function()
 end
 
 M.visual_selection = function()
-  local s_start = vim.fn.getpos("'<")
-  local s_end = vim.fn.getpos("'>")
-  local n_lines = math.abs(s_end[2] - s_start[2]) + 1
-  local lines = vim.api.nvim_buf_get_lines(0, s_start[2] - 1, s_end[2], false)
-  lines[1] = string.sub(lines[1], s_start[3], -1)
-  if n_lines == 1 then
-    lines[n_lines] = string.sub(lines[n_lines], 1, s_end[3] - s_start[3] + 1)
-  else
-    lines[n_lines] = string.sub(lines[n_lines], 1, s_end[3])
+  local mode = vim.api.nvim_get_mode().mode
+  if mode ~= "v" and mode ~= "V" then
+    log.fmt_debug("visual_selection: not in visual mode, mode ='%s'. return nil", mode)
+    return nil
   end
 
-  return table.concat(lines, "\n")
+  local pos_v = vim.fn.getpos("v")
+  local start_line, start_col = pos_v[2] - 1, pos_v[3] - 1
+
+  local cursor_pos = vim.fn.getpos(".")
+  local end_line, end_col = cursor_pos[2] - 1, cursor_pos[3] - 1
+
+  if end_line < start_line then
+    start_line, start_col, end_line, end_col = end_line, end_col, start_line, start_col
+  elseif start_line == end_line and end_col < start_col then
+    start_col, end_col = end_col, start_col
+  end
+
+  log.fmt_trace(
+    "visual_selection: start_line=%s, start_col=%s, end_line=%s, end_col=%s",
+    start_line,
+    start_col,
+    end_line,
+    end_col
+  )
+
+  local selection = vim.api.nvim_buf_get_text(0, start_line, start_col, end_line, end_col, {})
+  local one_line = table.concat(selection, "\n")
+  log.fmt_trace("visual_selection: selection: %s", one_line)
+
+  return one_line
 end
 
 M.set_lines = function(line_nr, content)
