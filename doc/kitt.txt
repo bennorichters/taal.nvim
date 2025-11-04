@@ -29,17 +29,27 @@ MIT License Copyright (c) 2025 Benno Richters
 
 # Setup ~
 
-This module needs to be set up with `require('kitt').setup({})` (replace
-`{}` with your custom `config` table). Calling setup is mandatory.
+This module needs to be set up with `require('kitt').setup({})`. The setup arg
+`{}` can be replaced with a custom config table, to overwrite the defaults.
+Calling the setup function is mandatory.
 
-The config has these fields:
-- log_level: string - [trace, info, debug, error] - default: error
-- timeout: number - imeout for LLM requests in ms - default: 6,000
-- adapters: table {[LLM] = {endpoint = [default endpoint per LLM]}
+The config supports these fields:
+- log_level: string - ["trace", "info", "debug", "error"] - default: "error"
+- timeout: number - timeout for LLM requests in ms - default: 6000
+  (six-thousand, i.e., six seconds)
+- adapters: table:
+  {
+    {[LLM] = {endpoint = endpoint to be used by this LLM},
+    {[LLM] = {...}},
+  }
 - adapter: string - default adapter for every LLM call - default: ollama
 - model: string - default model for every LLM call - default: gemma3
-- commands: table {{[Supported LLM = {adapter = [], model = []}, {...}}} -
-  overriding default adapter and model
+- commands: table:
+  {
+    [command_name]: string - ["improve_grammar", "suggest_grammar", "set_spellang",
+    "interact"] = { adapter = ["claude", "ollama", "openai_responses"], model
+    = "[chosen model]"}
+  }
 
 The default config is:
 
