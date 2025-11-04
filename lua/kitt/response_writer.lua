@@ -1,6 +1,6 @@
 local log = require("kitt.log")
 
-local M = { bufnr = -1, line = 0, content = "" }
+local M = { bufnr = -1, line = 0, column = 0, content = "" }
 M.__index = M
 
 function M:new()
@@ -27,19 +27,16 @@ function M:write(delta)
 
   delta:gsub(".", function(c)
     if c == "\n" then
-      log.fmt_trace("response_writer line=%s content=%s", self.line, self.content)
-      vim.api.nvim_buf_set_lines(self.bufnr, self.line, -1, false, { self.content })
       self.line = self.line + 1
-      self.content = ""
+      self.column = 0
+      vim.api.nvim_buf_set_lines(self.bufnr, -1, -1, true, { "" })
     else
-      self.content = self.content .. c
+      vim.api.nvim_buf_set_text(self.bufnr, self.line, self.column, self.line, self.column, { c })
+      self.column = self.column + 1
     end
-  end)
 
-  if self.content then
-    log.fmt_trace("response_writer -write rest- line=%s content=%s", self.line, self.content)
-    vim.api.nvim_buf_set_lines(self.bufnr, self.line, -1, false, { self.content })
-  end
+    self.content = self.content .. c
+  end)
 
   vim.api.nvim__redraw({ buf = self.bufnr, flush = true })
 end
