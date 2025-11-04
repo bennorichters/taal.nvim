@@ -16,7 +16,6 @@ M.setup = function(user_cfg)
   log.fmt_info("user config: %s", user_cfg)
 
   local template_sender = template_sender_factory(post, response_writer, config.settings.timeout)
-
   buffer_helper.setup()
   commands.setup(buffer_helper, template_sender, config.command_adapter_model())
 
