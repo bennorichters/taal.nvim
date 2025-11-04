@@ -8,10 +8,6 @@ local T = new_set()
 
 T["adapters.claude"] = new_set()
 
-T["adapters.claude"]["endpoint"] = function()
-  eq(adapter.endpoint, "https://api.anthropic.com/v1/messages")
-end
-
 local template = {
   system = "a",
   examples = {

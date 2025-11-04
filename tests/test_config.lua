@@ -8,6 +8,18 @@ local defaults = {
   log_level = "error",
   timeout = 6000,
 
+  adapters = {
+    claude = {
+      endpoint = "https://api.anthropic.com/v1/messages",
+    },
+    ollama = {
+      endpoint = "http://localhost:11434/api/chat",
+    },
+    openai_responses = {
+      endpoint = "https://api.openai.com/v1/responses",
+    },
+  },
+
   adapter = "ollama",
   model = "gemma3",
 

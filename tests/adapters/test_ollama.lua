@@ -8,10 +8,6 @@ local T = new_set()
 
 T["adapters.ollama"] = new_set()
 
-T["adapters.ollama"]["endpoint"] = function()
-  eq(adapter.endpoint, "http://localhost:11434/api/chat")
-end
-
 local template = {
   system = "a",
   examples = {

@@ -22,8 +22,6 @@ local function convert(template, model)
 end
 
 return {
-  endpoint = "https://api.anthropic.com/v1/messages",
-
   post_headers = function()
     local key = os.getenv("CLAUDE_API_KEY")
     return {

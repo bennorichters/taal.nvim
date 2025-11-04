@@ -20,8 +20,6 @@ local function transform_template(template, model)
 end
 
 return {
-  endpoint = "https://api.openai.com/v1/responses",
-
   post_headers = function()
     local key = os.getenv("OPENAI_API_KEY")
     return { headers = { content_type = "application/json", authorization = "Bearer " .. key } }

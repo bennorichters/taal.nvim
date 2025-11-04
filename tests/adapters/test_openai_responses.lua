@@ -6,10 +6,6 @@ local T = new_set()
 
 T["adapters.openai_responses"] = new_set()
 
-T["adapters.openai_responses"]["endpoint"] = function()
-  eq(adapter.endpoint, "https://api.openai.com/v1/responses")
-end
-
 local template = {
   system = "a",
   examples = {
