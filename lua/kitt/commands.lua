@@ -177,7 +177,6 @@ M.apply_suggestion = function()
         delete_visual_effects(info)
         info.col_start = info.col_start - length_diff
         info.col_end = info.col_end - length_diff
-        -- info.hl_id = M.buffer_helper.add_hl_group(info)
         apply_visual_effects(info)
       end
     end
