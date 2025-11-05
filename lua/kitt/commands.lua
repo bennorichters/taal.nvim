@@ -12,6 +12,10 @@ local function delete_suggestions()
   for _, info in ipairs(M.diff_info) do
     if info.buf_nr == buf_nr then
       M.buffer_helper.delete_hl_group(buf_nr, info.hl_id)
+
+      if info.inlay_id then
+        M.buffer_helper.delete_inlay(buf_nr, info.inlay_id)
+      end
     end
   end
 
@@ -37,7 +41,7 @@ local function show_suggestion()
   end
 end
 
-local function apply_line_effects(buf_line_text, col_start, col_end, alt_text)
+local function apply_text_effects(buf_line_text, col_start, col_end, alt_text, inlay)
   local info = {
     buf_nr = buf_line_text.buf_nr,
     line_nr = buf_line_text.line_nr,
@@ -48,6 +52,9 @@ local function apply_line_effects(buf_line_text, col_start, col_end, alt_text)
   }
 
   info.hl_id = M.buffer_helper.add_hl_group(info)
+  if inlay then
+    info.inlay_id = M.buffer_helper.add_inlay(info)
+  end
 
   return info
 end
@@ -62,13 +69,12 @@ local function apply_diff_effects(buf_line_text_a, buf_line_text_b)
   for _, loc in ipairs(locations) do
     log.trace("diff info: %s", loc)
 
-    table.insert(diff_info, apply_line_effects(buf_line_text_a, loc.a_start, loc.a_end, loc.b_text))
+    local info_a = apply_text_effects(buf_line_text_a, loc.a_start, loc.a_end, loc.b_text)
+    table.insert(diff_info, info_a)
 
     if buf_line_text_b.buf_nr then
-      table.insert(
-        diff_info,
-        apply_line_effects(buf_line_text_b, loc.b_start, loc.b_end, loc.a_text)
-      )
+      local info_b = apply_text_effects(buf_line_text_b, loc.b_start, loc.b_end, loc.a_text)
+      table.insert(diff_info, info_b)
     end
   end
 

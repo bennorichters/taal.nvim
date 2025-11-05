@@ -42,17 +42,14 @@ M.add_hl_group = function(info)
   return extmark_id
 end
 
-M.delete_hl_group = function(buf_nr, extmark_id)
+M.delete_hl_group = function(buf_nr, hl_id)
   log.fmt_trace(
-    "delete_hl_group namespace=%s, buf_nr=%s, extmark_id=%s",
+    "delete_hl_group buf_nr=%s, hl_id=%s",
     M.namespace_hl,
     buf_nr,
-    extmark_id
+    hl_id
   )
-  vim.api.nvim_buf_del_extmark(buf_nr, M.namespace_hl, extmark_id)
-  local remaining_marks =
-    vim.api.nvim_buf_get_extmarks(buf_nr, M.namespace_hl, 0, -1, { details = true })
-  log.fmt_trace("delete_hl_group remaining_marks=%s", remaining_marks)
+  vim.api.nvim_buf_del_extmark(buf_nr, M.namespace_hl, hl_id)
 end
 
 M.text_under_cursor = function()
@@ -60,11 +57,28 @@ M.text_under_cursor = function()
   return vim.api.nvim_buf_get_lines(0, line_number - 1, line_number, false)[1]
 end
 
-M.add_inlay = function(buf_nr, line_nr, col_nr, alt_text)
-  return vim.api.nvim_buf_set_extmark(buf_nr, M.namespace_inlay, line_nr - 1, col_nr, {
-    virt_text = { { " " .. alt_text, "Comment" } },
-    virt_text_pos = "inline",
-  })
+M.add_inlay = function(info)
+  log.fmt_trace("add_inlay: info=%s", info)
+  return vim.api.nvim_buf_set_extmark(
+    info.buf_nr,
+    M.namespace_inlay,
+    info.line_nr - 1,
+    info.col_end,
+    {
+      virt_text = { { " " .. info.alt_text, "Comment" } },
+      virt_text_pos = "inline",
+    }
+  )
+end
+
+M.delete_inlay = function(buf_nr, inlay_id)
+  log.fmt_trace(
+    "delete_inlay buf_nr=%s, inlay_id=%s",
+    M.namespace_hl,
+    buf_nr,
+    inlay_id
+  )
+  vim.api.nvim_buf_del_extmark(buf_nr, M.namespace_inlay, inlay_id)
 end
 
 M.visual_selection = function()
