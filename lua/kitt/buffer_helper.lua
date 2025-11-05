@@ -3,8 +3,10 @@ local log = require("kitt.log")
 local M = {}
 
 M.setup = function()
-  M.namespace = vim.api.nvim_create_namespace("kitt")
-  log.fmt_trace("buffer_helper.setup kitt namespace=%s", M.namespace)
+  M.namespace_hl = vim.api.nvim_create_namespace("kitt")
+  M.namespace_inlay = vim.api.nvim_create_namespace("kitt")
+
+  log.fmt_trace("buffer_helper.setup kitt namespace=%s", M.namespace_hl)
   vim.api.nvim_set_hl(0, "KittIssue", { bg = "DarkRed", fg = "White" })
   vim.api.nvim_set_hl(0, "KittImprovement", { bg = "DarkGreen", fg = "White" })
 end
@@ -24,7 +26,7 @@ end
 M.add_hl_group = function(info)
   local extmark_id = vim.api.nvim_buf_set_extmark(
     info.buf_nr,
-    M.namespace,
+    M.namespace_hl,
     info.line_nr - 1,
     info.col_start,
     { end_row = info.line_nr - 1, end_col = info.col_end, hl_group = info.hl_group }
@@ -33,7 +35,7 @@ M.add_hl_group = function(info)
   log.fmt_trace(
     "add_hl_group info=%s, namespace=%s, created extmark_id=%s",
     info,
-    M.namespace,
+    M.namespace_hl,
     extmark_id
   )
 
@@ -43,19 +45,26 @@ end
 M.delete_hl_group = function(buf_nr, extmark_id)
   log.fmt_trace(
     "delete_hl_group namespace=%s, buf_nr=%s, extmark_id=%s",
-    M.namespace,
+    M.namespace_hl,
     buf_nr,
     extmark_id
   )
-  vim.api.nvim_buf_del_extmark(buf_nr, M.namespace, extmark_id)
+  vim.api.nvim_buf_del_extmark(buf_nr, M.namespace_hl, extmark_id)
   local remaining_marks =
-    vim.api.nvim_buf_get_extmarks(buf_nr, M.namespace, 0, -1, { details = true })
+    vim.api.nvim_buf_get_extmarks(buf_nr, M.namespace_hl, 0, -1, { details = true })
   log.fmt_trace("delete_hl_group remaining_marks=%s", remaining_marks)
 end
 
 M.text_under_cursor = function()
   local line_number = vim.fn.line(".")
   return vim.api.nvim_buf_get_lines(0, line_number - 1, line_number, false)[1]
+end
+
+M.add_inlay = function(buf_nr, line_nr, col_nr, alt_text)
+  return vim.api.nvim_buf_set_extmark(buf_nr, M.namespace_inlay, line_nr - 1, col_nr, {
+    virt_text = { { " " .. alt_text, "Comment" } },
+    virt_text_pos = "inline",
+  })
 end
 
 M.visual_selection = function()
