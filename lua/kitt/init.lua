@@ -25,6 +25,7 @@ M.setup = function(user_cfg)
       return { "scratch", "inlay" }
     end,
   })
+  vim.api.nvim_create_user_command("KittHover", commands.hover, {})
   vim.api.nvim_create_user_command("KittApplySuggestion", commands.apply_suggestion, {})
   vim.api.nvim_create_user_command("KittSetSpelllang", commands.set_spelllang, {})
   vim.api.nvim_create_user_command("KittInteract", commands.interact, {})
