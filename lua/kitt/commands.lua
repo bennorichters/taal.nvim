@@ -37,7 +37,7 @@ local function show_suggestion()
   end
 end
 
-local function apply_diff_hl_groups(a, b)
+local function apply_diff_effects(a, b)
   log.trace("apply_diff_hl_groups a=%s", a)
   log.trace("apply_diff_hl_groups b=%s", b)
 
@@ -96,7 +96,7 @@ M.improve_grammar = function()
   local ui_select = text_prompt.process_buf_text()
   local callback = function(scratch_buf, ai_text)
     log.fmt_trace("ai_improve_grammar-callback scratch_buf=%s, ai_text=%s", scratch_buf, ai_text)
-    M.diff_info = apply_diff_hl_groups(
+    M.diff_info = apply_diff_effects(
       { hl_group = "KittIssue", buf_nr = buf_nr, line_nr = line_nr, text = text },
       { hl_group = "KittImprovement", buf_nr = scratch_buf, line_nr = 1, text = ai_text }
     )
@@ -115,7 +115,7 @@ M.suggest_grammar = function()
   local buf_nr = M.buffer_helper.current_buffer_nr()
   local line_nr = M.buffer_helper.current_line_nr()
   delete_suggestions()
-  M.diff_info = apply_diff_hl_groups(
+  M.diff_info = apply_diff_effects(
     { hl_group = "KittIssue", buf_nr = buf_nr, line_nr = line_nr, text = original },
     { text = ai_text }
   )
