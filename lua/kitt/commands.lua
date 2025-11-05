@@ -28,7 +28,7 @@ local function delete_suggestions()
   end
 end
 
-local function apply_text_effects(buf_line_text, col_start, col_end, alt_text, inlay)
+local function apply_visual_effects(buf_line_text, col_start, col_end, alt_text, inlay)
   local info = {
     buf_nr = buf_line_text.buf_nr,
     line_nr = buf_line_text.line_nr,
@@ -56,11 +56,11 @@ local function apply_diff_effects(buf_line_text_a, buf_line_text_b, inlay)
   for _, loc in ipairs(locations) do
     log.trace("diff info: %s", loc)
 
-    local info_a = apply_text_effects(buf_line_text_a, loc.a_start, loc.a_end, loc.b_text, inlay)
+    local info_a = apply_visual_effects(buf_line_text_a, loc.a_start, loc.a_end, loc.b_text, inlay)
     table.insert(diff_info, info_a)
 
     if buf_line_text_b.buf_nr then
-      local info_b = apply_text_effects(buf_line_text_b, loc.b_start, loc.b_end, loc.a_text)
+      local info_b = apply_visual_effects(buf_line_text_b, loc.b_start, loc.b_end, loc.a_text)
       table.insert(diff_info, info_b)
     end
   end
