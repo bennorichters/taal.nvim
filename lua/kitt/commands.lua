@@ -133,6 +133,14 @@ M.grammar = function(opts)
   local scratch = opts.fargs[1] == "scratch" or opts.fargs[2] == "scratch"
   local inlay = opts.fargs[1] == "inlay" or opts.fargs[2] == "inlay"
 
+  if
+    (#opts.fargs == 1 and not scratch and not inlay)
+    or (#opts.fargs == 2 and not (scratch and inlay))
+    or #opts.fargs > 2
+  then
+    return error("wrong arguments supplied")
+  end
+
   if scratch then
     improve_grammar(inlay)
   else
