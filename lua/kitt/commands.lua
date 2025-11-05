@@ -59,7 +59,7 @@ local function apply_text_effects(buf_line_text, col_start, col_end, alt_text, i
   return info
 end
 
-local function apply_diff_effects(buf_line_text_a, buf_line_text_b)
+local function apply_diff_effects(buf_line_text_a, buf_line_text_b, inlay)
   log.trace("apply_diff_hl_groups a=%s", buf_line_text_a)
   log.trace("apply_diff_hl_groups b=%s", buf_line_text_b)
 
@@ -69,7 +69,7 @@ local function apply_diff_effects(buf_line_text_a, buf_line_text_b)
   for _, loc in ipairs(locations) do
     log.trace("diff info: %s", loc)
 
-    local info_a = apply_text_effects(buf_line_text_a, loc.a_start, loc.a_end, loc.b_text)
+    local info_a = apply_text_effects(buf_line_text_a, loc.a_start, loc.a_end, loc.b_text, inlay)
     table.insert(diff_info, info_a)
 
     if buf_line_text_b.buf_nr then
