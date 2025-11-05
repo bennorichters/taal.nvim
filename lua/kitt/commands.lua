@@ -37,34 +37,34 @@ local function show_suggestion()
   end
 end
 
-local function apply_diff_effects(a, b)
-  log.trace("apply_diff_hl_groups a=%s", a)
-  log.trace("apply_diff_hl_groups b=%s", b)
+local function apply_diff_effects(buf_line_text_a, buf_line_text_b)
+  log.trace("apply_diff_hl_groups a=%s", buf_line_text_a)
+  log.trace("apply_diff_hl_groups b=%s", buf_line_text_b)
 
   local diff_info = {}
-  local locations = differ.diff(a.text, b.text)
+  local locations = differ.diff(buf_line_text_a.text, buf_line_text_b.text)
 
   for _, loc in ipairs(locations) do
     log.trace("diff info: %s", loc)
 
     local info_a = {
-      buf_nr = a.buf_nr,
-      line_nr = a.line_nr,
+      buf_nr = buf_line_text_a.buf_nr,
+      line_nr = buf_line_text_a.line_nr,
       col_start = loc.a_start,
       col_end = loc.a_end,
-      hl_group = a.hl_group,
+      hl_group = buf_line_text_a.hl_group,
       alt_text = loc.b_text,
     }
     info_a.hl_id = M.buffer_helper.add_hl_group(info_a)
     table.insert(diff_info, info_a)
 
-    if b.buf_nr then
+    if buf_line_text_b.buf_nr then
       local info_b = {
-        buf_nr = b.buf_nr,
-        line_nr = b.line_nr,
+        buf_nr = buf_line_text_b.buf_nr,
+        line_nr = buf_line_text_b.line_nr,
         col_start = loc.b_start,
         col_end = loc.b_end,
-        hl_group = b.hl_group,
+        hl_group = buf_line_text_b.hl_group,
         alt_text = loc.a_text,
       }
       info_b.hl_id = M.buffer_helper.add_hl_group(info_b)
