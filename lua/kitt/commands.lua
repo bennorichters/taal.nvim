@@ -7,37 +7,24 @@ local tpl_recognize_language = require("kitt.templates.recognize_language")
 
 local M = { diff_info = {} }
 
+local function delete_visual_effects(info)
+  M.buffer_helper.delete_hl_group(info.buf_nr, info.hl_id)
+
+  if info.inlay_id then
+    M.buffer_helper.delete_inlay(info.buf_nr, info.inlay_id)
+  end
+end
+
 local function delete_suggestions()
   local buf_nr = M.buffer_helper.current_buffer_nr()
   for _, info in ipairs(M.diff_info) do
     if info.buf_nr == buf_nr then
-      M.buffer_helper.delete_hl_group(buf_nr, info.hl_id)
-
-      if info.inlay_id then
-        M.buffer_helper.delete_inlay(buf_nr, info.inlay_id)
-      end
+      delete_visual_effects(info)
     end
   end
 
   for i = #M.diff_info, 1, -1 do
     table.remove(M.diff_info, i)
-  end
-end
-
-local function show_suggestion()
-  local buf_nr = M.buffer_helper.current_buffer_nr()
-  local line_nr = M.buffer_helper.current_line_nr()
-  local col_nr = M.buffer_helper.current_column_nr()
-  for _, info in ipairs(M.diff_info) do
-    if
-      info.buf_nr == buf_nr
-      and info.line_nr == line_nr
-      and info.col_start <= col_nr
-      and info.col_end >= col_nr
-    then
-      vim.notify(info.alt_text)
-      return
-    end
   end
 end
 
@@ -126,7 +113,7 @@ M.setup = function(buffer_helper, template_sender, adapter_model)
   log.fmt_trace("commands.setup. adapter_model=%s", adapter_model)
 
   vim.api.nvim_create_autocmd("InsertEnter", { callback = delete_suggestions })
-  vim.api.nvim_create_autocmd("CursorHold", { callback = show_suggestion })
+  -- vim.api.nvim_create_autocmd("CursorHold", { callback = show_suggestion })
 end
 
 M.grammar = function(opts)
@@ -160,14 +147,14 @@ M.apply_suggestion = function()
       if applied_index == 0 and info.col_start <= col_nr and info.col_end > col_nr then
         applied_index = i
         M.buffer_helper.replace_text(buf_nr, line_nr, info.col_start, info.col_end, info.alt_text)
-        M.buffer_helper.delete_hl_group(buf_nr, info.hl_id)
+        delete_visual_effects(info)
 
         length_diff = info.col_end - info.col_start - #info.alt_text
         if length_diff == 0 then
           break
         end
       elseif applied_index > 0 then
-        M.buffer_helper.delete_hl_group(buf_nr, info.hl_id)
+        delete_visual_effects(info)
         info.col_start = info.col_start - length_diff
         info.col_end = info.col_end - length_diff
         info.hl_id = M.buffer_helper.add_hl_group(info)
