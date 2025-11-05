@@ -113,7 +113,6 @@ M.setup = function(buffer_helper, template_sender, adapter_model)
   log.fmt_trace("commands.setup. adapter_model=%s", adapter_model)
 
   vim.api.nvim_create_autocmd("InsertEnter", { callback = delete_suggestions })
-  -- vim.api.nvim_create_autocmd("CursorHold", { callback = show_suggestion })
 end
 
 M.grammar = function(opts)
