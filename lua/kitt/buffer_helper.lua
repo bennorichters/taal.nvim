@@ -9,6 +9,7 @@ M.setup = function()
   log.fmt_trace("buffer_helper.setup kitt namespace=%s", M.namespace_hl)
   vim.api.nvim_set_hl(0, "KittIssue", { bg = "DarkRed", fg = "White" })
   vim.api.nvim_set_hl(0, "KittImprovement", { bg = "DarkGreen", fg = "White" })
+  vim.api.nvim_set_hl(0, "KittInlay", { fg = "#A6E22E", italic = true })
 end
 
 M.current_buffer_nr = function()
@@ -43,12 +44,7 @@ M.add_hl_group = function(info)
 end
 
 M.delete_hl_group = function(buf_nr, hl_id)
-  log.fmt_trace(
-    "delete_hl_group buf_nr=%s, hl_id=%s",
-    M.namespace_hl,
-    buf_nr,
-    hl_id
-  )
+  log.fmt_trace("delete_hl_group buf_nr=%s, hl_id=%s", M.namespace_hl, buf_nr, hl_id)
   vim.api.nvim_buf_del_extmark(buf_nr, M.namespace_hl, hl_id)
 end
 
@@ -60,19 +56,14 @@ M.add_inlay = function(info)
     info.line_nr - 1,
     info.col_end,
     {
-      virt_text = { { " " .. info.alt_text, "Comment" } },
+      virt_text = { { " " .. info.alt_text, "KittInlay" } },
       virt_text_pos = "inline",
     }
   )
 end
 
 M.delete_inlay = function(buf_nr, inlay_id)
-  log.fmt_trace(
-    "delete_inlay buf_nr=%s, inlay_id=%s",
-    M.namespace_hl,
-    buf_nr,
-    inlay_id
-  )
+  log.fmt_trace("delete_inlay buf_nr=%s, inlay_id=%s", M.namespace_hl, buf_nr, inlay_id)
   vim.api.nvim_buf_del_extmark(buf_nr, M.namespace_inlay, inlay_id)
 end
 
