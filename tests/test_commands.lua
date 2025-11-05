@@ -57,7 +57,7 @@ end
 T["improve_grammar"] = function()
   local buf = vim.api.nvim_get_current_buf()
 
-  cmd.improve_grammar()
+  cmd.grammar({ fargs = { "scratch" } })
 
   eq(mock.check.template, tpl_grammar)
   eq(mock.check.select_called, true)
@@ -83,7 +83,7 @@ T["improve_grammar"] = function()
 end
 
 T["suggest_grammar"] = function()
-  cmd.suggest_grammar()
+  cmd.grammar({ fargs = {} })
 
   local buf_nr = mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)

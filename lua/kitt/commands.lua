@@ -81,18 +81,7 @@ local function apply_diff_effects(buf_line_text_a, buf_line_text_b, inlay)
   return diff_info
 end
 
-M.setup = function(buffer_helper, template_sender, adapter_model)
-  M.buffer_helper = buffer_helper
-  M.template_sender = template_sender
-  M.adapter_model = adapter_model
-
-  log.fmt_trace("commands.setup. adapter_model=%s", adapter_model)
-
-  vim.api.nvim_create_autocmd("InsertEnter", { callback = delete_suggestions })
-  vim.api.nvim_create_autocmd("CursorHold", { callback = show_suggestion })
-end
-
-M.improve_grammar = function()
+local function improve_grammar(inlay)
   local buf_nr = M.buffer_helper.current_buffer_nr()
   local line_nr = M.buffer_helper.current_line_nr()
   local text = M.buffer_helper.text_under_cursor()
@@ -104,7 +93,8 @@ M.improve_grammar = function()
     log.fmt_trace("ai_improve_grammar-callback scratch_buf=%s, ai_text=%s", scratch_buf, ai_text)
     M.diff_info = apply_diff_effects(
       { hl_group = "KittIssue", buf_nr = buf_nr, line_nr = line_nr, text = text },
-      { hl_group = "KittImprovement", buf_nr = scratch_buf, line_nr = 1, text = ai_text }
+      { hl_group = "KittImprovement", buf_nr = scratch_buf, line_nr = 1, text = ai_text },
+      inlay
     )
 
     ui_select()
@@ -114,7 +104,7 @@ M.improve_grammar = function()
   M.template_sender.stream(M.adapter_model["improve_grammar"], tpl_grammar, text, callback)
 end
 
-M.suggest_grammar = function()
+local function suggest_grammar(inlay)
   local original = M.buffer_helper.text_under_cursor()
   local ai_text = M.template_sender.send(M.adapter_model["suggest_grammar"], tpl_grammar, original)
 
@@ -123,8 +113,31 @@ M.suggest_grammar = function()
   delete_suggestions()
   M.diff_info = apply_diff_effects(
     { hl_group = "KittIssue", buf_nr = buf_nr, line_nr = line_nr, text = original },
-    { text = ai_text }
+    { text = ai_text },
+    inlay
   )
+end
+
+M.setup = function(buffer_helper, template_sender, adapter_model)
+  M.buffer_helper = buffer_helper
+  M.template_sender = template_sender
+  M.adapter_model = adapter_model
+
+  log.fmt_trace("commands.setup. adapter_model=%s", adapter_model)
+
+  vim.api.nvim_create_autocmd("InsertEnter", { callback = delete_suggestions })
+  vim.api.nvim_create_autocmd("CursorHold", { callback = show_suggestion })
+end
+
+M.grammar = function(opts)
+  local scratch = opts.fargs[1] == "scratch" or opts.fargs[2] == "scratch"
+  local inlay = opts.fargs[1] == "inlay" or opts.fargs[2] == "inlay"
+
+  if scratch then
+    improve_grammar(inlay)
+  else
+    suggest_grammar(inlay)
+  end
 end
 
 M.apply_suggestion = function()
