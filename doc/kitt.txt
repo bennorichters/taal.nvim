@@ -27,10 +27,10 @@ MIT License Copyright (c) 2025 Benno Richters
 - nvim-lua/plenary.nvim
   Pleanary's curl is used to contact LLM's
 
-# Setup ~
+# Installation ~
 
 This module needs to be set up with `require('kitt').setup({})`. The setup arg
-`{}` can be replaced with a custom config table, to overwrite the defaults.
+`{}` can be with a custom config table, to overwrite the defaults.
 Calling the setup function is mandatory.
 
 The config supports these fields:
@@ -53,7 +53,7 @@ The config supports these fields:
 
 The default config is:
 
-` {
+`{
   log_level = "error",
   timeout = 6000,
 
@@ -92,20 +92,15 @@ The default config is:
   },
 }`
 
+# Commands ~
+
+
 # Highlight groups ~
- 
+
+- 'KittIsse' - grammar error
+- 'KittImprovement' - suggested improvement
 
 kitt.txt         *kitt*
-
-kitt — short one-line summary
-=================================
-
-kitt is a Neovim plugin that does X.  For usage, see |kitt-usage|.
-
-Installation
-============
-
-Place this directory under your 'pack' or use your plugin manager.
 
 Usage
 =====
