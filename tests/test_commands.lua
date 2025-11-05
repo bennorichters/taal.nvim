@@ -65,13 +65,13 @@ T["improve_grammar"] = function()
   local scratch_buf = mock.values.scratch_buf
 
   local info1 = get_info1(buf)
-  info1.extmark_id = 101
+  info1.hl_id = 101
   local info2 = get_info2(scratch_buf)
-  info2.extmark_id = 102
+  info2.hl_id = 102
   local info3 = get_info3(buf)
-  info3.extmark_id = 103
+  info3.hl_id = 103
   local info4 = get_info4(scratch_buf)
-  info4.extmark_id = 104
+  info4.hl_id = 104
 
   eq(cmd.diff_info, { info1, info2, info3, info4 })
 
@@ -87,9 +87,9 @@ T["suggest_grammar"] = function()
 
   local buf_nr = mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
-  info1.extmark_id = 101
+  info1.hl_id = 101
   local info3 = get_info3(buf_nr)
-  info3.extmark_id = 102
+  info3.hl_id = 102
 
   eq(cmd.diff_info, { info1, info3 })
 end
@@ -101,9 +101,9 @@ T["apply_suggestion.apply_to_first_word"] = function()
 
   local buf_nr = mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
-  info1.extmark_id = 51
+  info1.hl_id = 51
   local info3 = get_info3(buf_nr)
-  info3.extmark_id = 52
+  info3.hl_id = 52
 
   cmd.diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
 
@@ -118,10 +118,10 @@ T["apply_suggestion.apply_to_first_word"] = function()
     line_nr = 1,
   }
 
-  info3_updated.extmark_id = 52
+  info3_updated.hl_id = 52
   eq(mock.check.add_hl_group_info, { info3_updated })
 
-  info3_updated.extmark_id = 101
+  info3_updated.hl_id = 101
   eq(cmd.diff_info, { info3_updated })
 
   eq(
@@ -139,9 +139,9 @@ T["apply_suggestion.apply_to_second_word"] = function()
 
   local buf_nr = mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
-  info1.extmark_id = 51
+  info1.hl_id = 51
   local info3 = get_info3(buf_nr)
-  info3.extmark_id = 52
+  info3.hl_id = 52
 
   cmd.diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
 

@@ -2,7 +2,7 @@ local original_values = {
   ai_text = "The moon is brighter then yesterday.",
   user_text = "The moon is more bright then yesterdate.",
   scratch_buf = 42,
-  extmark_id = 100,
+  hl_id = 100,
 }
 
 local M = {}
@@ -28,8 +28,8 @@ M.buffhelp = {
   end,
   add_hl_group = function(info)
     M.add_check_value("add_hl_group_info", info)
-    M.values.extmark_id = M.values.extmark_id + 1
-    return M.values.extmark_id
+    M.values.hl_id = M.values.hl_id + 1
+    return M.values.hl_id
   end,
   delete_hl_group = function(...)
     M.add_check_value("delete_hl_group_info", { ... })

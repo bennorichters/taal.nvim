@@ -11,7 +11,7 @@ local function delete_suggestions()
   local buf_nr = M.buffer_helper.current_buffer_nr()
   for _, info in ipairs(M.diff_info) do
     if info.buf_nr == buf_nr then
-      M.buffer_helper.delete_hl_group(buf_nr, info.extmark_id)
+      M.buffer_helper.delete_hl_group(buf_nr, info.hl_id)
     end
   end
 
@@ -55,7 +55,7 @@ local function apply_diff_hl_groups(a, b)
       hl_group = a.hl_group,
       alt_text = loc.b_text,
     }
-    info_a.extmark_id = M.buffer_helper.add_hl_group(info_a)
+    info_a.hl_id = M.buffer_helper.add_hl_group(info_a)
     table.insert(diff_info, info_a)
 
     if b.buf_nr then
@@ -67,7 +67,7 @@ local function apply_diff_hl_groups(a, b)
         hl_group = b.hl_group,
         alt_text = loc.a_text,
       }
-      info_b.extmark_id = M.buffer_helper.add_hl_group(info_b)
+      info_b.hl_id = M.buffer_helper.add_hl_group(info_b)
       table.insert(diff_info, info_b)
     end
   end
@@ -133,17 +133,17 @@ M.apply_suggestion = function()
       if applied_index == 0 and info.col_start <= col_nr and info.col_end > col_nr then
         applied_index = i
         M.buffer_helper.replace_text(buf_nr, line_nr, info.col_start, info.col_end, info.alt_text)
-        M.buffer_helper.delete_hl_group(buf_nr, info.extmark_id)
+        M.buffer_helper.delete_hl_group(buf_nr, info.hl_id)
 
         length_diff = info.col_end - info.col_start - #info.alt_text
         if length_diff == 0 then
           break
         end
       elseif applied_index > 0 then
-        M.buffer_helper.delete_hl_group(buf_nr, info.extmark_id)
+        M.buffer_helper.delete_hl_group(buf_nr, info.hl_id)
         info.col_start = info.col_start - length_diff
         info.col_end = info.col_end - length_diff
-        info.extmark_id = M.buffer_helper.add_hl_group(info)
+        info.hl_id = M.buffer_helper.add_hl_group(info)
       end
     end
   end
