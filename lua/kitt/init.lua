@@ -19,7 +19,12 @@ M.setup = function(user_cfg)
   buffer_helper.setup()
   commands.setup(buffer_helper, template_sender, config.command_adapter_model())
 
-  vim.api.nvim_create_user_command("KittGrammar", commands.grammar, { nargs = "*" })
+  vim.api.nvim_create_user_command("KittGrammar", commands.grammar, {
+    nargs = "*",
+    complete = function()
+      return { "scratch", "inlay" }
+    end,
+  })
   vim.api.nvim_create_user_command("KittApplySuggestion", commands.apply_suggestion, {})
   vim.api.nvim_create_user_command("KittSetSpelllang", commands.set_spelllang, {})
   vim.api.nvim_create_user_command("KittInteract", commands.interact, {})
