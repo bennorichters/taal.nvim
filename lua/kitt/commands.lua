@@ -109,6 +109,16 @@ local function show_hover(text)
   local buf = vim.api.nvim_create_buf(false, true)
   vim.bo[buf].bufhidden = "wipe"
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, { text })
+
+  local ns = vim.api.nvim_create_namespace("hover_popup")
+  vim.api.nvim_buf_set_extmark(
+    buf,
+    ns,
+    0,
+    0,
+    { end_row = 0, end_col = #text, hl_group = "KittInlay" }
+  )
+
   local maxw = vim.fn.strdisplaywidth(text)
 
   local opts = {
@@ -162,7 +172,20 @@ M.grammar = function(opts)
 end
 
 M.hover = function()
-  show_hover("aap")
+  local buf_nr = M.buffer_helper.current_buffer_nr()
+  local line_nr = M.buffer_helper.current_line_nr()
+  local col_nr = M.buffer_helper.current_column_nr()
+  for _, info in ipairs(M.diff_info) do
+    if
+      info.buf_nr == buf_nr
+      and info.line_nr == line_nr
+      and info.col_start <= col_nr
+      and info.col_end >= col_nr
+    then
+      show_hover(info.alt_text)
+      return
+    end
+  end
 end
 
 M.apply_suggestion = function()
