@@ -73,7 +73,7 @@ T["improve_grammar"] = function()
   local info4 = get_info4(scratch_buf)
   info4.hl_id = 104
 
-  eq(cmd.diff_info, { info1, info2, info3, info4 })
+  eq(cmd.all_diff_info, { info1, info2, info3, info4 })
 
   info1 = get_info1(buf)
   info2 = get_info2(scratch_buf)
@@ -91,7 +91,7 @@ T["suggest_grammar"] = function()
   local info3 = get_info3(buf_nr)
   info3.hl_id = 102
 
-  eq(cmd.diff_info, { info1, info3 })
+  eq(cmd.all_diff_info, { info1, info3 })
 end
 
 T["apply_suggestion.apply_to_first_word"] = function()
@@ -105,7 +105,7 @@ T["apply_suggestion.apply_to_first_word"] = function()
   local info3 = get_info3(buf_nr)
   info3.hl_id = 52
 
-  cmd.diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
+  cmd.all_diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
 
   cmd.apply_suggestion()
 
@@ -122,7 +122,7 @@ T["apply_suggestion.apply_to_first_word"] = function()
   eq(mock.check.add_hl_group_info, { info3_updated })
 
   info3_updated.hl_id = 101
-  eq(cmd.diff_info, { info3_updated })
+  eq(cmd.all_diff_info, { info3_updated })
 
   eq(
     mock.check.replace_text_info,
@@ -143,11 +143,11 @@ T["apply_suggestion.apply_to_second_word"] = function()
   local info3 = get_info3(buf_nr)
   info3.hl_id = 52
 
-  cmd.diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
+  cmd.all_diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
 
   cmd.apply_suggestion()
 
-  eq(cmd.diff_info, { info1 })
+  eq(cmd.all_diff_info, { info1 })
 
   -- add_hl_group should not have been called and this check value is not set
   eq(not mock.check.add_hl_group_info, true)
