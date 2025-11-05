@@ -105,43 +105,6 @@ local function suggest_grammar(inlay)
   )
 end
 
-local function show_hover(text)
-  local buf = vim.api.nvim_create_buf(false, true)
-  vim.bo[buf].bufhidden = "wipe"
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { text })
-
-  local ns = vim.api.nvim_create_namespace("hover_popup")
-  vim.api.nvim_buf_set_extmark(
-    buf,
-    ns,
-    0,
-    0,
-    { end_row = 0, end_col = #text, hl_group = "KittInlay" }
-  )
-
-  local maxw = vim.fn.strdisplaywidth(text)
-
-  local opts = {
-    relative = "cursor",
-    row = 1,
-    col = 0,
-    width = maxw,
-    height = 1,
-    style = "minimal",
-    border = "single",
-    focusable = false,
-  }
-  local win = vim.api.nvim_open_win(buf, false, opts)
-
-  vim.api.nvim_create_autocmd({ "CursorMoved", "BufHidden", "InsertEnter" }, {
-    buffer = vim.api.nvim_get_current_buf(),
-    once = true,
-    callback = function()
-      pcall(vim.api.nvim_win_close, win, true)
-    end,
-  })
-end
-
 M.setup = function(buffer_helper, template_sender, adapter_model)
   M.buffer_helper = buffer_helper
   M.template_sender = template_sender
@@ -182,7 +145,7 @@ M.hover = function()
       and info.col_start <= col_nr
       and info.col_end >= col_nr
     then
-      show_hover(info.alt_text)
+      M.buffer_helper.show_hover(info.alt_text)
       return
     end
   end

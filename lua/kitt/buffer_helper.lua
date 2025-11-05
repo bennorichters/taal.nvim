@@ -72,6 +72,43 @@ M.text_under_cursor = function()
   return vim.api.nvim_buf_get_lines(0, line_number - 1, line_number, false)[1]
 end
 
+M.show_hover = function(text)
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.bo[buf].bufhidden = "wipe"
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { text })
+
+  local ns = vim.api.nvim_create_namespace("hover_popup")
+  vim.api.nvim_buf_set_extmark(
+    buf,
+    ns,
+    0,
+    0,
+    { end_row = 0, end_col = #text, hl_group = "KittInlay" }
+  )
+
+  local maxw = vim.fn.strdisplaywidth(text)
+
+  local opts = {
+    relative = "cursor",
+    row = 1,
+    col = 0,
+    width = maxw,
+    height = 1,
+    style = "minimal",
+    border = "single",
+    focusable = false,
+  }
+  local win = vim.api.nvim_open_win(buf, false, opts)
+
+  vim.api.nvim_create_autocmd({ "CursorMoved", "BufHidden", "InsertEnter" }, {
+    buffer = vim.api.nvim_get_current_buf(),
+    once = true,
+    callback = function()
+      pcall(vim.api.nvim_win_close, win, true)
+    end,
+  })
+end
+
 M.visual_selection = function()
   local mode = vim.api.nvim_get_mode().mode
   if mode ~= "v" and mode ~= "V" then
