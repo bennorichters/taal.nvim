@@ -52,11 +52,6 @@ M.delete_hl_group = function(buf_nr, hl_id)
   vim.api.nvim_buf_del_extmark(buf_nr, M.namespace_hl, hl_id)
 end
 
-M.text_under_cursor = function()
-  local line_number = vim.fn.line(".")
-  return vim.api.nvim_buf_get_lines(0, line_number - 1, line_number, false)[1]
-end
-
 M.add_inlay = function(info)
   log.fmt_trace("add_inlay: info=%s", info)
   return vim.api.nvim_buf_set_extmark(
@@ -79,6 +74,11 @@ M.delete_inlay = function(buf_nr, inlay_id)
     inlay_id
   )
   vim.api.nvim_buf_del_extmark(buf_nr, M.namespace_inlay, inlay_id)
+end
+
+M.text_under_cursor = function()
+  local line_number = vim.fn.line(".")
+  return vim.api.nvim_buf_get_lines(0, line_number - 1, line_number, false)[1]
 end
 
 M.visual_selection = function()
