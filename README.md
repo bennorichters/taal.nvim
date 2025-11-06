@@ -72,21 +72,17 @@ This module needs to be set up with `require('taal').setup({})`. The setup arg `
     model = "gemma3", 
 
     commands = {
-      improve_grammar = {
+      grammar = {
 	    adapter = nil, -- overrides default LLM for TaalGrammar
-	    model = nil,
+	    model = nil, -- overrides default model for TaalGrammar
       },
-      suggest_grammar = {
-	    adapter = nil,
-	    model = nil,
-      },
-      set_spellang = {
-	    adapter = nil,
-	    model = nil,
+      setspellang = {
+	    adapter = nil,  -- overrides default LLM for TaalSetSpelllang
+	    model = nil,  -- overrides default model for TaalSetSpelllang
       },
       interact = {
-	    adapter = nil,
-	    model = nil,
+	    adapter = nil, -- overrides default LLM for TaalInteract
+	    model = nil, -- overrides default model for TaalInteract
       },
     },
   }
