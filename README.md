@@ -48,7 +48,7 @@ If you want to use Claude or OpenAI_responses, do not forget to configure the pl
 
 ### Setup
 
-This module needs to be set up with `require("taal").setup({})`. The setup arg `{}` is optional and can be a custom config table, to overwrite the defaults. Calling the setup function, with or without a table, is mandatory.
+This plugin needs to be set up with `require("taal").setup({})`. The setup arg `{}` is optional and can be a custom config table, to overwrite the defaults. Calling the setup function, with or without a table, is mandatory.
 
 <details>
 <summary>Default config</summary>
@@ -109,7 +109,7 @@ This example uses Ollama and the model gemma3 as the default LLM (because this c
 </details>
 
 ## Commands
-This plugin exposes the following five commands:
+The following five commands are exposed:
 
 - `TaalGrammar`  
   Checks grammar and spelling of the line of text currently under cursor. Grammar and spelling errors are highlighted with the 'TaalIssue' highlight group. This command takes two optional arguments:
