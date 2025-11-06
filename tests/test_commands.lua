@@ -1,8 +1,8 @@
 local Helpers = require("tests.helpers")
-local tpl_grammar = require("kitt.templates.grammar")
+local tpl_grammar = require("taal.templates.grammar")
 local eq = MiniTest.expect.equality
 
-local cmd = require("kitt.commands")
+local cmd = require("taal.commands")
 local mock = require("tests.mock")
 cmd.setup(mock.buffhelp, mock.template_sender, mock.adapter_model)
 

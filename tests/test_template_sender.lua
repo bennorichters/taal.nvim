@@ -57,7 +57,7 @@ T["template_sender"]["send"] = function()
     return { status = 200, body = "{}" }
   end
 
-  local ts = require("kitt.template_sender")(post, nil, 10)
+  local ts = require("taal.template_sender")(post, nil, 10)
   eq(ts.send({ adapter = adapter_mock, model = "m" }), "42")
   eq(post_called, true)
 end
@@ -88,7 +88,7 @@ T["template_sender"]["stream"] = function()
     end
   end
 
-  local ts = require("kitt.template_sender")(post, ResponseWriterMock, 10)
+  local ts = require("taal.template_sender")(post, ResponseWriterMock, 10)
   ts.stream({ adapter = adapter_mock, model = "m" }, nil, nil, call_back)
 
   eq(call_back_check, true)
@@ -109,7 +109,7 @@ T["template_sender"]["stream.no_call_back_is_fine"] = function()
     end
   end
 
-  local ts = require("kitt.template_sender")(post, ResponseWriterMock, 10)
+  local ts = require("taal.template_sender")(post, ResponseWriterMock, 10)
   ts.stream({ adapter = adapter_mock, model = "m" })
 
   vim.schedule_wrap = orig_schedule_wrap

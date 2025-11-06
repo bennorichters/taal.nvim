@@ -2,7 +2,7 @@ require("tests.helpers").enable_log()
 
 local new_set = MiniTest.new_set
 local eq = MiniTest.expect.equality
-local adapter = require("kitt.adapters.ollama")
+local adapter = require("taal.adapters.ollama")
 
 local T = new_set()
 

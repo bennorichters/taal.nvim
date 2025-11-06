@@ -1,7 +1,7 @@
 local Helpers = require("tests.helpers")
 local eq = MiniTest.expect.equality
 local child, T = Helpers.new_child_with_set([[
-  prompt = require('kitt.text_prompt').prompt
+  prompt = require('taal.text_prompt').prompt
 ]])
 
 local get_lines = function(buf)

@@ -1,4 +1,4 @@
-*kitt.txt* LLM assistance for improving grammar and spelling
+*taal.txt* LLM assistance for improving grammar and spelling
 
 MIT License Copyright (c) 2025 Benno Richters
 
@@ -100,7 +100,7 @@ The default config is:
 - 'KittIsse' - grammar error
 - 'KittImprovement' - suggested improvement
 
-kitt.txt         *kitt*
+taal.txt         *kitt*
 
 Usage
 =====

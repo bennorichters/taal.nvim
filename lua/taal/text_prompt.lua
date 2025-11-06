@@ -1,4 +1,4 @@
-local log = require("kitt.log")
+local log = require("taal.log")
 
 local M = {}
 

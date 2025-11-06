@@ -1,18 +1,18 @@
 local M = {}
 
 M.setup = function(user_cfg)
-  local buffer_helper = require("kitt.buffer_helper")
-  local commands = require("kitt.commands")
-  local config = require("kitt.config")
-  local log = require("kitt.log")
+  local buffer_helper = require("taal.buffer_helper")
+  local commands = require("taal.commands")
+  local config = require("taal.config")
+  local log = require("taal.log")
   local post = require("plenary.curl").post
-  local response_writer = require("kitt.response_writer")
-  local template_sender_factory = require("kitt.template_sender")
+  local response_writer = require("taal.response_writer")
+  local template_sender_factory = require("taal.template_sender")
 
   config.setup(user_cfg)
 
   log.new({ level = config.settings.log_level }, true)
-  log.trace("kitt.nvim log started")
+  log.trace("taal.nvim log started")
   log.fmt_info("user config: %s", user_cfg)
 
   local template_sender = template_sender_factory(post, response_writer, config.settings.timeout)

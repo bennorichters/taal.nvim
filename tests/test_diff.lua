@@ -1,6 +1,6 @@
 local new_set = MiniTest.new_set
 local eq = MiniTest.expect.equality
-local differ = require("kitt.diff")
+local differ = require("taal.diff")
 
 -- TODO: test for empty texts
 

@@ -1,4 +1,4 @@
-local log = require("kitt.log")
+local log = require("taal.log")
 
 local M = { bufnr = -1, line = 0, column = 0, content = "" }
 M.__index = M

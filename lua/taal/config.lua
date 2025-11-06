@@ -86,7 +86,7 @@ M.setup = function(settings)
 end
 
 M.get_adapter = function(adapter_name)
-  local adapter = require("kitt.adapters." .. adapter_name)
+  local adapter = require("taal.adapters." .. adapter_name)
   adapter.endpoint = M.settings.adapters[adapter_name].endpoint
   return adapter
 end

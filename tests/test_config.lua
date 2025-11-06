@@ -2,7 +2,7 @@ require("tests.helpers").enable_log()
 
 local new_set = MiniTest.new_set
 local expect, eq = MiniTest.expect, MiniTest.expect.equality
-local config = require("kitt.config")
+local config = require("taal.config")
 
 local defaults = {
   log_level = "error",

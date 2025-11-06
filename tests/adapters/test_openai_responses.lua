@@ -1,6 +1,6 @@
 local new_set = MiniTest.new_set
 local eq = MiniTest.expect.equality
-local adapter = require("kitt.adapters.openai_responses")
+local adapter = require("taal.adapters.openai_responses")
 
 local T = new_set()
 

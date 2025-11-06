@@ -1,4 +1,4 @@
-local log = require("kitt.log")
+local log = require("taal.log")
 local start_data = "data: "
 
 local function convert(template, model)

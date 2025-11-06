@@ -1,4 +1,4 @@
-local log = require("kitt.log")
+local log = require("taal.log")
 
 local function format_template(template, user_input)
   local json = vim.fn.json_encode(user_input)

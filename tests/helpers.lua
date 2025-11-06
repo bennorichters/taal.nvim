@@ -7,7 +7,7 @@ M.new_child_with_set = function(code)
     hooks = {
       pre_case = function()
         child.restart({ "-u", "scripts/minimal_init.lua" })
-        child.lua("log = require('kitt.log')")
+        child.lua("log = require('taal.log')")
         child.lua("log.new({ level = 'trace'}, true)")
         child.lua("log.trace('test log started in child process')")
         child.lua(code)
@@ -20,7 +20,7 @@ M.new_child_with_set = function(code)
 end
 
 M.enable_log = function()
-  local log = require("kitt.log")
+  local log = require("taal.log")
   log.new({ level = "trace" }, true)
   log.trace("test log started")
 end

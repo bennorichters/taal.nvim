@@ -1,9 +1,9 @@
-local differ = require("kitt.diff")
-local log = require("kitt.log")
-local text_prompt = require("kitt.text_prompt")
-local tpl_grammar = require("kitt.templates.grammar")
-local tpl_interact = require("kitt.templates.interact_with_content")
-local tpl_recognize_language = require("kitt.templates.recognize_language")
+local differ = require("taal.diff")
+local log = require("taal.log")
+local text_prompt = require("taal.text_prompt")
+local tpl_grammar = require("taal.templates.grammar")
+local tpl_interact = require("taal.templates.interact_with_content")
+local tpl_recognize_language = require("taal.templates.recognize_language")
 
 local M = { all_diff_info = {} }
 
