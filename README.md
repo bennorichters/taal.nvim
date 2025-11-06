@@ -133,6 +133,6 @@ vim.keymap.set("n", "<leader>tr", "<Cmd>TaalGrammar<Cr>")
 vim.keymap.set("n", "<leader>th", "<Cmd>TaalHover<Cr>")
 vim.keymap.set("n", "<leader>ta", "<Cmd>TaalApplySuggestion<Cr>")
 vim.keymap.set("n", "<leader>ts", "<Cmd>TaalSetSpelllang<Cr>")
-vim.keymap.set("v", "<leader>ti", "<Cmd>TaalInteract<Cr>")
+vim.keymap.set("v", "<leader>ti", "<Cmd>TaalInteract<Cr>") -- Note that this is for Visual Mode
 
 ```
