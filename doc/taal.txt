@@ -14,7 +14,7 @@ FEATURES
 - Apply improvements all at once, or on a one-to-one basis.
 
 - Recognizes the language the text is written in and sets the correct
-  `spelllang` option.
+  |spelllang| option.
   
 - Interact with the LLM using the selected text.
 
