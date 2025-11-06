@@ -109,6 +109,7 @@ This example uses Ollama and the model gemma3 as the default LLM (because this c
 </details>
 
 ## Commands
+This plugin exposes the following five commands:
 
 - `TaalGrammar`  
   Checks grammar and spelling of the line of text currently under cursor. Grammar and spelling errors are highlighted with the 'TaalIssue' highlight group. This command takes two optional arguments:
