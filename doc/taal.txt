@@ -8,17 +8,17 @@ FEATURES
 - Suggests grammar and spelling improvements. This feature is language 
   agnostic, as long as the chosen LLM is capable of that.
 
-- View a word-by-word diff of the original text and the suggested
+- Offers a word-by-word diff of the original text and the suggested
   improvements.
 
-- Apply improvements all at once, or on a one-to-one basis.
+- Applies improvements all at once, or on a one-to-one basis.
 
 - Recognizes the language the text is written in and sets the correct
   |spelllang| option.
   
-- Interact with the LLM using the selected text.
+- Interacts with the LLM using a user command and the selected text.
 
-- Supports three LLMs: Claude, Ollama, OpenAI-responses
+- Supports three LLMs: Claude, Ollama, OpenAI-responses.
 
 DEPENDENCIES
 
@@ -30,6 +30,14 @@ INSTALLATION
 This module needs to be set up with `require('taal').setup({})`. The setup arg
 `{}` is optional and can be a custom config table, to overwrite the defaults.
 Calling the setup function, with or without a table, is mandatory.
+
+API keys ~
+
+Three LLM's are supported. Two of them (Claude and OpenAI-responses) need an
+API key. These keys should be made available via an environment variable:
+
+- Claude: `{{CLAUDE_API_KEY}}`
+- OpenAI_responses: `{{OPENAI_API_KEY}}`
 
 Config options ~
 
