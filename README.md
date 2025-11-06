@@ -116,9 +116,9 @@ The following five commands are exposed:
   - <em>inlay</em> - Shows grammar and spelling improvements as inlay hints using the 'TaalInlay' highlight group.
   - <em>scratch</em> - Writes the complete improved line in a scratch buffer in a vertical split.
 - `TaalHover`  
-  Shows the grammar improvement of the text with an error currently under cursor in a popup.
+  Shows the grammar improvement of the text with the error currently under cursor in a popup.
 - `TaalApplySuggestion`  
-  Applies the suggested improvement of the text with an error currently under cursor. 
+  Applies the suggested improvement of the text with the error currently under cursor. 
 - `TaalSetSpelllang`  
   Recognizes the language of the text under cursor and sets the spelling language accordingly using the 'spelllang' option.
 - `TaalInteract`  
