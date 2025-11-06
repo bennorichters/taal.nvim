@@ -113,8 +113,8 @@ This plugin exposes the following five commands:
 
 - `TaalGrammar`  
   Checks grammar and spelling of the line of text currently under cursor. Grammar and spelling errors are highlighted with the 'TaalIssue' highlight group. This command takes two optional arguments:
-  - <inlay> Shows grammar and spelling improvements as inlay hints using the 'TaalInlay' highlight group.
-  - <scratch> Writes the complete improved line in a scratch buffer in a vertical split.
+  - <en>inlay</em> Shows grammar and spelling improvements as inlay hints using the 'TaalInlay' highlight group.
+  - <em>scratch</em> Writes the complete improved line in a scratch buffer in a vertical split.
 - `TaalHover`  
   Shows the grammar improvement of the text with an error currently under cursor in a popup.
 - `TaalApplySuggestion`  
