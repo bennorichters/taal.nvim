@@ -1,5 +1,7 @@
 Taal	taal.txt	/*Taal*
-taal	taal.txt	/*taal*
-taal-command	taal.txt	/*taal-command*
-taal-usage	taal.txt	/*taal-usage*
+taal-apply-suggestion	taal.txt	/*taal-apply-suggestion*
+taal-grammar	taal.txt	/*taal-grammar*
+taal-hover	taal.txt	/*taal-hover*
+taal-interact	taal.txt	/*taal-interact*
+taal-set-spelllang	taal.txt	/*taal-set-spelllang*
 taal.txt	taal.txt	/*taal.txt*
