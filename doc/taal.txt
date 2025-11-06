@@ -54,9 +54,9 @@ The config supports these fields:
 - model: string - default model for every LLM call - default: gemma3
 - commands: table:
   {
-    [command_name]: string - ["improve_grammar", "suggest_grammar", "set_spellang",
-    "interact"] = { adapter = ["claude", "ollama", "openai_responses"], model
-    = "[chosen model]"}
+    [command_name]: string - ["grammar", "set_spellang", "interact"] = 
+    { adapter = ["claude", "ollama", "openai_responses"], 
+    model = "[chosen model]"}
   }
 
 Default config ~

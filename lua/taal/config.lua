@@ -24,11 +24,7 @@ local defaults = {
   model = "gemma3",
 
   commands = {
-    improve_grammar = {
-      adapter = nil,
-      model = nil,
-    },
-    suggest_grammar = {
+    grammar = {
       adapter = nil,
       model = nil,
     },
@@ -96,13 +92,9 @@ M.command_adapter_model = function()
   local cmds = settings.commands
 
   return {
-    improve_grammar = {
-      adapter = M.get_adapter(cmds.improve_grammar.adapter or settings.adapter),
-      model = cmds.improve_grammar.model or settings.model,
-    },
-    suggest_grammar = {
-      adapter = M.get_adapter(cmds.suggest_grammar.adapter or settings.adapter),
-      model = cmds.suggest_grammar.model or settings.model,
+    grammar = {
+      adapter = M.get_adapter(cmds.grammar.adapter or settings.adapter),
+      model = cmds.grammar.model or settings.model,
     },
     set_spellang = {
       adapter = M.get_adapter(cmds.set_spellang.adapter or settings.adapter),

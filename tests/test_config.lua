@@ -24,11 +24,7 @@ local defaults = {
   model = "gemma3",
 
   commands = {
-    improve_grammar = {
-      adapter = nil,
-      model = nil,
-    },
-    suggest_grammar = {
+    grammar = {
       adapter = nil,
       model = nil,
     },
@@ -63,17 +59,16 @@ T["config"]["setup.change_timeout"] = function()
   eq(config.settings, expected)
 end
 
-T["config"]["setup.adapter.improve_grammar"] = function()
-  config.setup({ commands = { improve_grammar = { adapter = "claude" } } })
+T["config"]["setup.adapter.grammar"] = function()
+  config.setup({ commands = { grammar = { adapter = "claude" } } })
   local expected = vim.fn.deepcopy(defaults)
-  expected.commands.improve_grammar.adapter = "claude"
+  expected.commands.grammar.adapter = "claude"
   eq(config.settings, expected)
 end
 
 T["config"]["setup.invalid_adapter"] = function()
   expect.error(config.setup, nil, { adapter = "x" })
-  expect.error(config.setup, nil, { commands = { improve_grammar = { adapter = "x" } } })
-  expect.error(config.setup, nil, { commands = { suggest_grammar = { adapter = "x" } } })
+  expect.error(config.setup, nil, { commands = { grammar = { adapter = "x" } } })
   expect.error(config.setup, nil, { commands = { set_spellang = { adapter = "x" } } })
   expect.error(config.setup, nil, { commands = { interact = { adapter = "x" } } })
 end

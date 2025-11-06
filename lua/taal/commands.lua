@@ -92,12 +92,12 @@ local function improve_grammar(inlay)
   end
 
   delete_suggestions()
-  M.template_sender.stream(M.adapter_model["improve_grammar"], tpl_grammar, text, callback)
+  M.template_sender.stream(M.adapter_model["grammar"], tpl_grammar, text, callback)
 end
 
 local function suggest_grammar(inlay)
   local original = M.buffer_helper.text_under_cursor()
-  local ai_text = M.template_sender.send(M.adapter_model["suggest_grammar"], tpl_grammar, original)
+  local ai_text = M.template_sender.send(M.adapter_model["grammar"], tpl_grammar, original)
 
   local buf_nr = M.buffer_helper.current_buffer_nr()
   local line_nr = M.buffer_helper.current_line_nr()
