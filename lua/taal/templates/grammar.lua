@@ -9,12 +9,20 @@ return {
     .. "If the user text is empty, reply with an empty string.",
   examples = {
     {
-      user = "The moon is more bright then it was yesterdate.",
-      assistant = "The moon is brighter than it was yesterday.",
+      user = "Ich habe meines Buch vergessen gehabt.",
+      assistant = "Ich habe mein Buch vergessen.",
+    },
+    {
+      user = "Hova lehet legolcsóbban benzin venni?",
+      assistant = "Hol lehet legolcsóbban benzint venni?",
     },
     {
       user = "Hun moeten onmidellijk doen wat ik zech.",
       assistant = "Ze moeten onmiddellijk doen wat ik zeg.",
+    },
+    {
+      user = "The moon is more bright then it was yesterdate.",
+      assistant = "The moon is brighter than it was yesterday.",
     },
   },
 }
