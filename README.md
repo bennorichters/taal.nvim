@@ -20,7 +20,8 @@ A Neovim plugin that uses LLMs to improve the grammar and spelling of natural la
 
 This plugin uses `curl` and for that it depends on [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim).
 
-Example using [mini.deps](https://nvim-mini.org/mini.nvim/readmes/mini-deps):
+<details>
+<summary>Example using <a href="https://nvim-mini.org/mini.nvim/readmes/mini-deps">mini.deps</a></summary>
 
 ```lua
 MiniDeps.later(function()
@@ -32,6 +33,7 @@ MiniDeps.later(function()
   require("taal").setup {}
 end)
 ```
+</details>
 
 ### API keys
 
