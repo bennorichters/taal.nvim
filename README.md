@@ -46,7 +46,7 @@ Three LLM's are supported. Ollama, the default choice, does not need an API key.
 
 If you want to use Claude or OpenAI_responses, do not forget to configure the plugin accordingly, see below.
 
-## Usage
+### Setup
 
 This module needs to be set up with `require('taal').setup({})`. The setup arg `{}` is optional and can be a custom config table, to overwrite the defaults. Calling the setup function, with or without a table, is mandatory.
 
