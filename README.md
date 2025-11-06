@@ -37,10 +37,12 @@ end)
 
 ### API keys
 
-Three LLM's are supported. Two of them (Claude and OpenAI-responses) need an API key. These keys should be made available via an environment variable:
+Three LLM's are supported. Ollama, the default choice, does not need an API key. The other two (Claude and OpenAI-responses) do need a key. These keys should be made available via an environment variable:
 
 - Claude: `{{CLAUDE_API_KEY}}`
 - OpenAI_responses: `{{OPENAI_API_KEY}}`
+
+If you want to use Claude or OpenAI_responses, do not forget to configure the plugin accordingly, see below.
 
 ## Usage
 
