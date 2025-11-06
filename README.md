@@ -90,14 +90,14 @@ This module needs to be set up with `require('taal').setup({})`. The setup arg `
 
 ### Example config
 
-This example uses Ollama and the model gemma3 as the default LLM (because it is not changed), except for the interact command. For that command it will use Claude with the model claude-sonnet-4-5-20250929.
+This example uses Ollama and the model gemma3 as the default LLM (because this config does not override the default), except for the interact command. For that command it will use Claude with the model claude-sonnet-4-5-20250929.
 ```lua
-  { 
+  require('taal').setup({ 
     commands = {
       interact = { 
 	    adapter="claude", model="claude-sonnet-4-5-20250929", 
       }
     }
-  }
+  })
 ```
 
