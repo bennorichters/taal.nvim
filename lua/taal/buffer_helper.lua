@@ -3,13 +3,18 @@ local log = require("taal.log")
 local M = {}
 
 M.setup = function()
-  M.namespace_hl = vim.api.nvim_create_namespace("kitt")
-  M.namespace_inlay = vim.api.nvim_create_namespace("kitt")
+  M.namespace_hl = vim.api.nvim_create_namespace("taal_hl")
+  M.namespace_inlay = vim.api.nvim_create_namespace("taal_hl")
 
-  log.fmt_trace("buffer_helper.setup kitt namespace=%s", M.namespace_hl)
-  vim.api.nvim_set_hl(0, "KittIssue", { bg = "DarkRed", fg = "White" })
-  vim.api.nvim_set_hl(0, "KittImprovement", { bg = "DarkGreen", fg = "White" })
-  vim.api.nvim_set_hl(0, "KittInlay", { fg = "#A6E22E", italic = true })
+  log.fmt_trace(
+    "buffer_helper.setup namespace_hl=%s namespace_inlay=%s",
+    M.namespace_hl,
+    M.namespace_inlay
+  )
+
+  vim.api.nvim_set_hl(0, "TaalIssue", { bg = "DarkRed", fg = "White" })
+  vim.api.nvim_set_hl(0, "TaalImprovement", { bg = "DarkGreen", fg = "White" })
+  vim.api.nvim_set_hl(0, "TaalInlay", { fg = "#A6E22E", italic = true })
 end
 
 M.current_buffer_nr = function()
@@ -56,7 +61,7 @@ M.add_inlay = function(info)
     info.line_nr - 1,
     info.col_end,
     {
-      virt_text = { { " " .. info.alt_text, "KittInlay" } },
+      virt_text = { { " " .. info.alt_text, "TaalInlay" } },
       virt_text_pos = "inline",
     }
   )
@@ -83,7 +88,7 @@ M.show_hover = function(text)
     ns,
     0,
     0,
-    { end_row = 0, end_col = #text, hl_group = "KittInlay" }
+    { end_row = 0, end_col = #text, hl_group = "TaalInlay" }
   )
 
   local maxw = vim.fn.strdisplaywidth(text)

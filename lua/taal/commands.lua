@@ -83,8 +83,8 @@ local function improve_grammar(inlay)
   local callback = function(scratch_buf, ai_text)
     log.fmt_trace("ai_improve_grammar-callback scratch_buf=%s, ai_text=%s", scratch_buf, ai_text)
     M.all_diff_info = apply_diff_effects(
-      { hl_group = "KittIssue", buf_nr = buf_nr, line_nr = line_nr, text = text },
-      { hl_group = "KittImprovement", buf_nr = scratch_buf, line_nr = 1, text = ai_text },
+      { hl_group = "TaalIssue", buf_nr = buf_nr, line_nr = line_nr, text = text },
+      { hl_group = "TaalImprovement", buf_nr = scratch_buf, line_nr = 1, text = ai_text },
       inlay
     )
 
@@ -103,7 +103,7 @@ local function suggest_grammar(inlay)
   local line_nr = M.buffer_helper.current_line_nr()
   delete_suggestions()
   M.all_diff_info = apply_diff_effects(
-    { hl_group = "KittIssue", buf_nr = buf_nr, line_nr = line_nr, text = original },
+    { hl_group = "TaalIssue", buf_nr = buf_nr, line_nr = line_nr, text = original },
     { text = ai_text },
     inlay
   )

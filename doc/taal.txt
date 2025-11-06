@@ -3,7 +3,7 @@
 MIT License Copyright (c) 2025 Benno Richters
 
 ------------------------------------------------------------------------------
-                                                                          *Kitt*
+                                                                          *Taal*
 
 # Features ~
 
@@ -29,7 +29,7 @@ MIT License Copyright (c) 2025 Benno Richters
 
 # Installation ~
 
-This module needs to be set up with `require('kitt').setup({})`. The setup arg
+This module needs to be set up with `require('taal').setup({})`. The setup arg
 `{}` can be with a custom config table, to overwrite the defaults.
 Calling the setup function is mandatory.
 
@@ -97,29 +97,29 @@ The default config is:
 
 # Highlight groups ~
 
-- 'KittIsse' - grammar error
-- 'KittImprovement' - suggested improvement
+- 'TaalIsse' - grammar error
+- 'TaalImprovement' - suggested improvement
 
-taal.txt         *kitt*
+taal.txt         *taal*
 
 Usage
 =====
 
-:KittCommand    *kitt-command*
+:TaalCommand    *taal-command*
     Run the plugin command.
 
-kitt function
+taal function
 ==================
-kitt exposes a Lua function:
-    lua require("kitt").do_thing()
-See |kitt-command| for example.
+taal exposes a Lua function:
+    lua require("taal").do_thing()
+See |taal-command| for example.
 
 |:help| and related help-tags
 =============================
 See |:help| for general help navigation.
 
-(kitt)                             *kitt-usage*
+(taal)                             *taal-usage*
     Example:
-        :KittCommand arg1 arg2
+        :TaalCommand arg1 arg2
 
 vim:tw=78:ts=8:noet:ft=help:norl:

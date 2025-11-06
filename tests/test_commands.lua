@@ -19,7 +19,7 @@ local function get_info1(buf)
     buf_nr = buf,
     col_end = 23,
     col_start = 12,
-    hl_group = "KittIssue",
+    hl_group = "TaalIssue",
     line_nr = 1,
   }
 end
@@ -29,7 +29,7 @@ local function get_info2(buf)
     buf_nr = buf,
     col_end = 20,
     col_start = 12,
-    hl_group = "KittImprovement",
+    hl_group = "TaalImprovement",
     line_nr = 1,
   }
 end
@@ -39,7 +39,7 @@ local function get_info3(buf)
     buf_nr = buf,
     col_end = 40,
     col_start = 29,
-    hl_group = "KittIssue",
+    hl_group = "TaalIssue",
     line_nr = 1,
   }
 end
@@ -49,7 +49,7 @@ local function get_info4(buf)
     buf_nr = buf,
     col_end = 36,
     col_start = 26,
-    hl_group = "KittImprovement",
+    hl_group = "TaalImprovement",
     line_nr = 1,
   }
 end
@@ -114,7 +114,7 @@ T["apply_suggestion.apply_to_first_word"] = function()
     buf_nr = 1,
     col_end = 37,
     col_start = 26,
-    hl_group = "KittIssue",
+    hl_group = "TaalIssue",
     line_nr = 1,
   }
 
