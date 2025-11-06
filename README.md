@@ -48,70 +48,49 @@ If you want to use Claude or OpenAI_responses, do not forget to configure the pl
 
 This module needs to be set up with `require('taal').setup({})`. The setup arg `{}` is optional and can be a custom config table, to overwrite the defaults. Calling the setup function, with or without a table, is mandatory.
 
-### Config options
-
-The config supports these fields:
-- log_level: string - ["trace", "info", "debug", "error"] - default: "error"
-- timeout: number - timeout for LLM requests in ms - default: 6000
-  (six-thousand, i.e., six seconds)
-- adapters: table:
-  {
-    {[LLM] = {endpoint = endpoint to be used by this LLM},
-    {[LLM] = {endpoint = ...}},
-  }
-- adapter: string - default adapter for every LLM call - default: ollama
-- model: string - default model for every LLM call - default: gemma3
-- commands: table:
-  {
-    [command_name]: string - ["improve_grammar", "suggest_grammar", "set_spellang",
-    "interact"] = { adapter = ["claude", "ollama", "openai_responses"], model
-    = "[chosen model]"}
-  }
-
-<details>
-<summary>Default config</summary>
+### Default config 
 
 ```lua
   {
-    log_level = "error",
-    timeout = 6000,
+    log_level = "error", -- one of: trace, debug, info, warn, error, fatal
+    timeout = 6000, -- time out in ms, i.e., 6000 is six seconds
 
     adapters = {
       claude = {
-	endpoint = "https://api.anthropic.com/v1/messages",
+	    endpoint = "https://api.anthropic.com/v1/messages", -- endpoint for Claude
       },
       ollama = {
-	endpoint = "http://localhost:11434/api/chat",
+	    endpoint = "http://localhost:11434/api/chat", -- endpoint for Ollama
       },
       openai_responses = {
-	endpoint = "https://api.openai.com/v1/responses",
+	    endpoint = "https://api.openai.com/v1/responses", -- endpoint for Openai_responses
       },
     },
 
-    adapter = "ollama",
-    model = "gemma3",
+    -- default LLM and model, used by all commands if not overriden by on of the options below
+    adapter = "ollama", -- one of: claude, ollama, openai_responses
+    model = "gemma3", 
 
     commands = {
       improve_grammar = {
-	adapter = nil,
-	model = nil,
+	    adapter = nil, -- overrides default LLM for TaalGrammar
+	    model = nil,
       },
       suggest_grammar = {
-	adapter = nil,
-	model = nil,
+	    adapter = nil,
+	    model = nil,
       },
       set_spellang = {
-	adapter = nil,
-	model = nil,
+	    adapter = nil,
+	    model = nil,
       },
       interact = {
-	adapter = nil,
-	model = nil,
+	    adapter = nil,
+	    model = nil,
       },
     },
   }
 ```
-</details>
 
 ### Example config
 
@@ -120,7 +99,7 @@ This example uses Ollama and the model gemma3 as the default LLM (because it is 
   { 
     commands = {
       interact = { 
-	adapter="claude", model="claude-sonnet-4-5-20250929", 
+	    adapter="claude", model="claude-sonnet-4-5-20250929", 
       }
     }
   }
