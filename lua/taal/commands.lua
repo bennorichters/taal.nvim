@@ -99,6 +99,10 @@ local function suggest_grammar(inlay)
   local original = M.buffer_helper.text_under_cursor()
   local ai_text = M.template_sender.send(M.adapter_model["grammar"], tpl_grammar, original)
 
+  if original == ai_text then
+    vim.notify("Great sentence. No improvements found.", vim.log.levels.INFO)
+  end
+
   local buf_nr = M.buffer_helper.current_buffer_nr()
   local line_nr = M.buffer_helper.current_line_nr()
   delete_suggestions()
