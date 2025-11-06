@@ -18,7 +18,9 @@ A Neovim plugin that uses LLMs to improve the grammar and spelling of natural la
 
 ## Installation
 
-Using [Mini.Deps](https://nvim-mini.org/mini.nvim/readmes/mini-deps):
+This plugin uses `curl` and for that it depends on [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim).
+
+Example using [Mini.Deps](https://nvim-mini.org/mini.nvim/readmes/mini-deps):
 
 ```lua
 MiniDeps.later(function()
@@ -31,3 +33,13 @@ MiniDeps.later(function()
 end)
 ```
 
+### API keys
+
+Three LLM's are supported. Two of them (Claude and OpenAI-responses) need an API key. These keys should be made available via an environment variable:
+
+- Claude: `{{CLAUDE_API_KEY}}`
+- OpenAI_responses: `{{OPENAI_API_KEY}}`
+
+## Usage
+
+...
