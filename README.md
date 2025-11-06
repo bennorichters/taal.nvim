@@ -68,11 +68,9 @@ The config supports these fields:
     = "[chosen model]"}
   }
 
-### Default config
-
 <details>
-<summary>default config</summary>
-The default config is:
+<summary>Default config</summary>
+
 ```lua
   {
     log_level = "error",
