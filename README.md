@@ -48,7 +48,7 @@ If you want to use Claude or OpenAI_responses, do not forget to configure the pl
 
 ### Setup
 
-This module needs to be set up with `require('taal').setup({})`. The setup arg `{}` is optional and can be a custom config table, to overwrite the defaults. Calling the setup function, with or without a table, is mandatory.
+This module needs to be set up with `require("taal").setup({})`. The setup arg `{}` is optional and can be a custom config table, to overwrite the defaults. Calling the setup function, with or without a table, is mandatory.
 
 <details>
 <summary>Default config</summary>
