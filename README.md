@@ -18,7 +18,7 @@ A Neovim plugin that uses LLMs to improve the grammar and spelling of natural la
 
 ## Installation
 
-This plugin uses `curl` and for that it depends on [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim).
+This plugin uses `curl`, make sure it is installed, and for that it depends on [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim).
 
 <details>
 <summary>Example using <a href="https://nvim-mini.org/mini.nvim/readmes/mini-deps">mini.deps</a></summary>
