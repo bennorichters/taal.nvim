@@ -1,6 +1,6 @@
 # Taal
 
-A Neovim plugin that uses LLMs to improve grammar and spelling of natural language text.
+A Neovim plugin that uses LLMs to improve the grammar and spelling of natural language text.
 
 ## Features
 
@@ -138,5 +138,4 @@ vim.keymap.set("n", "<leader>ts", "<Cmd>TaalSetSpelllang<Cr>")
 
 -- Note that this mapping is for Visual Mode
 vim.keymap.set("v", "<leader>ti", "<Cmd>TaalInteract<Cr>") 
-
 ```
