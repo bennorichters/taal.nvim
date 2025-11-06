@@ -113,13 +113,13 @@ This example uses Ollama and the model gemma3 as the default LLM (because this c
   Checks grammar and spelling of the line of text currently under cursor. Grammar and spelling errors are highlighted with the 'TaalIssue' highlight group. This command takes two optional arguments:
   - <inlay> Shows grammar and spelling improvemnts as inlay hints using the 'TaalInlay' highlight group.
   - <scratch> Writes the complete improved line in a scratch buffer in a vertical split.
-- `TaalHover`
+- `TaalHover`  
   Shows the grammar improvement of the text with an errir currently under cursor in a popup.
 - `TaalApplySuggestion`  
   Applies the suggested improvement of the text with an error currently under cursor. 
-- `TaalSetSpelllang`
+- `TaalSetSpelllang`  
   Recognizes the language of the text under cursor and sets the spelling language accordingly using the 'spelllang' option.
-- `TaalInteract`
+- `TaalInteract`  
   Asks the user for a prompt and sends this, together with the selected text to the LLM. Use in Visual Mode. Not that this ex command cannot be used by using `:TaalInteract` as using the colon will switch Neovim back to normal mode. Map this command to a key using `<Cmd>TaalInteract<Cr>` instead.
 
 ## Keymaps
