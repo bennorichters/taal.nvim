@@ -133,7 +133,7 @@ TaalGrammar                                                        *taal-grammar
       split.
 
 TaalHover                                                            *taal-hover*
-    Shows the grammar improvement of the text with an errir currently under
+    Shows the grammar improvement of the text with an error currently under
     cursor in a popup.
 
 TaalInteract                                                       *taal-interact*

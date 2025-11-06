@@ -114,7 +114,7 @@ This example uses Ollama and the model gemma3 as the default LLM (because this c
   - <inlay> Shows grammar and spelling improvemnts as inlay hints using the 'TaalInlay' highlight group.
   - <scratch> Writes the complete improved line in a scratch buffer in a vertical split.
 - `TaalHover`  
-  Shows the grammar improvement of the text with an errir currently under cursor in a popup.
+  Shows the grammar improvement of the text with an error currently under cursor in a popup.
 - `TaalApplySuggestion`  
   Applies the suggested improvement of the text with an error currently under cursor. 
 - `TaalSetSpelllang`  
