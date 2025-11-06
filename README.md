@@ -93,7 +93,7 @@ This module needs to be set up with `require('taal').setup({})`. The setup arg `
 </details>
 
 <details>
-<summary>Default config</summary>
+<summary>Example config</summary>
 
 This example uses Ollama and the model gemma3 as the default LLM (because this config does not override the default), except for the interact command. For that command it will use Claude with the model claude-sonnet-4-5-20250929.
 ```lua
