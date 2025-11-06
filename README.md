@@ -120,7 +120,7 @@ This example uses Ollama and the model gemma3 as the default LLM (because this c
 - `TaalSetSpelllang`  
   Recognizes the language of the text under cursor and sets the spelling language accordingly using the 'spelllang' option.
 - `TaalInteract`  
-  Asks the user for a prompt and sends this, together with the selected text to the LLM. Use in Visual Mode. Not that this ex command cannot be used by using `:TaalInteract` as using the colon will switch Neovim back to normal mode. Map this command to a key using `<Cmd>TaalInteract<Cr>` instead.
+  Asks the user for a prompt and sends this, together with the selected text to the LLM. Use in Visual Mode. Note that this ex command cannot be used by using `:TaalInteract` as using the colon will switch Neovim back to normal mode. Map this command to a key using `<Cmd>TaalInteract<Cr>` instead, as in the example below.
 
 ## Keymaps
 
