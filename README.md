@@ -1,6 +1,6 @@
 # Taal
 
-A Neovim plugin that uses LLMs to improve the grammar and spelling of natural language text.
+A Neovim plugin that uses LLMs to improve grammar and spelling of natural language text.
 
 ## Features
 
@@ -50,8 +50,9 @@ If you want to use Claude or OpenAI_responses, do not forget to configure the pl
 
 This module needs to be set up with `require('taal').setup({})`. The setup arg `{}` is optional and can be a custom config table, to overwrite the defaults. Calling the setup function, with or without a table, is mandatory.
 
-### Default config 
-
+<details>
+<summary>Default config</summary>
+	
 ```lua
   {
     log_level = "error", -- one of: trace, debug, info, warn, error, fatal
@@ -89,8 +90,10 @@ This module needs to be set up with `require('taal').setup({})`. The setup arg `
     },
   }
 ```
+</details>
 
-### Example config
+<details>
+<summary>Default config</summary>
 
 This example uses Ollama and the model gemma3 as the default LLM (because this config does not override the default), except for the interact command. For that command it will use Claude with the model claude-sonnet-4-5-20250929.
 ```lua
@@ -102,4 +105,4 @@ This example uses Ollama and the model gemma3 as the default LLM (because this c
     }
   })
 ```
-
+</details>
