@@ -70,7 +70,7 @@ This module needs to be set up with `require("taal").setup({})`. The setup arg `
       },
     },
 
-    -- default LLM and model, used by all commands if not overriden by on of the options below
+    -- default LLM and model, used by all commands if not overriden by one of the options below
     adapter = "ollama", -- one of: claude, ollama, openai_responses
     model = "gemma3", 
 
