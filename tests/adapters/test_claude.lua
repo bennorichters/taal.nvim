@@ -51,8 +51,9 @@ T["adapters.claude"]["template_stream"] = function()
 end
 
 T["adapters.claude"]["post_headers"] = function()
-  local old_env_api_key = os.getenv("CLAUDE_API_KEY")
-  vim.fn.setenv("CLAUDE_API_KEY", "test_key")
+  local env_var = "CLAUDE_API_KEY"
+  local old_env_api_key = os.getenv(env_var)
+  vim.fn.setenv(env_var, "test_key")
 
   eq(adapter.post_headers(), {
     headers = {
@@ -63,7 +64,7 @@ T["adapters.claude"]["post_headers"] = function()
   })
 
   if old_env_api_key then
-    vim.fn.setenv("OPENAI_API_KEY", old_env_api_key)
+    vim.fn.setenv(env_var, old_env_api_key)
   end
 end
 
