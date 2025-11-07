@@ -12,6 +12,9 @@ local defaults = {
     claude = {
       url = "https://api.anthropic.com",
     },
+    gemini = {
+      url = "https://generativelanguage.googleapis.com"
+    },
     ollama = {
       url = "http://localhost:11434",
     },

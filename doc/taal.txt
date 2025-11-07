@@ -18,7 +18,7 @@ FEATURES
   
 - Interacts with the LLM using a user command and the selected text.
 
-- Supports three LLMs: Claude, Ollama, OpenAI-responses.
+- Supports three LLMs: Claude, Gemini, OpenAI-responses.
 
 DEPENDENCIES
 
@@ -47,15 +47,15 @@ The config supports these fields:
   (six-thousand, i.e., six seconds)
 - adapters: table:
   {
-    {[LLM] = {endpoint = endpoint to be used by this LLM},
-    {[LLM] = {endpoint = ...}},
+    {[LLM] = {url = url to be used by this LLM},
+    {[LLM] = {url = ...}},
   }
-- adapter: string - default adapter for every LLM call - default: ollama
-- model: string - default model for every LLM call - default: gemma3
+- adapter: string - default adapter for every LLM call - default: Gemini
+- model: string - default model for every LLM call - default: gemini-2.5-flash
 - commands: table:
   {
     [command_name]: string - ["grammar", "set_spellang", "interact"] = 
-    { adapter = ["claude", "ollama", "openai_responses"], 
+    { adapter = ["claude", "gemini", "openai_responses"], 
     model = "[chosen model]"}
   }
 
@@ -69,18 +69,18 @@ The default config is:
 
     adapters = {
       claude = {
-	endpoint = "https://api.anthropic.com/v1/messages",
+	url = "https://api.anthropic.com/v1/messages",
       },
-      ollama = {
-	endpoint = "http://localhost:11434/api/chat",
+      gemini = {
+	url = "https://generativelanguage.googleapis.com",
       },
       openai_responses = {
-	endpoint = "https://api.openai.com/v1/responses",
+	url = "https://api.openai.com/v1/responses",
       },
     },
 
-    adapter = "ollama",
-    model = "gemma3",
+    adapter = "gemini",
+    model = "gemini-2.5-flash",
 
     commands = {
       improve_grammar = {
@@ -105,7 +105,7 @@ The default config is:
 
 Example config ~
 
-This example uses Ollama and the model gemma3 as the default LLM (because it
+This example uses Gemini and the model gemini-2.5-flash as the default LLM (because it
 is not changed), except for the interact command. For that command it will use
 Claude with the model claude-sonnet-4-5-20250929.
 >lua

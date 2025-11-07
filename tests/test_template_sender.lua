@@ -19,17 +19,17 @@ local adapter_mock = {
   post_headers = function()
     return { headers = { foo = "bar" } }
   end,
-  template = function(_)
+  template = function()
     return '{fooz = "barz"}'
   end,
-  template_stream = function(_)
+  template_stream = function()
     return '{fooz = "barz"}'
   end,
   parse = function(_)
     return "42"
   end,
-  parse_stream = function(_)
-    return "42"
+  parse_stream = function()
+    return true, "43"
   end,
 }
 
@@ -114,6 +114,46 @@ T["template_sender"]["stream.no_call_back_is_fine"] = function()
 
   local ts = require("taal.template_sender")(post, ResponseWriterMock, 10)
   ts.stream({ adapter = adapter_mock, model = "m" })
+
+  vim.schedule_wrap = orig_schedule_wrap
+end
+
+T["template_sender"]["stream.done_with_delta"] = function()
+  local function post(_, opts)
+    opts.stream()
+    return { status = 200, body = "{}" }
+  end
+
+  local orig_schedule_wrap = vim.schedule_wrap
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.schedule_wrap = function(fn)
+    return function()
+      fn()
+    end
+  end
+
+  local call_back_check
+  local call_back = function()
+    call_back_check = true
+  end
+
+  local check_write
+  local ResponseWriterMockCheckWrite = {
+    new = function()
+      return {
+        create_scratch_buffer = function() end,
+        write = function(_, delta)
+          check_write = delta
+        end,
+      }
+    end,
+  }
+
+  local ts = require("taal.template_sender")(post, ResponseWriterMockCheckWrite, 10)
+  ts.stream({ adapter = adapter_mock, model = "m" }, nil, nil, call_back)
+
+  eq(check_write, "43")
+  eq(call_back_check, true)
 
   vim.schedule_wrap = orig_schedule_wrap
 end

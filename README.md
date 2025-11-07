@@ -14,7 +14,7 @@ A Neovim plugin that uses LLMs to improve the grammar and spelling of natural la
   
 - Interacts with the LLM using a user command and the selected text.
 
-- Supports three LLMs: Claude, Ollama, OpenAI-responses.
+- Supports three LLMs: Claude, Gemini, OpenAI-responses.
 
 ## Installation
 
@@ -39,9 +39,10 @@ end)
 
 ### API keys
 
-Three LLM's are supported. Ollama, the default choice, does not need an API key. The other two (Claude and OpenAI-responses) do need a key. These keys should be made available via an environment variable:
+The LLM's need an API key. These keys should be made available via an environment variable:
 
 - Claude: `{{CLAUDE_API_KEY}}`
+- Gemini: `{{GEMINI_API_KEY}}`
 - OpenAI_responses: `{{OPENAI_API_KEY}}`
 
 If you want to use Claude or OpenAI_responses, do not forget to configure the plugin accordingly, see below.
@@ -60,33 +61,36 @@ This plugin needs to be set up with `require("taal").setup({})`. The setup arg `
 
     adapters = {
       claude = {
-	    endpoint = "https://api.anthropic.com/v1/messages", -- endpoint for Claude
+        -- URL for Claude
+        url = "https://api.anthropic.com/v1/messages",
       },
-      ollama = {
-	    endpoint = "http://localhost:11434/api/chat", -- endpoint for Ollama
+      gemini = {
+        -- URL for Gemini
+        url = "https://generativelanguage.googleapis.com"
       },
       openai_responses = {
-	    endpoint = "https://api.openai.com/v1/responses", -- endpoint for Openai_responses
+        -- URL for Openai_responses
+	      url = "https://api.openai.com/v1/responses", 
       },
     },
 
     -- default LLM and model, used by all commands if not overriden by one
     -- of the options below
-    adapter = "ollama", -- one of: claude, ollama, openai_responses
-    model = "gemma3", 
+    adapter = "gemini", -- one of: claude, gemini, openai_responses
+    model = "gemini-2.5-flash", 
 
     commands = {
       grammar = {
-	    adapter = nil, -- overrides default LLM for TaalGrammar
-	    model = nil, -- overrides default model for TaalGrammar
+  	    adapter = nil, -- overrides default LLM for TaalGrammar
+	      model = nil, -- overrides default model for TaalGrammar
       },
       setspellang = {
-	    adapter = nil,  -- overrides default LLM for TaalSetSpelllang
-	    model = nil,  -- overrides default model for TaalSetSpelllang
+	      adapter = nil,  -- overrides default LLM for TaalSetSpelllang
+	      model = nil,  -- overrides default model for TaalSetSpelllang
       },
       interact = {
-	    adapter = nil, -- overrides default LLM for TaalInteract
-	    model = nil, -- overrides default model for TaalInteract
+	      adapter = nil, -- overrides default LLM for TaalInteract
+	      model = nil, -- overrides default model for TaalInteract
       },
     },
   }
@@ -96,12 +100,12 @@ This plugin needs to be set up with `require("taal").setup({})`. The setup arg `
 <details>
 <summary>Example config</summary>
 
-This example uses Ollama and the model gemma3 as the default LLM (because this config does not override the default), except for the interact command. For that command it will use Claude with the model claude-sonnet-4-5-20250929.
+This example uses Gemini and the model gemini-2.5-flash as the default LLM (because this config does not override the default), except for the interact command. For that command it will use Claude with the model claude-sonnet-4-5-20250929.
 ```lua
   require("taal").setup({ 
     commands = {
       interact = { 
-	    adapter="claude", model="claude-sonnet-4-5-20250929", 
+	      adapter="claude", model="claude-sonnet-4-5-20250929", 
       }
     }
   })

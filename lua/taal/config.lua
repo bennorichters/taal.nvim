@@ -1,5 +1,6 @@
 local supported_adapters = {
   claude = true,
+  gemini = true,
   ollama = true,
   openai_responses = true,
 }
@@ -12,6 +13,9 @@ local defaults = {
     claude = {
       url = "https://api.anthropic.com",
     },
+    gemini = {
+      url = "https://generativelanguage.googleapis.com"
+    },
     ollama = {
       url = "http://localhost:11434",
     },
@@ -20,8 +24,8 @@ local defaults = {
     },
   },
 
-  adapter = "ollama",
-  model = "gemma3",
+  adapter = "gemini",
+  model = "gemini-2.5-flash",
 
   commands = {
     grammar = {

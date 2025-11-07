@@ -22,10 +22,13 @@ local function on_chunk_wrap(parse_stream, writer, done_callback)
     log.fmt_trace("on_chunk: stream_data=%s", stream_data or "--no stream_data--")
 
     local done, delta = parse_stream(stream_data)
+
+    if delta then
+      writer:write(delta)
+    end
+
     if done and done_callback then
       done_callback(writer.bufnr, writer.content)
-    elseif delta then
-      writer:write(delta)
     end
   end
 end
