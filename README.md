@@ -18,6 +18,8 @@ A Neovim plugin that uses LLMs to improve the grammar and spelling of natural la
 
 ![Show errors wih inlay hints](assets/inlay.png)
 
+![Show errors wih in a scratch buffer](assets/scratch.png)
+
 ## Installation
 
 This plugin uses `curl`.
