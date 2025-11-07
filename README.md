@@ -62,7 +62,7 @@ This plugin needs to be set up with `require("taal").setup({})`. The setup arg `
     adapters = {
       claude = {
         -- URL for Claude
-        url = "https://api.anthropic.com/v1/messages",
+        url = "https://api.anthropic.com",
       },
       gemini = {
         -- URL for Gemini
@@ -70,7 +70,7 @@ This plugin needs to be set up with `require("taal").setup({})`. The setup arg `
       },
       openai_responses = {
         -- URL for Openai_responses
-	      url = "https://api.openai.com/v1/responses", 
+	      url = "https://api.openai.com", 
       },
     },
 

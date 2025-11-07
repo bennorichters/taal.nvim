@@ -69,13 +69,13 @@ The default config is:
 
     adapters = {
       claude = {
-	url = "https://api.anthropic.com/v1/messages",
+	url = "https://api.anthropic.com",
       },
       gemini = {
 	url = "https://generativelanguage.googleapis.com",
       },
       openai_responses = {
-	url = "https://api.openai.com/v1/responses",
+	url = "https://api.openai.com",
       },
     },
 
