@@ -53,4 +53,8 @@ T["diff"]["changes"] = function()
   })
 end
 
+T["diff"]["tbd"] = function()
+  local locs = differ.diff( "- a b.", "a c b.")
+end
+
 return T
