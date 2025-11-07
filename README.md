@@ -16,6 +16,8 @@ A Neovim plugin that uses LLMs to improve the grammar and spelling of natural la
 
 - Supports three LLMs: Claude, Gemini, OpenAI-responses.
 
+![Show errors wih inlay hints](assets/inlay.png)
+
 ## Installation
 
 This plugin uses `curl`.
