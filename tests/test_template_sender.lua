@@ -12,7 +12,10 @@ local function tablelength(T)
 end
 
 local adapter_mock = {
-  endpoint = "endpoint",
+  url = "url",
+  endpoint = function()
+    return "endpoint"
+  end,
   post_headers = function()
     return { headers = { foo = "bar" } }
   end,

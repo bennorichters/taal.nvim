@@ -22,6 +22,10 @@ local function convert(template, model)
 end
 
 return {
+  endpoint = function(self)
+    return self.url .. "/v1/messages"
+  end,
+
   post_headers = function()
     local key = os.getenv("CLAUDE_API_KEY")
     return {

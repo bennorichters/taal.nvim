@@ -20,6 +20,10 @@ local function transform_template(template, model)
 end
 
 return {
+  endpoint = function(self)
+    return self.url .. "/v1/responses"
+  end,
+
   post_headers = function()
     local key = os.getenv("OPENAI_API_KEY")
     return { headers = { content_type = "application/json", authorization = "Bearer " .. key } }

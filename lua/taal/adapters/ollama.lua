@@ -19,6 +19,10 @@ local function convert(template, model)
 end
 
 return {
+  endpoint = function(self)
+    return self.url .. "/api/chat"
+  end,
+
   post_headers = function()
     return { headers = { content_type = "application/json" } }
   end,

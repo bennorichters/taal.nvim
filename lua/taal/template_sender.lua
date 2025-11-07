@@ -33,8 +33,8 @@ end
 return function(post, response_writer, timeout)
   local function send_request(adapter, body_content, extra_opts)
     log.fmt_trace(
-      "posting with endpoint=%s, extra_opts=%s, body=%s",
-      adapter.endpoint,
+      "posting with url=%s, extra_opts=%s, body=%s",
+      adapter.url,
       extra_opts,
       body_content
     )
@@ -48,7 +48,7 @@ return function(post, response_writer, timeout)
       opts = vim.tbl_deep_extend("error", opts, extra_opts)
     end
 
-    return post(adapter.endpoint, opts)
+    return post(adapter:endpoint(), opts)
   end
 
   local M = {}

@@ -10,13 +10,13 @@ local defaults = {
 
   adapters = {
     claude = {
-      endpoint = "https://api.anthropic.com/v1/messages",
+      url = "https://api.anthropic.com",
     },
     ollama = {
-      endpoint = "http://localhost:11434/api/chat",
+      url = "http://localhost:11434",
     },
     openai_responses = {
-      endpoint = "https://api.openai.com/v1/responses",
+      url = "https://api.openai.com",
     },
   },
 
