@@ -23,8 +23,8 @@ local defaults = {
     },
   },
 
-  adapter = "ollama",
-  model = "gemma3",
+  adapter = "gemini",
+  model = "gemini-2.5-flash",
 
   commands = {
     grammar = {
