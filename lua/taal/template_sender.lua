@@ -31,24 +31,19 @@ local function on_chunk_wrap(parse_stream, writer, done_callback)
 end
 
 return function(post, response_writer, timeout)
-  local function send_request(adapter, body_content, extra_opts)
-    log.fmt_trace(
-      "posting with url=%s, extra_opts=%s, body=%s",
-      adapter.url,
-      extra_opts,
-      body_content
-    )
+  local function send_request(endpoint, headers, body, extra_opts)
+    log.fmt_trace("posting with endpoint=%s, body=%s, extra_opts=%s", endpoint, body, extra_opts)
 
     local opts = {
-      body = body_content,
-      headers = adapter.post_headers().headers,
+      headers = headers.headers, -- TODO: ugly
+      body = body,
     }
 
     if extra_opts then
       opts = vim.tbl_deep_extend("error", opts, extra_opts)
     end
 
-    return post(adapter:endpoint(), opts)
+    return post(endpoint, opts)
   end
 
   local M = {}
@@ -57,10 +52,14 @@ return function(post, response_writer, timeout)
     log.fmt_trace("send with adapter_model=%s", adapter_model)
 
     local adapter = adapter_model.adapter
+
+    local endpoint = adapter:endpoint(adapter_model.model)
+    local headers = adapter.post_headers()
+
     local adapter_template = adapter.template(template, adapter_model.model)
     local body_content = format_template(adapter_template, user_input)
 
-    local response = send_request(adapter, body_content, { timeout = timeout })
+    local response = send_request(endpoint, headers, body_content, { timeout = timeout })
     log.fmt_trace(
       "sent response: %s",
       response and response.status and vim.inspect(response) or "---no valid response---"
@@ -97,6 +96,10 @@ return function(post, response_writer, timeout)
     log.fmt_trace("stream with adapter_model=%s", adapter_model)
 
     local adapter = adapter_model.adapter
+
+    local endpoint = adapter:endpoint(adapter_model.model, true)
+    local headers = adapter.post_headers()
+
     local adapter_template = adapter.template_stream(template, adapter_model.model)
     local body_content = format_template(adapter_template, user_input)
 
@@ -109,7 +112,7 @@ return function(post, response_writer, timeout)
       raw = { "--tcp-nodelay", "--no-buffer" },
     }
 
-    send_request(adapter, body_content, extra_opts)
+    send_request(endpoint, headers, body_content, extra_opts)
   end
 
   return M
