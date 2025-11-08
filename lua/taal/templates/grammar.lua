@@ -6,7 +6,8 @@ return {
     .. "Do NOT produce acknowledgements, explanations, or any extra content. "
     .. "Always respond with only the corrected text (no leading/trailing white space). "
     .. "Detect the language of the user's text and reply in that language. "
-    .. "If the user text is empty, reply with an empty string.",
+    .. "Do not remove Markdown syntax. "
+    .. "If the user text is empty, reply with an empty string. ",
   examples = {
     {
       user = "Ich habe meines Buch vergessen gehabt.",
@@ -19,6 +20,10 @@ return {
     {
       user = "Hun moeten onmidellijk doen wat ik zech.",
       assistant = "Ze moeten onmiddellijk doen wat ik zeg.",
+    },
+    {
+      user = "- This sentence is correct.",
+      assistant = "- This sentence is correct.",
     },
     {
       user = "The moon is more bright then it was yesterdate.",
