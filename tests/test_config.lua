@@ -82,7 +82,6 @@ end
 T["config"]["setup.invalid_command_spelllang_adapter"] = function()
   config.setup({ commands = { set_spelllang = { adapter = "x" } } })
   eq(config.settings.commands.set_spelllang.adapter, nil)
-  -- expect.error(config.setup, nil, { commands = { interact = { adapter = "x" } } })
 end
 
 T["config"]["setup.invalid_command_spelllang_adapter"] = function()
