@@ -43,33 +43,31 @@ local defaults = {
   },
 }
 
-local M = {}
+local function non_default_adapters(settings)
+  local result = {}
 
-M.all_adapters_supported = function(settings)
   if not settings then
-    return true
+    return result
   end
 
-  if settings.adapter and not supported_adapters[settings.adapter] then
-    return false, settings.adapter
+  if settings.adapter then
+    table.insert(result, settings.adapter)
   end
 
   if not settings.commands then
-    return true
+    return result
   end
 
   for key, _ in pairs(defaults.commands) do
-    if
-      settings.commands[key]
-      and settings.commands[key].adapter
-      and not supported_adapters[settings.commands[key].adapter]
-    then
-      return false, settings.commands[key].adapter
+    if settings.commands[key] and settings.commands[key].adapter then
+      table.insert(result, settings.commands[key].adapter)
     end
   end
 
-  return true
+  return result
 end
+
+local M = {}
 
 M.setup = function(settings)
   M.user_config = settings
@@ -79,6 +77,16 @@ M.setup = function(settings)
   else
     M.settings = defaults
   end
+end
+
+M.all_adapters_supported = function(settings)
+  for _, v in ipairs(non_default_adapters(settings)) do
+    if not supported_adapters[v] then
+      return false, v
+    end
+  end
+
+  return true
 end
 
 M.get_adapter = function(adapter_name)
