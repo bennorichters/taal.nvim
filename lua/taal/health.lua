@@ -14,16 +14,26 @@ function M.check()
   local ok, mod = pcall(require, "plenary")
   if not ok then
     vim.health.error("failed to require 'plenary': " .. tostring(mod))
-    return
   else
     vim.health.ok("plenary available")
   end
 
-  local ok_adapters, wrong_adapter = config.all_adapters_supported(config.user_config)
+  local ok_adapters, wrong_adapters = config.adapters_supported()
   if ok_adapters then
     vim.health.ok("all configured adapters are supported")
   else
-    vim.health.error("adapter '" .. wrong_adapter .. "' is not supported.")
+    for _, key in ipairs(wrong_adapters) do
+      vim.health.error("Unsupported adapter" .. key)
+    end
+  end
+
+  local ok_api_keys, missing_keys = config.keys_available()
+  if ok_api_keys then
+    vim.health.ok("all API keys for used adapters available")
+  else
+    for _, key in ipairs(missing_keys) do
+      vim.health.error("API key missing for adapter '" .. key)
+    end
   end
 end
 

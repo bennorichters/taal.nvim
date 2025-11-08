@@ -7,30 +7,6 @@ local supported_adapters = {
 
 local M = {}
 
-local function non_default_adapters(settings)
-  local result = {}
-
-  if not settings then
-    return result
-  end
-
-  if settings.adapter then
-    table.insert(result, settings.adapter)
-  end
-
-  if not settings.commands then
-    return result
-  end
-
-  for key, _ in pairs(M.defaults.commands) do
-    if settings.commands[key] and settings.commands[key].adapter then
-      table.insert(result, settings.commands[key].adapter)
-    end
-  end
-
-  return result
-end
-
 M.defaults = {
   log_level = "error",
   timeout = 6000,
@@ -72,21 +48,55 @@ M.defaults = {
 M.setup = function(settings)
   M.user_config = settings
 
-  if M.all_adapters_supported(settings) then
+  local ok = M.adapters_supported()
+  if ok then
     M.settings = vim.tbl_deep_extend("force", M.defaults, settings or {})
   else
     M.settings = M.defaults
   end
 end
 
-M.all_adapters_supported = function(settings)
-  for _, v in ipairs(non_default_adapters(settings)) do
-    if not supported_adapters[v] then
-      return false, v
+local function all_adapters()
+  local adapter_used = {}
+
+  if not M.user_config then
+    return {}
+  end
+
+  if M.user_config.adapter then
+    adapter_used[M.user_config.adapter] = true
+  end
+
+  if M.user_config.commands then
+    for key, _ in pairs(M.defaults.commands) do
+      if M.user_config.commands[key] and M.user_config.commands[key].adapter then
+        adapter_used[M.user_config.commands[key].adapter] = true
+      end
     end
   end
 
-  return true
+  local result = {}
+  for k, _ in pairs(adapter_used) do
+    table.insert(result, k)
+  end
+
+  return result
+end
+
+M.adapters_supported = function()
+  local result = {}
+  local adpts = all_adapters()
+  for _, adpt in pairs(adpts) do
+    if not supported_adapters[adpt] then
+      table.insert(result, adpt)
+    end
+  end
+
+  return #result == 0, result
+end
+
+M.keys_available = function()
+  return true, {}
 end
 
 M.get_adapter = function(adapter_name)

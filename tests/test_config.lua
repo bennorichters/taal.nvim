@@ -33,27 +33,48 @@ end
 
 T["config"]["setup.invalid_default_adapter"] = function()
   config.setup({ adapter = "x" })
-  eq(config.settings.adapter, "gemini")
+  eq(config.settings, config.defaults)
 end
 
 T["config"]["setup.invalid_command_grammar_adapter"] = function()
   config.setup({ commands = { grammar = { adapter = "x" } } })
-  eq(config.settings.commands.grammar.adapter, nil)
+  eq(config.settings, config.defaults)
 end
 
 T["config"]["setup.invalid_command_spelllang_adapter"] = function()
   config.setup({ commands = { set_spelllang = { adapter = "x" } } })
-  eq(config.settings.commands.set_spelllang.adapter, nil)
+  eq(config.settings, config.defaults)
 end
 
 T["config"]["setup.invalid_command_spelllang_adapter"] = function()
   config.setup({ commands = { set_spelllang = { adapter = "x" } } })
-  eq(config.settings.commands.set_spelllang.adapter, nil)
+  eq(config.settings, config.defaults)
 end
 
 T["config"]["setup.invalid_command_interact_adapter"] = function()
   config.setup({ commands = { interact = { adapter = "x" } } })
-  eq(config.settings.commands.interact.adapter, nil)
+  eq(config.settings, config.defaults)
 end
+
+T["config"]["adapters_supported.ok"] = function()
+  config.setup({ adapter = "claude" })
+  eq(config.adapters_supported(), true)
+end
+
+-- T["config"]["adapters_supported.one_ok_two_wrong"] = function()
+--   config.setup({
+--     adapter = "claude",
+--     commands = { { grammar = { adapter = "y" } }, { interact = { adapter = "x" } } },
+--   })
+--
+--   local ok, adpts = config.adapters_supported()
+--
+--   eq(ok, false)
+--
+--   table.sort(adpts, function(left, right)
+--     return left < right
+--   end)
+--   eq(adpts, { "x", "y" })
+-- end
 
 return T
