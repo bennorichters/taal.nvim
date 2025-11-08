@@ -69,7 +69,6 @@ M.defaults = {
   },
 }
 
-
 M.setup = function(settings)
   M.user_config = settings
 
