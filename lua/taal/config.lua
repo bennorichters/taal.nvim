@@ -5,7 +5,33 @@ local supported_adapters = {
   openai_responses = true,
 }
 
-local defaults = {
+local M = {}
+
+local function non_default_adapters(settings)
+  local result = {}
+
+  if not settings then
+    return result
+  end
+
+  if settings.adapter then
+    table.insert(result, settings.adapter)
+  end
+
+  if not settings.commands then
+    return result
+  end
+
+  for key, _ in pairs(M.defaults.commands) do
+    if settings.commands[key] and settings.commands[key].adapter then
+      table.insert(result, settings.commands[key].adapter)
+    end
+  end
+
+  return result
+end
+
+M.defaults = {
   log_level = "error",
   timeout = 6000,
 
@@ -43,39 +69,14 @@ local defaults = {
   },
 }
 
-local function non_default_adapters(settings)
-  local result = {}
-
-  if not settings then
-    return result
-  end
-
-  if settings.adapter then
-    table.insert(result, settings.adapter)
-  end
-
-  if not settings.commands then
-    return result
-  end
-
-  for key, _ in pairs(defaults.commands) do
-    if settings.commands[key] and settings.commands[key].adapter then
-      table.insert(result, settings.commands[key].adapter)
-    end
-  end
-
-  return result
-end
-
-local M = {}
 
 M.setup = function(settings)
   M.user_config = settings
 
   if M.all_adapters_supported(settings) then
-    M.settings = vim.tbl_deep_extend("force", defaults, settings or {})
+    M.settings = vim.tbl_deep_extend("force", M.defaults, settings or {})
   else
-    M.settings = defaults
+    M.settings = M.defaults
   end
 end
 

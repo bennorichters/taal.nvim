@@ -1,46 +1,8 @@
 require("tests.helpers").enable_log()
 
 local new_set = MiniTest.new_set
-local expect, eq = MiniTest.expect, MiniTest.expect.equality
+local eq = MiniTest.expect.equality
 local config = require("taal.config")
-
-local defaults = {
-  log_level = "error",
-  timeout = 6000,
-
-  adapters = {
-    claude = {
-      url = "https://api.anthropic.com",
-    },
-    gemini = {
-      url = "https://generativelanguage.googleapis.com",
-    },
-    ollama = {
-      url = "http://localhost:11434",
-    },
-    openai_responses = {
-      url = "https://api.openai.com",
-    },
-  },
-
-  adapter = "gemini",
-  model = "gemini-2.5-flash",
-
-  commands = {
-    grammar = {
-      adapter = nil,
-      model = nil,
-    },
-    set_spelllang = {
-      adapter = nil,
-      model = nil,
-    },
-    interact = {
-      adapter = nil,
-      model = nil,
-    },
-  },
-}
 
 local T = new_set()
 
@@ -52,19 +14,19 @@ end
 
 T["config"]["setup.defaults"] = function()
   config.setup()
-  eq(config.settings, defaults)
+  eq(config.settings, config.defaults)
 end
 
 T["config"]["setup.change_timeout"] = function()
   config.setup({ timeout = 10 })
-  local expected = vim.fn.deepcopy(defaults)
+  local expected = vim.fn.deepcopy(config.defaults)
   expected.timeout = 10
   eq(config.settings, expected)
 end
 
 T["config"]["setup.adapter.grammar"] = function()
   config.setup({ commands = { grammar = { adapter = "claude" } } })
-  local expected = vim.fn.deepcopy(defaults)
+  local expected = vim.fn.deepcopy(config.defaults)
   expected.commands.grammar.adapter = "claude"
   eq(config.settings, expected)
 end
