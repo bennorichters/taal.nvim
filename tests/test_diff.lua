@@ -2,8 +2,6 @@ local new_set = MiniTest.new_set
 local eq = MiniTest.expect.equality
 local differ = require("taal.diff")
 
--- TODO: test for empty texts
-
 local T = new_set()
 
 T["diff"] = new_set()
@@ -53,14 +51,18 @@ T["diff"]["changes"] = function()
   })
 end
 
-T["diff"]["tbd"] = function()
-  local locs = differ.diff("x a b", "a y b")
-  -- {1,1,0,0}, {2,0,2,1}
-  -- {1,1,0,0} -> x is replaced by nothing, i.e., deleted
-  -- {2,0,2,1) -> before b (because Hunk size 0) y is inserted
+T["diff"]["deleting_words"] = function()
+  eq(differ.diff("x a b", "a y b"), {
+    { a_start = 0, a_end = 1, a_text = "x", b_start = 0, b_end = 0, b_text = "" },
+    { a_start = 0, a_end = 0, a_text = "", b_start = 2, b_end = 3, b_text = "y" },
+  })
+end
 
-  -- { a_start = 0, a_end = 1, a_text = "x", b_start = 0, b_end = 0, b_text = "" },
-  -- { a_start = 3, a_end = 3, a_text = "", b_start = 2, b_end = 3, b_text = "y" },
+T["diff"]["empty_texts"] = function()
+  eq(differ.diff("", ""), {})
+  eq(differ.diff("", "a b c"), {
+    { a_start = 0, a_end = 0, a_text = "", b_start = 0, b_end = 5, b_text = "a b c" },
+  })
 end
 
 return T
