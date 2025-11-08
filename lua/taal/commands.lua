@@ -36,6 +36,10 @@ local function delete_suggestions()
 end
 
 local function create_diff_info(buf_line_text, col_start, col_end, alt_text, inlay)
+  if col_end == col_start then
+    return nil
+  end
+
   local info = {
     buf_nr = buf_line_text.buf_nr,
     line_nr = buf_line_text.line_nr,
@@ -61,11 +65,15 @@ local function apply_diff_effects(buf_line_text_a, buf_line_text_b, inlay)
     log.trace("diff info: %s", loc)
 
     local info_a = create_diff_info(buf_line_text_a, loc.a_start, loc.a_end, loc.b_text, inlay)
-    table.insert(diff_info, info_a)
+    if info_a then
+      table.insert(diff_info, info_a)
+    end
 
     if buf_line_text_b.buf_nr then
       local info_b = create_diff_info(buf_line_text_b, loc.b_start, loc.b_end, loc.a_text)
-      table.insert(diff_info, info_b)
+      if info_b then
+        table.insert(diff_info, info_b)
+      end
     end
   end
 
@@ -153,7 +161,8 @@ M.hover = function()
       and info.col_start <= col_nr
       and info.col_end >= col_nr
     then
-      M.buffer_helper.show_hover(info.alt_text)
+      local hover_text = (info.alt_text == "") and "[REMOVE]" or info.alt_text
+      M.buffer_helper.show_hover(hover_text)
       return
     end
   end
