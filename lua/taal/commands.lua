@@ -202,15 +202,15 @@ end
 
 M.set_spelllang = function()
   local code = M.template_sender.send(
-    M.adapter_model["set_spellang"],
+    M.adapter_model["set_spelllang"],
     tpl_recognize_language,
     M.buffer_helper.text_under_cursor()
   )
   if code then
-    log.fmt_info("set spellang=%s", code)
+    log.fmt_info("set spelllang=%s", code)
     vim.cmd("set spelllang=" .. code)
   else
-    log.fmt_error("no content returned for setting spellang")
+    log.fmt_error("no content returned for setting spelllang")
   end
 end
 

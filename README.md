@@ -90,7 +90,7 @@ This plugin needs to be set up with `require("taal").setup({})`. The setup arg `
   	    adapter = nil, -- overrides default LLM for TaalGrammar
 	      model = nil, -- overrides default model for TaalGrammar
       },
-      setspellang = {
+      setspelllang = {
 	      adapter = nil,  -- overrides default LLM for TaalSetSpelllang
 	      model = nil,  -- overrides default model for TaalSetSpelllang
       },

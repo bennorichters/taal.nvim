@@ -54,7 +54,7 @@ The config supports these fields:
 - model: string - default model for every LLM call - default: gemini-2.5-flash
 - commands: table:
   {
-    [command_name]: string - ["grammar", "set_spellang", "interact"] = 
+    [command_name]: string - ["grammar", "set_spelllang", "interact"] = 
     { adapter = ["claude", "gemini", "openai_responses"], 
     model = "[chosen model]"}
   }
@@ -91,7 +91,7 @@ The default config is:
 	adapter = nil,
 	model = nil,
       },
-      set_spellang = {
+      set_spelllang = {
 	adapter = nil,
 	model = nil,
       },

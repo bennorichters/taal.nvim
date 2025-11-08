@@ -13,7 +13,7 @@ local defaults = {
       url = "https://api.anthropic.com",
     },
     gemini = {
-      url = "https://generativelanguage.googleapis.com"
+      url = "https://generativelanguage.googleapis.com",
     },
     ollama = {
       url = "http://localhost:11434",
@@ -31,7 +31,7 @@ local defaults = {
       adapter = nil,
       model = nil,
     },
-    set_spellang = {
+    set_spelllang = {
       adapter = nil,
       model = nil,
     },
@@ -69,11 +69,30 @@ T["config"]["setup.adapter.grammar"] = function()
   eq(config.settings, expected)
 end
 
-T["config"]["setup.invalid_adapter"] = function()
-  expect.error(config.setup, nil, { adapter = "x" })
-  expect.error(config.setup, nil, { commands = { grammar = { adapter = "x" } } })
-  expect.error(config.setup, nil, { commands = { set_spellang = { adapter = "x" } } })
-  expect.error(config.setup, nil, { commands = { interact = { adapter = "x" } } })
+T["config"]["setup.invalid_default_adapter"] = function()
+  config.setup({ adapter = "x" })
+  eq(config.settings.adapter, "gemini")
+end
+
+T["config"]["setup.invalid_command_grammar_adapter"] = function()
+  config.setup({ commands = { grammar = { adapter = "x" } } })
+  eq(config.settings.commands.grammar.adapter, nil)
+end
+
+T["config"]["setup.invalid_command_spelllang_adapter"] = function()
+  config.setup({ commands = { set_spelllang = { adapter = "x" } } })
+  eq(config.settings.commands.set_spelllang.adapter, nil)
+  -- expect.error(config.setup, nil, { commands = { interact = { adapter = "x" } } })
+end
+
+T["config"]["setup.invalid_command_spelllang_adapter"] = function()
+  config.setup({ commands = { set_spelllang = { adapter = "x" } } })
+  eq(config.settings.commands.set_spelllang.adapter, nil)
+end
+
+T["config"]["setup.invalid_command_interact_adapter"] = function()
+  config.setup({ commands = { interact = { adapter = "x" } } })
+  eq(config.settings.commands.interact.adapter, nil)
 end
 
 return T

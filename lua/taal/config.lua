@@ -32,7 +32,7 @@ local defaults = {
       adapter = nil,
       model = nil,
     },
-    set_spellang = {
+    set_spelllang = {
       adapter = nil,
       model = nil,
     },
@@ -104,9 +104,9 @@ M.command_adapter_model = function()
       adapter = M.get_adapter(cmds.grammar.adapter or settings.adapter),
       model = cmds.grammar.model or settings.model,
     },
-    set_spellang = {
-      adapter = M.get_adapter(cmds.set_spellang.adapter or settings.adapter),
-      model = cmds.set_spellang.model or settings.model,
+    set_spelllang = {
+      adapter = M.get_adapter(cmds.set_spelllang.adapter or settings.adapter),
+      model = cmds.set_spelllang.model or settings.model,
     },
     interact = {
       adapter = M.get_adapter(cmds.interact.adapter or settings.adapter),

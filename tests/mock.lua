@@ -66,7 +66,7 @@ M.adapter_model = {
     adapter = "",
     model = "",
   },
-  set_spellang = {
+  set_spelllang = {
     adapter = "",
     model = "",
   },
