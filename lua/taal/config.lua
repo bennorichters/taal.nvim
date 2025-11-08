@@ -14,7 +14,7 @@ local defaults = {
       url = "https://api.anthropic.com",
     },
     gemini = {
-      url = "https://generativelanguage.googleapis.com"
+      url = "https://generativelanguage.googleapis.com",
     },
     ollama = {
       url = "http://localhost:11434",
@@ -43,21 +43,15 @@ local defaults = {
   },
 }
 
-local function is_adapter_supported(adapter)
-  if not supported_adapters[adapter] then
-    error("unsupported adapter: " .. adapter)
-  end
+local M = {}
 
-  return true
-end
-
-local function validate_adapters(settings)
+M.all_adapters_supported = function(settings)
   if not settings then
     return true
   end
 
-  if settings.adapter and not is_adapter_supported(settings.adapter) then
-    return false
+  if settings.adapter and not supported_adapters[settings.adapter] then
+    return false, settings.adapter
   end
 
   if not settings.commands then
@@ -68,20 +62,22 @@ local function validate_adapters(settings)
     if
       settings.commands[key]
       and settings.commands[key].adapter
-      and not is_adapter_supported(settings.commands[key].adapter)
+      and not supported_adapters[settings.commands[key].adapter]
     then
-      return false
+      return false, settings.commands[key].adapter
     end
   end
 
   return true
 end
 
-local M = {}
-
 M.setup = function(settings)
-  if validate_adapters(settings) then
+  M.user_config = settings
+
+  if M.all_adapters_supported(settings) then
     M.settings = vim.tbl_deep_extend("force", defaults, settings or {})
+  else
+    M.settings = defaults
   end
 end
 

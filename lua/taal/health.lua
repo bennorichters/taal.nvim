@@ -1,3 +1,5 @@
+local config = require("taal.config")
+
 local M = {}
 
 function M.check()
@@ -13,9 +15,16 @@ function M.check()
   if not ok then
     vim.health.error("failed to require 'plenary': " .. tostring(mod))
     return
+  else
+    vim.health.ok("plenary available")
   end
-  vim.health.ok("plenary available")
+
+  local ok_adapters, wrong_adapter = config.all_adapters_supported(config.user_config)
+  if ok_adapters then
+    vim.health.ok("all configured adapters are supported")
+  else
+    vim.health.error("adapter '" .. wrong_adapter .. "' is not supported.")
+  end
 end
 
 return M
-
