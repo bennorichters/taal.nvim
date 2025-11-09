@@ -61,20 +61,16 @@ T["config"]["adapters_supported.ok"] = function()
   eq(config.adapters_supported(), true)
 end
 
--- T["config"]["adapters_supported.one_ok_two_wrong"] = function()
---   config.setup({
---     adapter = "claude",
---     commands = { { grammar = { adapter = "y" } }, { interact = { adapter = "x" } } },
---   })
---
---   local ok, adpts = config.adapters_supported()
---
---   eq(ok, false)
---
---   table.sort(adpts, function(left, right)
---     return left < right
---   end)
---   eq(adpts, { "x", "y" })
--- end
+T["config"]["adapters_supported.one_ok_two_wrong"] = function()
+  config.setup({
+    commands = { grammar = { adapter = "x" }, interact = { adapter = "y" } },
+  })
+
+  local ok, adpts = config.adapters_supported()
+
+  eq(ok, false)
+  table.sort(adpts)
+  eq(adpts, {"x", "y"})
+end
 
 return T

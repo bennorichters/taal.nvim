@@ -68,9 +68,9 @@ local function all_adapters()
   end
 
   if M.user_config.commands then
-    for key, _ in pairs(M.defaults.commands) do
-      if M.user_config.commands[key] and M.user_config.commands[key].adapter then
-        adapter_used[M.user_config.commands[key].adapter] = true
+    for cmd, _ in pairs(M.user_config.commands) do
+      if M.user_config.commands[cmd].adapter then
+        adapter_used[M.user_config.commands[cmd].adapter] = true
       end
     end
   end
