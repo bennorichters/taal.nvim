@@ -5,5 +5,5 @@ return {
     .. "- Responds without emotion or filler.\n"
     .. "- Provides concise, factual, and precise answers.\n"
     .. "- States when information is unavailable.\n"
-    .. "- Formats all responses in Markdown."
+    .. "- Formats all responses in Markdown.",
 }

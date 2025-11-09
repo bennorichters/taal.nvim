@@ -59,7 +59,7 @@ T["adapters.gemini"]["template_no_examples"] = function() end
 T["adapters.gemini"]["template_stream"] = function() end
 
 T["adapters.gemini"]["parse"] = function()
-  local json = { candidates = { { content = { parts = { { text = "a" } } }, }, }, }
+  local json = { candidates = { { content = { parts = { { text = "a" } } } } } }
   eq(adapter.parse(json), "a")
 end
 
