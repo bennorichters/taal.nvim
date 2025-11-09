@@ -41,23 +41,17 @@ API key. These keys should be made available via an environment variable:
 
 Config options ~
 
-The config supports these fields:
-- log_level: string - ["trace", "info", "debug", "error"] - default: "error"
-- timeout: number - timeout for LLM requests in ms - default: 6000
-  (six-thousand, i.e., six seconds)
-- adapters: table:
-  {
-    {[LLM] = {url = url to be used by this LLM},
-    {[LLM] = {url = ...}},
-  }
-- adapter: string - default adapter for every LLM call - default: Gemini
-- model: string - default model for every LLM call - default: gemini-2.5-flash
-- commands: table:
-  {
-    [command_name]: string - ["grammar", "set_spelllang", "interact"] = 
-    { adapter = ["claude", "gemini", "openai_responses"], 
-    model = "[chosen model]"}
-  }
+The user configuration table supports these fields:
+- {log_level} (`'trace'|'info'|'debug'|'error'`, default: `'error'`)
+- {timeout} (`integer`, default: `6000`) timeout for LLM requests in ms
+- {adapters} (`table<'claude'|'gemini'|'openai', table<'url',string>>`) url
+  per adapter
+- {adapter} (`'claude'|'gemini'|'openai'`, default: `'gemini'`) default
+  adapter for all requests
+- {model} (`string`, default: `'gemini-2.5-flash'`) default model for all requests
+- {commands} (`table<'grammar'|'interact'|'setspelllang', `
+  `table<[ADAPTER|MODEL],[VALUE]>>`) overrides the default adapter and model
+  per command
 
 Default config ~
 
