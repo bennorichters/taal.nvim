@@ -166,7 +166,7 @@ The following five commands are exposed:
 
 ## Key mapping
 
-No default keymaps are provided. Here is an example mapping you can use.
+No default key mapping is provided. Here is an example mapping you can use.
 
 ```lua
 vim.keymap.set("n", "<leader>tg", "<Cmd>TaalGrammar scratch<Cr>")
