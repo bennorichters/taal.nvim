@@ -38,7 +38,7 @@ MiniDeps.later(function()
     depends = { "nvim-lua/plenary.nvim" },
   }
 
-  require("taal").setup {}
+  require("taal").setup()
 end)
 ```
 </details>
