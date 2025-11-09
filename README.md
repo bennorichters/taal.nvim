@@ -76,7 +76,7 @@ This plugin needs to be set up with `require("taal").setup({})`. The setup arg `
       },
       openai_responses = {
         -- URL for Openai_responses
-	      url = "https://api.openai.com", 
+        url = "https://api.openai.com", 
       },
     },
 
@@ -88,15 +88,15 @@ This plugin needs to be set up with `require("taal").setup({})`. The setup arg `
     commands = {
       grammar = {
   	    adapter = nil, -- overrides default LLM for TaalGrammar
-	      model = nil, -- overrides default model for TaalGrammar
+	    model = nil, -- overrides default model for TaalGrammar
       },
       setspelllang = {
-	      adapter = nil,  -- overrides default LLM for TaalSetSpelllang
-	      model = nil,  -- overrides default model for TaalSetSpelllang
+	    adapter = nil,  -- overrides default LLM for TaalSetSpelllang
+	    model = nil,  -- overrides default model for TaalSetSpelllang
       },
-      interact = {
-	      adapter = nil, -- overrides default LLM for TaalInteract
-	      model = nil, -- overrides default model for TaalInteract
+	  interact = {
+	    adapter = nil, -- overrides default LLM for TaalInteract
+	    model = nil, -- overrides default model for TaalInteract
       },
     },
   }
@@ -111,7 +111,7 @@ This example uses Gemini and the model gemini-2.5-flash as the default LLM (beca
   require("taal").setup({ 
     commands = {
       interact = { 
-	      adapter="claude", model="claude-sonnet-4-5-20250929", 
+	    adapter="claude", model="claude-sonnet-4-5-20250929", 
       }
     }
   })
