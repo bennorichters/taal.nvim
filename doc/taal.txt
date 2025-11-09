@@ -75,7 +75,7 @@ The default config is:
         url = "https://generativelanguage.googleapis.com",
       },
       openai_responses = {
-       url = "https://api.openai.com",
+        url = "https://api.openai.com",
       },
     },
 
