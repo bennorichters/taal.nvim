@@ -69,13 +69,13 @@ The default config is:
 
     adapters = {
       claude = {
-	url = "https://api.anthropic.com",
+        url = "https://api.anthropic.com",
       },
       gemini = {
-	url = "https://generativelanguage.googleapis.com",
+        url = "https://generativelanguage.googleapis.com",
       },
       openai_responses = {
-	url = "https://api.openai.com",
+       url = "https://api.openai.com",
       },
     },
 
@@ -84,25 +84,24 @@ The default config is:
 
     commands = {
       improve_grammar = {
-	adapter = nil,
-	model = nil,
+        adapter = nil,
+        model = nil,
       },
       suggest_grammar = {
-	adapter = nil,
-	model = nil,
+        adapter = nil,
+        model = nil,
       },
       set_spelllang = {
-	adapter = nil,
-	model = nil,
+        adapter = nil,
+        model = nil,
       },
       interact = {
-	adapter = nil,
-	model = nil,
+        adapter = nil,
+        model = nil,
       },
     },
   }
 <
-
 Example config ~
 
 This example uses Gemini and the model gemini-2.5-flash as the default LLM (because it
