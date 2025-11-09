@@ -39,6 +39,9 @@ MiniDeps.later(function()
     depends = { "nvim-lua/plenary.nvim" },
   }
 
+  -- Need to define your own key mappings.
+  -- See below for an example mapping
+
   require("taal").setup()
 end)
 ```
