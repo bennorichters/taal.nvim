@@ -46,7 +46,7 @@ M.defaults = {
 }
 
 M.setup = function(settings)
-  M.user_config = settings
+  M.user_config = settings or {}
 
   local adpts = M.all_adapters()
   local ok = M.adapters_supported(adpts)
@@ -60,12 +60,10 @@ end
 M.all_adapters = function()
   local adapter_used = {}
 
-  if not M.user_config then
-    return {}
-  end
-
   if M.user_config.adapter then
     adapter_used[M.user_config.adapter] = true
+  else
+    adapter_used[M.defaults.adapter] = true
   end
 
   if M.user_config.commands then
@@ -81,6 +79,8 @@ M.all_adapters = function()
     table.insert(result, k)
   end
 
+  table.sort(result)
+
   return result
 end
 
@@ -89,6 +89,21 @@ M.adapters_supported = function(adpts)
   for _, adpt in pairs(adpts) do
     if not supported_adapters[adpt] then
       table.insert(result, adpt)
+    end
+  end
+
+  return #result == 0, result
+end
+
+M.adapters_key_available = function(adpts)
+  print(vim.inspect(adpts))
+  local result = {}
+  for _, adpt in pairs(adpts) do
+    if supported_adapters[adpt] then
+      local key = os.getenv(string.upper(adpt) .. "_API_KEY")
+      if not key or #key == 0 then
+        table.insert(result, adpt)
+      end
     end
   end
 

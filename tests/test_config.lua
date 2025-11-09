@@ -56,6 +56,23 @@ T["config"]["setup.invalid_command_interact_adapter"] = function()
   eq(config.settings, config.defaults)
 end
 
+T["config"]["all_adapters.default_not_overriden"] = function()
+  config.setup({
+    commands = { grammar = { adapter = "x" }, interact = { adapter = "a" } },
+  })
+
+  eq({ "a", "gemini", "x" }, config.all_adapters())
+end
+
+T["config"]["all_adapters.default_overriden"] = function()
+  config.setup({
+    adapter = "y",
+    commands = { grammar = { adapter = "x" }, interact = { adapter = "a" } },
+  })
+
+  eq({ "a", "x", "y" }, config.all_adapters())
+end
+
 T["config"]["adapters_supported.ok"] = function()
   config.setup({ adapter = "claude" })
   eq(config.adapters_supported(config.all_adapters()), true)
@@ -69,8 +86,35 @@ T["config"]["adapters_supported.one_ok_two_wrong"] = function()
   local ok, adpts = config.adapters_supported(config.all_adapters())
 
   eq(ok, false)
-  table.sort(adpts)
-  eq(adpts, {"x", "y"})
+  eq(adpts, { "x", "y" })
+end
+
+T["config"]["adapters_key_available.gemini_exists"] = function()
+  local env_var = "GEMINI_API_KEY"
+  local old_env_api_key = os.getenv(env_var)
+  vim.fn.setenv(env_var, "test_key")
+
+  config.setup()
+  eq(config.adapters_key_available(config.all_adapters()), true)
+
+  if old_env_api_key then
+    vim.fn.setenv(env_var, old_env_api_key)
+  end
+end
+
+T["config"]["adapters_key_available.gemini_does_not_exist"] = function()
+  local env_var = "GEMINI_API_KEY"
+  local old_env_api_key = os.getenv(env_var)
+  vim.fn.setenv(env_var, "")
+
+  config.setup()
+  local ok, adpts = config.adapters_key_available(config.all_adapters())
+  eq(ok, false)
+  eq(adpts, { "gemini" })
+
+  if old_env_api_key then
+    vim.fn.setenv(env_var, old_env_api_key)
+  end
 end
 
 return T

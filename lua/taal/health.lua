@@ -18,21 +18,23 @@ function M.check()
     vim.health.ok("plenary available")
   end
 
-  local ok_adapters, wrong_adapters = config.adapters_supported()
+  local all_adapters = config.all_adapters()
+
+  local ok_adapters, wrong_adapters = config.adapters_supported(all_adapters)
   if ok_adapters then
     vim.health.ok("all configured adapters are supported")
   else
-    for _, key in ipairs(wrong_adapters) do
-      vim.health.error("Unsupported adapter" .. key)
+    for _, adapter in ipairs(wrong_adapters) do
+      vim.health.error("Unsupported adapter: " .. adapter)
     end
   end
 
-  local ok_api_keys, missing_keys = config.keys_available()
+  local ok_api_keys, missing_keys = config.adapters_key_available(all_adapters)
   if ok_api_keys then
     vim.health.ok("all API keys for used adapters available")
   else
-    for _, key in ipairs(missing_keys) do
-      vim.health.error("API key missing for adapter '" .. key)
+    for _, adapter in ipairs(missing_keys) do
+      vim.health.error("API key missing for adapter: " .. adapter)
     end
   end
 end
