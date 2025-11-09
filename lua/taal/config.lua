@@ -48,7 +48,8 @@ M.defaults = {
 M.setup = function(settings)
   M.user_config = settings
 
-  local ok = M.adapters_supported()
+  local adpts = M.all_adapters()
+  local ok = M.adapters_supported(adpts)
   if ok then
     M.settings = vim.tbl_deep_extend("force", M.defaults, settings or {})
   else
@@ -56,7 +57,7 @@ M.setup = function(settings)
   end
 end
 
-local function all_adapters()
+M.all_adapters = function()
   local adapter_used = {}
 
   if not M.user_config then
@@ -83,9 +84,8 @@ local function all_adapters()
   return result
 end
 
-M.adapters_supported = function()
+M.adapters_supported = function(adpts)
   local result = {}
-  local adpts = all_adapters()
   for _, adpt in pairs(adpts) do
     if not supported_adapters[adpt] then
       table.insert(result, adpt)

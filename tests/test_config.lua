@@ -58,7 +58,7 @@ end
 
 T["config"]["adapters_supported.ok"] = function()
   config.setup({ adapter = "claude" })
-  eq(config.adapters_supported(), true)
+  eq(config.adapters_supported(config.all_adapters()), true)
 end
 
 T["config"]["adapters_supported.one_ok_two_wrong"] = function()
@@ -66,7 +66,7 @@ T["config"]["adapters_supported.one_ok_two_wrong"] = function()
     commands = { grammar = { adapter = "x" }, interact = { adapter = "y" } },
   })
 
-  local ok, adpts = config.adapters_supported()
+  local ok, adpts = config.adapters_supported(config.all_adapters())
 
   eq(ok, false)
   table.sort(adpts)
