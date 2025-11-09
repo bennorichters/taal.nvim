@@ -164,7 +164,7 @@ The following five commands are exposed:
 - `TaalInteract`  
   Asks the user for a prompt and sends this, together with the selected text to the LLM. Use in Visual Mode. Note that this ex command cannot be used by using `:TaalInteract` as using the colon will switch Neovim back to normal mode. Map this command to a key using `<Cmd>TaalInteract<Cr>` instead, as in the example below.
 
-## Keymaps
+## Key mapping
 
 No default keymaps are provided. Here is an example mapping you can use.
 
