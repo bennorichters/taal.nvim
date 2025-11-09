@@ -81,7 +81,7 @@ The LLMs need an API key. These keys should be made available via an environment
 - Gemini: `{{GEMINI_API_KEY}}`
 - OpenAI_responses: `{{OPENAI_API_KEY}}`
 
-If you want to use Claude or OpenAI_responses, do not forget to configure the plugin accordingly, see below.
+(If you want to use Claude or OpenAI_responses, do not forget to configure the plugin accordingly, see below.)
 
 ### Setup
 
