@@ -93,8 +93,8 @@ This plugin needs to be set up with `require("taal").setup({})`. The setup arg `
 ```lua
   {
     log_level = "error", -- one of: trace, debug, info, warn, error, fatal
-    timeout = 6000, -- time out in ms, i.e., 6000 is six seconds
-
+    timeout = 6000, -- time out for API requests to LLM in ms
+	
     adapters = {
       claude = {
         -- URL for Claude
