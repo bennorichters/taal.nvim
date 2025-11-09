@@ -96,7 +96,6 @@ M.adapters_supported = function(adpts)
 end
 
 M.adapters_key_available = function(adpts)
-  print(vim.inspect(adpts))
   local result = {}
   for _, adpt in pairs(adpts) do
     if supported_adapters[adpt] then
