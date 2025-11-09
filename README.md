@@ -28,8 +28,9 @@ This plugin uses `curl`.
 - Make sure curl is installed on your system.
 - This plugin has a dependency on [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim) to access curl.
 
+Examples:
 <details>
-<summary>Example using <a href="https://nvim-mini.org/mini.nvim/readmes/mini-deps">mini.deps</a></summary>
+<summary><a href="https://nvim-mini.org/mini.nvim/readmes/mini-deps">mini.deps</a></summary>
 
 ```lua
 MiniDeps.later(function()
@@ -40,6 +41,27 @@ MiniDeps.later(function()
 
   require("taal").setup()
 end)
+```
+</details>
+
+<details>
+<summary><a href="https://github.com/folke/lazy.nvim/">Lazy</a></summary>
+
+```lua
+{
+  "bennorichters/taal.nvim",
+  dependencies = { "nvim-lua/plenary.nvim" },
+  keys = {
+    { "<leader>tg", "<cmd>TaalGrammar<cr>" },
+    { "<leader>tl", "<Cmd>TaalGrammar inlay<Cr>" },
+    { "<leader>tr", "<Cmd>TaalGrammar<Cr>" },
+    { "<leader>th", "<Cmd>TaalHover<Cr>" },
+    { "<leader>ta", "<Cmd>TaalApplySuggestion<Cr>" }, 
+    { "<leader>ts", "<Cmd>TaalSetSpelllang<Cr>" },
+    { "<leader>ti", "<Cmd>TaalInteract<Cr>", mode = "v" }, 
+  },
+  opts = {},
+},
 ```
 </details>
 
