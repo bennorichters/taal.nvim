@@ -80,7 +80,7 @@ local function apply_diff_effects(buf_line_text_a, buf_line_text_b, inlay)
   return diff_info
 end
 
-local function improve_grammar(inlay)
+local function grammar_scratch_buf(inlay)
   local buf_nr = M.buffer_helper.current_buffer_nr()
   local line_nr = M.buffer_helper.current_line_nr()
   local text = M.buffer_helper.text_under_cursor()
@@ -103,7 +103,7 @@ local function improve_grammar(inlay)
   M.template_sender.stream(M.adapter_model["grammar"], tpl_grammar, text, callback)
 end
 
-local function suggest_grammar(inlay)
+local function grammar_inline(inlay)
   local original = M.buffer_helper.text_under_cursor()
   local ai_text = M.template_sender.send(M.adapter_model["grammar"], tpl_grammar, original)
 
@@ -144,9 +144,9 @@ M.grammar = function(opts)
   end
 
   if scratch then
-    improve_grammar(inlay)
+    grammar_scratch_buf(inlay)
   else
-    suggest_grammar(inlay)
+    grammar_inline(inlay)
   end
 end
 
