@@ -39,10 +39,15 @@ MiniDeps.later(function()
     depends = { "nvim-lua/plenary.nvim" },
   }
 
-  -- Need to define your own key mappings.
-  -- See below for an example mapping
-
   require("taal").setup()
+
+  vim.keymap.set("n", "<leader>tg", "<Cmd>TaalGrammar scratch<Cr>")
+  vim.keymap.set("n", "<leader>tl", "<Cmd>TaalGrammar inlay<Cr>")
+  vim.keymap.set("n", "<leader>tr", "<Cmd>TaalGrammar<Cr>")
+  vim.keymap.set("n", "<leader>th", "<Cmd>TaalHover<Cr>")
+  vim.keymap.set("n", "<leader>ta", "<Cmd>TaalApplySuggestion<Cr>")
+  vim.keymap.set("n", "<leader>ts", "<Cmd>TaalSetSpelllang<Cr>")
+  vim.keymap.set("v", "<leader>ti", "<Cmd>TaalInteract<Cr>") 
 end)
 ```
 </details>
