@@ -7,7 +7,6 @@ A Neovim plugin that uses LLMs to improve the grammar and spelling of natural la
 - Suggests grammar and spelling improvements. This feature is language agnostic, as long as the chosen LLM is capable of that.
 - Offers a word-by-word diff of the original text and the suggested improvements.
 - Applies improvements all at once, or on a one-to-one basis.
-- Recognizes the language the text is written in and sets the correct `spelllang` option.
 - Interacts with the LLM using a user command and the selected text.
 - Supports three LLMs: Claude, Gemini, OpenAI-responses.
 
