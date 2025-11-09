@@ -75,7 +75,7 @@ end)
 
 ### API keys
 
-The LLM's need an API key. These keys should be made available via an environment variable:
+The LLMs need an API key. These keys should be made available via an environment variable:
 
 - Claude: `{{CLAUDE_API_KEY}}`
 - Gemini: `{{GEMINI_API_KEY}}`
