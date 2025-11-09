@@ -45,7 +45,7 @@ end)
 </details>
 
 <details>
-<summary><a href="https://github.com/folke/lazy.nvim/">Lazy</a></summary>
+<summary><a href="https://github.com/folke/lazy.nvim/">lazy.nvim</a></summary>
 
 ```lua
 {
