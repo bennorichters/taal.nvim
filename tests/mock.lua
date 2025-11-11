@@ -19,29 +19,35 @@ M.add_check_value = function(key, value)
   table.insert(M.check[key], vim.deepcopy(value))
 end
 
-M.buffhelp = {
+local buffhelp_functions = {
   current_buffer_nr = function()
     return 1
   end,
   current_line_nr = function()
     return 1
   end,
-  add_hl_group = function(info)
-    M.add_check_value("add_hl_group_info", info)
+  add_hl_group = function()
     M.values.hl_id = M.values.hl_id + 1
     return M.values.hl_id
-  end,
-  delete_hl_group = function(...)
-    M.add_check_value("delete_hl_group_info", { ... })
   end,
   text_under_cursor = function()
     return M.values.user_text
   end,
   set_lines = function() end,
-  replace_text = function(...)
-    M.add_check_value("replace_text_info", { ... })
+}
+
+local mt = {
+  __index = function(_, key)
+    return function(...)
+      M.add_check_value(key .. "_info", { ... })
+      if buffhelp_functions[key] then
+        return buffhelp_functions[key]()
+      end
+    end
   end,
 }
+
+M.buffhelp = setmetatable({}, mt)
 
 M.template_sender = {
   stream = function(_, template, _, callback)
