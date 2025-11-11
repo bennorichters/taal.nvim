@@ -33,6 +33,7 @@ local buffhelp_functions = {
 M.add_check_value = function(key, ...)
   M.check[key] = M.check[key] or {}
 
+  -- TODO: this only works for one arg ??
   for i = 1, select("#", ...) do
     local value = select(i, ...)
     table.insert(M.check[key], vim.deepcopy(value))
