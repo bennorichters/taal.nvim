@@ -54,7 +54,19 @@ local function get_info4(buf)
   }
 end
 
-T["improve_grammar"] = function()
+T["grammar"] = function()
+  cmd.grammar({ fargs = {} })
+
+  local buf_nr = mock.buffhelp.current_buffer_nr()
+  local info1 = get_info1(buf_nr)
+  info1.hl_id = 101
+  local info3 = get_info3(buf_nr)
+  info3.hl_id = 102
+
+  eq(cmd.all_diff_info, { info1, info3 })
+end
+
+T["grammar_scratch"] = function()
   local buf = vim.api.nvim_get_current_buf()
 
   cmd.grammar({ fargs = { "scratch" } })
@@ -80,18 +92,6 @@ T["improve_grammar"] = function()
   info3 = get_info3(buf)
   info4 = get_info4(scratch_buf)
   eq(mock.check.add_hl_group_info, { info1, info2, info3, info4 })
-end
-
-T["suggest_grammar"] = function()
-  cmd.grammar({ fargs = {} })
-
-  local buf_nr = mock.buffhelp.current_buffer_nr()
-  local info1 = get_info1(buf_nr)
-  info1.hl_id = 101
-  local info3 = get_info3(buf_nr)
-  info3.hl_id = 102
-
-  eq(cmd.all_diff_info, { info1, info3 })
 end
 
 T["apply_suggestion.apply_to_first_word"] = function()
