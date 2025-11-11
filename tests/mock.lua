@@ -14,9 +14,13 @@ end
 
 M.reset()
 
-M.add_check_value = function(key, value)
+M.add_check_value = function(key, ...)
   M.check[key] = M.check[key] or {}
-  table.insert(M.check[key], vim.deepcopy(value))
+
+  for i = 1, select("#", ...) do
+    local value = select(i, ...)
+    table.insert(M.check[key], vim.deepcopy(value))
+  end
 end
 
 local buffhelp_functions = {
@@ -39,7 +43,7 @@ local buffhelp_functions = {
 local mt = {
   __index = function(_, key)
     return function(...)
-      M.add_check_value(key .. "_info", { ... })
+      M.add_check_value(key .. "_info", ...)
       if buffhelp_functions[key] then
         return buffhelp_functions[key]()
       end

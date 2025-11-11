@@ -91,7 +91,7 @@ T["grammar_scratch"] = function()
   info2 = get_info2(scratch_buf)
   info3 = get_info3(buf)
   info4 = get_info4(scratch_buf)
-  eq(mock.check.add_hl_group_info, { { info1 }, { info2 }, { info3 }, { info4 } })
+  eq(mock.check.add_hl_group_info, { info1, info2, info3, info4 })
 end
 
 T["apply_suggestion.apply_to_first_word"] = function()
@@ -119,15 +119,12 @@ T["apply_suggestion.apply_to_first_word"] = function()
   }
 
   info3_updated.hl_id = 52
-  eq(mock.check.add_hl_group_info, { { info3_updated } })
+  eq(mock.check.add_hl_group_info, { info3_updated })
 
   info3_updated.hl_id = 101
   eq(cmd.all_diff_info, { info3_updated })
 
-  eq(
-    mock.check.replace_text_info,
-    { { buf_nr, 1, info1.col_start, info1.col_end, info1.alt_text } }
-  )
+  eq(mock.check.replace_text_info, { buf_nr, 1, info1.col_start, info1.col_end, info1.alt_text })
 
   mock.buffhelp.current_column_nr = nil
 end
@@ -153,12 +150,9 @@ T["apply_suggestion.apply_to_second_word"] = function()
   eq(not mock.check.add_hl_group_info, true)
 
   -- delete_hl_group should have been called once
-  eq(mock.check.delete_hl_group_info, { { 1, 52 } })
+  eq(mock.check.delete_hl_group_info, { 1, 52 })
 
-  eq(
-    mock.check.replace_text_info,
-    { { buf_nr, 1, info3.col_start, info3.col_end, info3.alt_text } }
-  )
+  eq(mock.check.replace_text_info, { buf_nr, 1, info3.col_start, info3.col_end, info3.alt_text })
 
   mock.buffhelp.current_column_nr = nil
 end
