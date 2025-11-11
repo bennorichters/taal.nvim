@@ -14,15 +14,6 @@ end
 
 M.reset()
 
-M.add_check_value = function(key, ...)
-  M.check[key] = M.check[key] or {}
-
-  for i = 1, select("#", ...) do
-    local value = select(i, ...)
-    table.insert(M.check[key], vim.deepcopy(value))
-  end
-end
-
 local buffhelp_functions = {
   current_buffer_nr = function()
     return 1
@@ -40,7 +31,16 @@ local buffhelp_functions = {
   set_lines = function() end,
 }
 
-local mt = {
+M.add_check_value = function(key, ...)
+  M.check[key] = M.check[key] or {}
+
+  for i = 1, select("#", ...) do
+    local value = select(i, ...)
+    table.insert(M.check[key], vim.deepcopy(value))
+  end
+end
+
+M.buffhelp = setmetatable({}, {
   __index = function(_, key)
     return function(...)
       M.add_check_value(key .. "_info", ...)
@@ -49,9 +49,7 @@ local mt = {
       end
     end
   end,
-}
-
-M.buffhelp = setmetatable({}, mt)
+})
 
 M.template_sender = {
   stream = function(_, template, _, callback)
