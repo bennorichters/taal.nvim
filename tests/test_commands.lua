@@ -94,6 +94,52 @@ T["grammar_scratch"] = function()
   eq(mock.check.add_hl_group_info, { info1, info2, info3, info4 })
 end
 
+T["hover.first_word"] = function()
+  local buf_nr = mock.buffhelp.current_buffer_nr()
+  local info1 = get_info1(buf_nr)
+  cmd.all_diff_info = { vim.deepcopy(info1) }
+
+  mock.buffhelp.current_column_nr = function()
+    return 15
+  end
+
+  cmd.hover()
+  eq(mock.check.show_hover_info, { "brighter" })
+
+  mock.buffhelp.current_column_nr = nil
+end
+
+T["hover.before_first_word"] = function()
+  local buf_nr = mock.buffhelp.current_buffer_nr()
+  local info1 = get_info1(buf_nr)
+  cmd.all_diff_info = { vim.deepcopy(info1) }
+
+  mock.buffhelp.current_column_nr = function()
+    return 1
+  end
+
+  cmd.hover()
+  eq(mock.check.show_hover_info, nil)
+
+  mock.buffhelp.current_column_nr = nil
+end
+
+T["hover.empty_word"] = function()
+  local buf_nr = mock.buffhelp.current_buffer_nr()
+  local info1 = get_info1(buf_nr)
+  info1.alt_text = ""
+  cmd.all_diff_info = { vim.deepcopy(info1) }
+
+  mock.buffhelp.current_column_nr = function()
+    return 15
+  end
+
+  cmd.hover()
+  eq(mock.check.show_hover_info, { "[REMOVE]" })
+
+  mock.buffhelp.current_column_nr = nil
+end
+
 T["apply_suggestion.apply_to_first_word"] = function()
   mock.buffhelp.current_column_nr = function()
     return 15
@@ -153,52 +199,6 @@ T["apply_suggestion.apply_to_second_word"] = function()
   eq(mock.check.delete_hl_group_info, { 1, 52 })
 
   eq(mock.check.replace_text_info, { buf_nr, 1, info3.col_start, info3.col_end, info3.alt_text })
-
-  mock.buffhelp.current_column_nr = nil
-end
-
-T["hover.first_word"] = function()
-  local buf_nr = mock.buffhelp.current_buffer_nr()
-  local info1 = get_info1(buf_nr)
-  cmd.all_diff_info = { vim.deepcopy(info1) }
-
-  mock.buffhelp.current_column_nr = function()
-    return 15
-  end
-
-  cmd.hover()
-  eq(mock.check.show_hover_info, { "brighter" })
-
-  mock.buffhelp.current_column_nr = nil
-end
-
-T["hover.before_first_word"] = function()
-  local buf_nr = mock.buffhelp.current_buffer_nr()
-  local info1 = get_info1(buf_nr)
-  cmd.all_diff_info = { vim.deepcopy(info1) }
-
-  mock.buffhelp.current_column_nr = function()
-    return 1
-  end
-
-  cmd.hover()
-  eq(mock.check.show_hover_info, nil)
-
-  mock.buffhelp.current_column_nr = nil
-end
-
-T["hover.empty_word"] = function()
-  local buf_nr = mock.buffhelp.current_buffer_nr()
-  local info1 = get_info1(buf_nr)
-  info1.alt_text = ""
-  cmd.all_diff_info = { vim.deepcopy(info1) }
-
-  mock.buffhelp.current_column_nr = function()
-    return 15
-  end
-
-  cmd.hover()
-  eq(mock.check.show_hover_info, { "[REMOVE]" })
 
   mock.buffhelp.current_column_nr = nil
 end
