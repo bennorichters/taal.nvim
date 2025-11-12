@@ -157,4 +157,19 @@ T["apply_suggestion.apply_to_second_word"] = function()
   mock.buffhelp.current_column_nr = nil
 end
 
+T["hover.first_word"] = function()
+  local buf_nr = mock.buffhelp.current_buffer_nr()
+  local info1 = get_info1(buf_nr)
+  cmd.all_diff_info = { vim.deepcopy(info1) }
+
+  mock.buffhelp.current_column_nr = function()
+    return 15
+  end
+
+  cmd.hover()
+  eq(mock.check.show_hover_info, { "brighter" })
+
+  mock.buffhelp.current_column_nr = nil
+end
+
 return T
