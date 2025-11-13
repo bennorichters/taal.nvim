@@ -56,7 +56,6 @@ local buffer_helper_mock = {
 }
 
 local template_sender_mock = {
-  ---@diagnostic disable-next-line: unused-local
   stream = function(_adapter_model, _template, _user_input, callback)
     ---@diagnostic disable-next-line: duplicate-set-field
     vim.ui.select = function()
@@ -64,7 +63,6 @@ local template_sender_mock = {
     end
     callback(M.values.scratch_buf, M.values.ai_text)
   end,
-  ---@diagnostic disable-next-line: unused-local
   send = function(_adapter_model, template, _user_input)
     if template == tpl_grammar then
       return M.values.ai_text
