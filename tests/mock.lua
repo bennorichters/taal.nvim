@@ -30,7 +30,7 @@ local args_store_super = function(name, mock)
   return setmetatable({}, {
     __index = function(_, key)
       return function(...)
-        add_args_to_store(name, key .. "_args", ...)
+        add_args_to_store(name, key, ...)
         if mock[key] then
           return mock[key](...)
         end

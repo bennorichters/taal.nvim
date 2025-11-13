@@ -73,7 +73,7 @@ T["grammar_scratch"] = function()
 
   cmd.grammar({ fargs = { "scratch" } })
 
-  eq(mock.args_store.template_sender.stream_args[1], tpl_grammar)
+  eq(mock.args_store.template_sender.stream[1], tpl_grammar)
   eq(mock.args_store.template_sender_stream_select_called, true)
 
   local scratch_buf = mock.values.scratch_buf
@@ -93,7 +93,7 @@ T["grammar_scratch"] = function()
   info2 = get_info2(scratch_buf)
   info3 = get_info3(buf)
   info4 = get_info4(scratch_buf)
-  eq(mock.args_store.buffer_helper.add_hl_group_args, { info1, info2, info3, info4 })
+  eq(mock.args_store.buffer_helper.add_hl_group, { info1, info2, info3, info4 })
 end
 
 T["hover.first_word"] = function()
@@ -106,7 +106,7 @@ T["hover.first_word"] = function()
   end
 
   cmd.hover()
-  eq(mock.args_store.buffer_helper.show_hover_args, { "brighter" })
+  eq(mock.args_store.buffer_helper.show_hover, { "brighter" })
 
   mock.buffhelp.current_column_nr = nil
 end
@@ -121,7 +121,7 @@ T["hover.before_first_word"] = function()
   end
 
   cmd.hover()
-  eq(mock.args_store.buffer_helper.show_hover_args, nil)
+  eq(mock.args_store.buffer_helper.show_hover, nil)
 
   mock.buffhelp.current_column_nr = nil
 end
@@ -137,7 +137,7 @@ T["hover.empty_word"] = function()
   end
 
   cmd.hover()
-  eq(mock.args_store.buffer_helper.show_hover_args, { "[REMOVE]" })
+  eq(mock.args_store.buffer_helper.show_hover, { "[REMOVE]" })
 
   mock.buffhelp.current_column_nr = nil
 end
@@ -167,13 +167,13 @@ T["apply_suggestion.apply_to_first_word"] = function()
   }
 
   info3_updated.hl_id = 52
-  eq(mock.args_store.buffer_helper.add_hl_group_args, { info3_updated })
+  eq(mock.args_store.buffer_helper.add_hl_group, { info3_updated })
 
   info3_updated.hl_id = 101
   eq(cmd.all_diff_info, { info3_updated })
 
   eq(
-    mock.args_store.buffer_helper.replace_text_args,
+    mock.args_store.buffer_helper.replace_text,
     { buf_nr, 1, info1.col_start, info1.col_end, info1.alt_text }
   )
 
@@ -198,13 +198,13 @@ T["apply_suggestion.apply_to_second_word"] = function()
   eq(cmd.all_diff_info, { info1 })
 
   -- add_hl_group should not have been called and this check value is not set
-  eq(not mock.args_store.buffer_helper.add_hl_group_args, true)
+  eq(not mock.args_store.buffer_helper.add_hl_group, true)
 
   -- delete_hl_group should have been called once
-  eq(mock.args_store.buffer_helper.delete_hl_group_args, { 1, 52 })
+  eq(mock.args_store.buffer_helper.delete_hl_group, { 1, 52 })
 
   eq(
-    mock.args_store.buffer_helper.replace_text_args,
+    mock.args_store.buffer_helper.replace_text,
     { buf_nr, 1, info3.col_start, info3.col_end, info3.alt_text }
   )
 
@@ -216,7 +216,7 @@ T["set_spelllang.normal_behaviour"] = function()
 
   cmd.set_spelllang()
   eq(vim.o.spelllang, "hu")
-  eq(mock.args_store.template_sender.send_args[2], tpl_lang)
+  eq(mock.args_store.template_sender.send[2], tpl_lang)
 
   vim.o.spelllang = old_spelllang
 end
