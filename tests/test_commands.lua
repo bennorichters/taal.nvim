@@ -1,17 +1,17 @@
+local Cmd = require("taal.commands")
 local Helpers = require("tests.helpers")
+local Mock = require("tests.mock")
 
-local cmd = require("taal.commands")
 local eq = MiniTest.expect.equality
-local mock = require("tests.mock")
 local tpl_grammar = require("taal.templates.grammar")
 local tpl_lang = require("taal.templates.recognize_language")
 
-cmd.setup(mock.buffhelp, mock.template_sender, mock.adapter_model)
+Cmd.setup(Mock.buffhelp, Mock.template_sender, Mock.adapter_model)
 
 Helpers.enable_log()
 T = MiniTest.new_set({ hooks = {
   post_case = function()
-    mock.reset()
+    Mock.reset()
   end,
 } })
 
@@ -57,26 +57,26 @@ local function get_info4(buf)
 end
 
 T["grammar"] = function()
-  cmd.grammar({ fargs = {} })
+  Cmd.grammar({ fargs = {} })
 
-  local buf_nr = mock.buffhelp.current_buffer_nr()
+  local buf_nr = Mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
   info1.hl_id = 101
   local info3 = get_info3(buf_nr)
   info3.hl_id = 102
 
-  eq(cmd.all_diff_info, { info1, info3 })
+  eq(Cmd.all_diff_info, { info1, info3 })
 end
 
 T["grammar_scratch"] = function()
   local buf = vim.api.nvim_get_current_buf()
 
-  cmd.grammar({ fargs = { "scratch" } })
+  Cmd.grammar({ fargs = { "scratch" } })
 
-  eq(mock.args_store.template_sender.stream[1], tpl_grammar)
-  eq(mock.args_store.template_sender_stream_select_called, true)
+  eq(Mock.args_store.template_sender.stream[1], tpl_grammar)
+  eq(Mock.args_store.template_sender_stream_select_called, true)
 
-  local scratch_buf = mock.values.buffer_helper.scratch_buf
+  local scratch_buf = Mock.values.buffer_helper.scratch_buf
 
   local info1 = get_info1(buf)
   info1.hl_id = 101
@@ -87,59 +87,59 @@ T["grammar_scratch"] = function()
   local info4 = get_info4(scratch_buf)
   info4.hl_id = 104
 
-  eq(cmd.all_diff_info, { info1, info2, info3, info4 })
+  eq(Cmd.all_diff_info, { info1, info2, info3, info4 })
 
   info1 = get_info1(buf)
   info2 = get_info2(scratch_buf)
   info3 = get_info3(buf)
   info4 = get_info4(scratch_buf)
-  eq(mock.args_store.buffer_helper.add_hl_group, { info1, info2, info3, info4 })
+  eq(Mock.args_store.buffer_helper.add_hl_group, { info1, info2, info3, info4 })
 end
 
 T["hover.first_word"] = function()
-  local buf_nr = mock.buffhelp.current_buffer_nr()
+  local buf_nr = Mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
-  cmd.all_diff_info = { vim.deepcopy(info1) }
+  Cmd.all_diff_info = { vim.deepcopy(info1) }
 
-  mock.values.buffer_helper.column_nr = 15
+  Mock.values.buffer_helper.column_nr = 15
 
-  cmd.hover()
-  eq(mock.args_store.buffer_helper.show_hover, { "brighter" })
+  Cmd.hover()
+  eq(Mock.args_store.buffer_helper.show_hover, { "brighter" })
 end
 
 T["hover.before_first_word"] = function()
-  local buf_nr = mock.buffhelp.current_buffer_nr()
+  local buf_nr = Mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
-  cmd.all_diff_info = { vim.deepcopy(info1) }
+  Cmd.all_diff_info = { vim.deepcopy(info1) }
 
-  cmd.hover()
-  eq(mock.args_store.buffer_helper.show_hover, nil)
+  Cmd.hover()
+  eq(Mock.args_store.buffer_helper.show_hover, nil)
 end
 
 T["hover.empty_word"] = function()
-  local buf_nr = mock.buffhelp.current_buffer_nr()
+  local buf_nr = Mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
   info1.alt_text = ""
-  cmd.all_diff_info = { vim.deepcopy(info1) }
+  Cmd.all_diff_info = { vim.deepcopy(info1) }
 
-  mock.values.buffer_helper.column_nr = 15
+  Mock.values.buffer_helper.column_nr = 15
 
-  cmd.hover()
-  eq(mock.args_store.buffer_helper.show_hover, { "[REMOVE]" })
+  Cmd.hover()
+  eq(Mock.args_store.buffer_helper.show_hover, { "[REMOVE]" })
 end
 
 T["apply_suggestion.apply_to_first_word"] = function()
-  mock.values.buffer_helper.column_nr = 15
+  Mock.values.buffer_helper.column_nr = 15
 
-  local buf_nr = mock.buffhelp.current_buffer_nr()
+  local buf_nr = Mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
   info1.hl_id = 51
   local info3 = get_info3(buf_nr)
   info3.hl_id = 52
 
-  cmd.all_diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
+  Cmd.all_diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
 
-  cmd.apply_suggestion()
+  Cmd.apply_suggestion()
 
   local info3_updated = {
     alt_text = "yesterday.",
@@ -151,40 +151,40 @@ T["apply_suggestion.apply_to_first_word"] = function()
   }
 
   info3_updated.hl_id = 52
-  eq(mock.args_store.buffer_helper.add_hl_group, { info3_updated })
+  eq(Mock.args_store.buffer_helper.add_hl_group, { info3_updated })
 
   info3_updated.hl_id = 101
-  eq(cmd.all_diff_info, { info3_updated })
+  eq(Cmd.all_diff_info, { info3_updated })
 
   eq(
-    mock.args_store.buffer_helper.replace_text,
+    Mock.args_store.buffer_helper.replace_text,
     { buf_nr, 1, info1.col_start, info1.col_end, info1.alt_text }
   )
 end
 
 T["apply_suggestion.apply_to_second_word"] = function()
-  mock.values.buffer_helper.column_nr = 30
+  Mock.values.buffer_helper.column_nr = 30
 
-  local buf_nr = mock.buffhelp.current_buffer_nr()
+  local buf_nr = Mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
   info1.hl_id = 51
   local info3 = get_info3(buf_nr)
   info3.hl_id = 52
 
-  cmd.all_diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
+  Cmd.all_diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
 
-  cmd.apply_suggestion()
+  Cmd.apply_suggestion()
 
-  eq(cmd.all_diff_info, { info1 })
+  eq(Cmd.all_diff_info, { info1 })
 
   -- add_hl_group should not have been called and this check value is not set
-  eq(not mock.args_store.buffer_helper.add_hl_group, true)
+  eq(not Mock.args_store.buffer_helper.add_hl_group, true)
 
   -- delete_hl_group should have been called once
-  eq(mock.args_store.buffer_helper.delete_hl_group, { 1, 52 })
+  eq(Mock.args_store.buffer_helper.delete_hl_group, { 1, 52 })
 
   eq(
-    mock.args_store.buffer_helper.replace_text,
+    Mock.args_store.buffer_helper.replace_text,
     { buf_nr, 1, info3.col_start, info3.col_end, info3.alt_text }
   )
 end
@@ -192,9 +192,9 @@ end
 T["set_spelllang.normal_behaviour"] = function()
   local old_spelllang = vim.o.spelllang
 
-  cmd.set_spelllang()
+  Cmd.set_spelllang()
   eq(vim.o.spelllang, "hu")
-  eq(mock.args_store.template_sender.send[2], tpl_lang)
+  eq(Mock.args_store.template_sender.send[2], tpl_lang)
 
   vim.o.spelllang = old_spelllang
 end
