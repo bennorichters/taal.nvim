@@ -2,11 +2,15 @@ local tpl_grammar = require("taal.templates.grammar")
 local tpl_lang = require("taal.templates.recognize_language")
 
 local original_values = {
-  ai_text = "The moon is brighter then yesterday.",
-  user_text = "The moon is more bright then yesterdate.",
-  lang_code = "hu",
-  scratch_buf = 42,
-  hl_id = 100,
+  buffer_helper = {
+    hl_id = 100,
+    scratch_buf = 42,
+    user_text = "The moon is more bright then yesterdate.",
+  },
+  template_sender = {
+    ai_text = "The moon is brighter then yesterday.",
+    lang_code = "hu",
+  },
 }
 
 local M = {}
@@ -47,11 +51,11 @@ local buffer_helper_mock = {
     return 1
   end,
   add_hl_group = function()
-    M.values.hl_id = M.values.hl_id + 1
-    return M.values.hl_id
+    M.values.buffer_helper.hl_id = M.values.buffer_helper.hl_id + 1
+    return M.values.buffer_helper.hl_id
   end,
   text_under_cursor = function()
-    return M.values.user_text
+    return M.values.buffer_helper.user_text
   end,
 }
 
@@ -61,13 +65,13 @@ local template_sender_mock = {
     vim.ui.select = function()
       M.args_store.template_sender_stream_select_called = true
     end
-    callback(M.values.scratch_buf, M.values.ai_text)
+    callback(M.values.buffer_helper.scratch_buf, M.values.template_sender.ai_text)
   end,
   send = function(_adapter_model, template, _user_input)
     if template == tpl_grammar then
-      return M.values.ai_text
+      return M.values.template_sender.ai_text
     elseif template == tpl_lang then
-      return M.values.lang_code
+      return M.values.template_sender.lang_code
     end
 
     error("unexpected template")

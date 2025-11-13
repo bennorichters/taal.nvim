@@ -76,7 +76,7 @@ T["grammar_scratch"] = function()
   eq(mock.args_store.template_sender.stream[1], tpl_grammar)
   eq(mock.args_store.template_sender_stream_select_called, true)
 
-  local scratch_buf = mock.values.scratch_buf
+  local scratch_buf = mock.values.buffer_helper.scratch_buf
 
   local info1 = get_info1(buf)
   info1.hl_id = 101
