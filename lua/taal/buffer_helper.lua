@@ -4,7 +4,7 @@ local M = {}
 
 M.setup = function()
   M.namespace_hl = vim.api.nvim_create_namespace("taal_hl")
-  M.namespace_inlay = vim.api.nvim_create_namespace("taal_hl")
+  M.namespace_inlay = vim.api.nvim_create_namespace("taal_inlay")
 
   log.fmt_trace(
     "buffer_helper.setup namespace_hl=%s namespace_inlay=%s",
