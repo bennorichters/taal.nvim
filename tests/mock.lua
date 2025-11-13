@@ -1,7 +1,7 @@
 local tpl_grammar = require("taal.templates.grammar")
 local tpl_lang = require("taal.templates.recognize_language")
 
-local original_values = {
+local default_values = {
   buffer_helper = {
     buffer_nr = 1,
     column_nr = 1,
@@ -19,7 +19,7 @@ local original_values = {
 local M = {}
 
 M.reset = function()
-  M.values = vim.deepcopy(original_values)
+  M.values = vim.deepcopy(default_values)
   M.args_store = {}
 end
 
