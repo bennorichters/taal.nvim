@@ -1,5 +1,4 @@
 local tpl_grammar = require("taal.templates.grammar")
-local tpl_interact = require("taal.templates.interact_with_content")
 local tpl_lang = require("taal.templates.recognize_language")
 
 local original_values = {
