@@ -1,9 +1,11 @@
 local Helpers = require("tests.helpers")
-local tpl_grammar = require("taal.templates.grammar")
-local eq = MiniTest.expect.equality
 
 local cmd = require("taal.commands")
+local eq = MiniTest.expect.equality
 local mock = require("tests.mock")
+local tpl_grammar = require("taal.templates.grammar")
+local tpl_lang = require("taal.templates.recognize_language")
+
 cmd.setup(mock.buffhelp, mock.template_sender, mock.adapter_model)
 
 Helpers.enable_log()
@@ -71,8 +73,8 @@ T["grammar_scratch"] = function()
 
   cmd.grammar({ fargs = { "scratch" } })
 
-  eq(mock.check.template, tpl_grammar)
-  eq(mock.check.select_called, true)
+  eq(mock.check.template_sender.stream_args[1], tpl_grammar)
+  eq(mock.check.template_sender_stream_select_called, true)
 
   local scratch_buf = mock.values.scratch_buf
 
@@ -91,7 +93,7 @@ T["grammar_scratch"] = function()
   info2 = get_info2(scratch_buf)
   info3 = get_info3(buf)
   info4 = get_info4(scratch_buf)
-  eq(mock.check.add_hl_group_args, { info1, info2, info3, info4 })
+  eq(mock.check.buffer_helper.add_hl_group_args, { info1, info2, info3, info4 })
 end
 
 T["hover.first_word"] = function()
@@ -104,7 +106,7 @@ T["hover.first_word"] = function()
   end
 
   cmd.hover()
-  eq(mock.check.show_hover_args, { "brighter" })
+  eq(mock.check.buffer_helper.show_hover_args, { "brighter" })
 
   mock.buffhelp.current_column_nr = nil
 end
@@ -119,7 +121,7 @@ T["hover.before_first_word"] = function()
   end
 
   cmd.hover()
-  eq(mock.check.show_hover_args, nil)
+  eq(mock.check.buffer_helper.show_hover_args, nil)
 
   mock.buffhelp.current_column_nr = nil
 end
@@ -135,7 +137,7 @@ T["hover.empty_word"] = function()
   end
 
   cmd.hover()
-  eq(mock.check.show_hover_args, { "[REMOVE]" })
+  eq(mock.check.buffer_helper.show_hover_args, { "[REMOVE]" })
 
   mock.buffhelp.current_column_nr = nil
 end
@@ -165,12 +167,15 @@ T["apply_suggestion.apply_to_first_word"] = function()
   }
 
   info3_updated.hl_id = 52
-  eq(mock.check.add_hl_group_args, { info3_updated })
+  eq(mock.check.buffer_helper.add_hl_group_args, { info3_updated })
 
   info3_updated.hl_id = 101
   eq(cmd.all_diff_info, { info3_updated })
 
-  eq(mock.check.replace_text_args, { buf_nr, 1, info1.col_start, info1.col_end, info1.alt_text })
+  eq(
+    mock.check.buffer_helper.replace_text_args,
+    { buf_nr, 1, info1.col_start, info1.col_end, info1.alt_text }
+  )
 
   mock.buffhelp.current_column_nr = nil
 end
@@ -193,14 +198,27 @@ T["apply_suggestion.apply_to_second_word"] = function()
   eq(cmd.all_diff_info, { info1 })
 
   -- add_hl_group should not have been called and this check value is not set
-  eq(not mock.check.add_hl_group_args, true)
+  eq(not mock.check.buffer_helper.add_hl_group_args, true)
 
   -- delete_hl_group should have been called once
-  eq(mock.check.delete_hl_group_args, { 1, 52 })
+  eq(mock.check.buffer_helper.delete_hl_group_args, { 1, 52 })
 
-  eq(mock.check.replace_text_args, { buf_nr, 1, info3.col_start, info3.col_end, info3.alt_text })
+  eq(
+    mock.check.buffer_helper.replace_text_args,
+    { buf_nr, 1, info3.col_start, info3.col_end, info3.alt_text }
+  )
 
   mock.buffhelp.current_column_nr = nil
+end
+
+T["set_spelllang.normal_behaviour"] = function()
+  local old_spelllang = vim.o.spelllang
+
+  cmd.set_spelllang()
+  eq(vim.o.spelllang, "hu")
+  eq(mock.check.template_sender.send_args[2], tpl_lang)
+
+  vim.o.spelllang = old_spelllang
 end
 
 return T

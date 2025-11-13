@@ -207,8 +207,8 @@ M.set_spelllang = function()
     M.buffer_helper.text_under_cursor()
   )
   if code then
-    log.fmt_info("set spelllang=%s", code)
-    vim.cmd("set spelllang=" .. code)
+    log.fmt_info("setting spelllang to: %s", code)
+    vim.o.spelllang = code
   else
     log.fmt_error("no content returned for setting spelllang")
   end
