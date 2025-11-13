@@ -13,24 +13,24 @@ local M = {}
 
 M.reset = function()
   M.values = vim.deepcopy(original_values)
-  M.check = {}
+  M.args_store = {}
 end
 
-local function add_check_value(group_name, key, ...)
-  M.check[group_name] = M.check[group_name] or {}
-  M.check[group_name][key] = M.check[group_name][key] or {}
+local function add_args_to_store(group_name, key, ...)
+  M.args_store[group_name] = M.args_store[group_name] or {}
+  M.args_store[group_name][key] = M.args_store[group_name][key] or {}
 
   for i = 1, select("#", ...) do
     local value = select(i, ...)
-    table.insert(M.check[group_name][key], vim.deepcopy(value))
+    table.insert(M.args_store[group_name][key], vim.deepcopy(value))
   end
 end
 
-local args_store = function(name, mock)
+local args_store_super = function(name, mock)
   return setmetatable({}, {
     __index = function(_, key)
       return function(...)
-        add_check_value(name, key .. "_args", ...)
+        add_args_to_store(name, key .. "_args", ...)
         if mock[key] then
           return mock[key](...)
         end
@@ -60,7 +60,7 @@ local template_sender_mock = {
   stream = function(_adapter_model, _template, _user_input, callback)
     ---@diagnostic disable-next-line: duplicate-set-field
     vim.ui.select = function()
-      M.check.template_sender_stream_select_called = true
+      M.args_store.template_sender_stream_select_called = true
     end
     callback(M.values.scratch_buf, M.values.ai_text)
   end,
@@ -76,9 +76,9 @@ local template_sender_mock = {
   end,
 }
 
-M.buffhelp = args_store("buffer_helper", buffer_helper_mock)
+M.buffhelp = args_store_super("buffer_helper", buffer_helper_mock)
 
-M.template_sender = args_store("template_sender", template_sender_mock)
+M.template_sender = args_store_super("template_sender", template_sender_mock)
 
 M.adapter_model = {
   improve_grammar = {
