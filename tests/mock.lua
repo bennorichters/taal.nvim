@@ -3,7 +3,10 @@ local tpl_lang = require("taal.templates.recognize_language")
 
 local original_values = {
   buffer_helper = {
+    buffer_nr = 1,
+    column_nr = 1,
     hl_id = 100,
+    line_nr = 1,
     scratch_buf = 42,
     user_text = "The moon is more bright then yesterdate.",
   },
@@ -45,10 +48,13 @@ end
 
 local buffer_helper_mock = {
   current_buffer_nr = function()
-    return 1
+    return M.values.buffer_helper.buffer_nr
+  end,
+  current_column_nr = function()
+    return M.values.buffer_helper.column_nr
   end,
   current_line_nr = function()
-    return 1
+    return M.values.buffer_helper.line_nr
   end,
   add_hl_group = function()
     M.values.buffer_helper.hl_id = M.values.buffer_helper.hl_id + 1

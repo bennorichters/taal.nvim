@@ -101,14 +101,10 @@ T["hover.first_word"] = function()
   local info1 = get_info1(buf_nr)
   cmd.all_diff_info = { vim.deepcopy(info1) }
 
-  mock.buffhelp.current_column_nr = function()
-    return 15
-  end
+  mock.values.buffer_helper.column_nr = 15
 
   cmd.hover()
   eq(mock.args_store.buffer_helper.show_hover, { "brighter" })
-
-  mock.buffhelp.current_column_nr = nil
 end
 
 T["hover.before_first_word"] = function()
@@ -116,14 +112,8 @@ T["hover.before_first_word"] = function()
   local info1 = get_info1(buf_nr)
   cmd.all_diff_info = { vim.deepcopy(info1) }
 
-  mock.buffhelp.current_column_nr = function()
-    return 1
-  end
-
   cmd.hover()
   eq(mock.args_store.buffer_helper.show_hover, nil)
-
-  mock.buffhelp.current_column_nr = nil
 end
 
 T["hover.empty_word"] = function()
@@ -132,20 +122,14 @@ T["hover.empty_word"] = function()
   info1.alt_text = ""
   cmd.all_diff_info = { vim.deepcopy(info1) }
 
-  mock.buffhelp.current_column_nr = function()
-    return 15
-  end
+  mock.values.buffer_helper.column_nr = 15
 
   cmd.hover()
   eq(mock.args_store.buffer_helper.show_hover, { "[REMOVE]" })
-
-  mock.buffhelp.current_column_nr = nil
 end
 
 T["apply_suggestion.apply_to_first_word"] = function()
-  mock.buffhelp.current_column_nr = function()
-    return 15
-  end
+  mock.values.buffer_helper.column_nr = 15
 
   local buf_nr = mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
@@ -176,14 +160,10 @@ T["apply_suggestion.apply_to_first_word"] = function()
     mock.args_store.buffer_helper.replace_text,
     { buf_nr, 1, info1.col_start, info1.col_end, info1.alt_text }
   )
-
-  mock.buffhelp.current_column_nr = nil
 end
 
 T["apply_suggestion.apply_to_second_word"] = function()
-  mock.buffhelp.current_column_nr = function()
-    return 30
-  end
+  mock.values.buffer_helper.column_nr = 30
 
   local buf_nr = mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
@@ -207,8 +187,6 @@ T["apply_suggestion.apply_to_second_word"] = function()
     mock.args_store.buffer_helper.replace_text,
     { buf_nr, 1, info3.col_start, info3.col_end, info3.alt_text }
   )
-
-  mock.buffhelp.current_column_nr = nil
 end
 
 T["set_spelllang.normal_behaviour"] = function()
