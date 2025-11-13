@@ -45,6 +45,12 @@ M.defaults = {
   },
 }
 
+local function get_adapter(adapter_name)
+  local adapter = require("taal.adapters." .. adapter_name)
+  adapter.url = M.settings.adapters[adapter_name].url
+  return adapter
+end
+
 M.setup = function(settings)
   M.user_config = settings or {}
 
@@ -109,31 +115,21 @@ M.adapters_key_available = function(adpts)
   return #result == 0, result
 end
 
-M.keys_available = function()
-  return true, {}
-end
-
-M.get_adapter = function(adapter_name)
-  local adapter = require("taal.adapters." .. adapter_name)
-  adapter.url = M.settings.adapters[adapter_name].url
-  return adapter
-end
-
 M.command_adapter_model = function()
   local settings = M.settings
   local cmds = settings.commands
 
   return {
     grammar = {
-      adapter = M.get_adapter(cmds.grammar.adapter or settings.adapter),
+      adapter = get_adapter(cmds.grammar.adapter or settings.adapter),
       model = cmds.grammar.model or settings.model,
     },
     set_spelllang = {
-      adapter = M.get_adapter(cmds.set_spelllang.adapter or settings.adapter),
+      adapter = get_adapter(cmds.set_spelllang.adapter or settings.adapter),
       model = cmds.set_spelllang.model or settings.model,
     },
     interact = {
-      adapter = M.get_adapter(cmds.interact.adapter or settings.adapter),
+      adapter = get_adapter(cmds.interact.adapter or settings.adapter),
       model = cmds.interact.model or settings.model,
     },
   }
