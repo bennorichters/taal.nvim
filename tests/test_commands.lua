@@ -3,10 +3,8 @@ local Helpers = require("tests.helpers")
 local Mock = require("tests.mock")
 
 local eq = MiniTest.expect.equality
-local tpl_grammar = require("taal.templates.grammar")
-local tpl_lang = require("taal.templates.recognize_language")
 
-Cmd.setup(Mock.buffhelp, Mock.template_sender, Mock.adapter_model)
+Cmd.setup(Mock.buffhelp, Mock.template_sender, Mock.adapter_model, Mock.templates)
 
 Helpers.enable_log()
 T = MiniTest.new_set({ hooks = {
@@ -73,7 +71,7 @@ T["grammar_scratch"] = function()
 
   Cmd.grammar({ fargs = { "scratch" } })
 
-  eq(Mock.args_store.template_sender.stream[1], tpl_grammar)
+  eq(Mock.args_store.template_sender.stream[1], Mock.templates.grammar)
   eq(Mock.args_store.template_sender_stream_select_called, true)
 
   local scratch_buf = Mock.values.buffer_helper.scratch_buf
@@ -194,7 +192,7 @@ T["set_spelllang.normal_behaviour"] = function()
 
   Cmd.set_spelllang()
   eq(vim.o.spelllang, "hu")
-  eq(Mock.args_store.template_sender.send[2], tpl_lang)
+  eq(Mock.args_store.template_sender.send[2], Mock.templates.recognize_language)
 
   vim.o.spelllang = old_spelllang
 end

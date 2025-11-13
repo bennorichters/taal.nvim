@@ -1,9 +1,6 @@
 local differ = require("taal.diff")
 local log = require("taal.log")
 local text_prompt = require("taal.text_prompt")
-local tpl_grammar = require("taal.templates.grammar")
-local tpl_interact = require("taal.templates.interact_with_content")
-local tpl_recognize_language = require("taal.templates.recognize_language")
 
 local M = { all_diff_info = {} }
 
@@ -100,12 +97,12 @@ local function grammar_scratch_buf(inlay)
   end
 
   delete_suggestions()
-  M.template_sender.stream(M.adapter_model["grammar"], tpl_grammar, text, callback)
+  M.template_sender.stream(M.adapter_model["grammar"], M.templates.grammar, text, callback)
 end
 
 local function grammar_inline(inlay)
   local original = M.buffer_helper.text_under_cursor()
-  local ai_text = M.template_sender.send(M.adapter_model["grammar"], tpl_grammar, original)
+  local ai_text = M.template_sender.send(M.adapter_model["grammar"], M.templates.grammar, original)
 
   if original == ai_text then
     vim.notify("Great sentence. No improvements found.", vim.log.levels.INFO)
@@ -121,10 +118,11 @@ local function grammar_inline(inlay)
   )
 end
 
-M.setup = function(buffer_helper, template_sender, adapter_model)
+M.setup = function(buffer_helper, template_sender, adapter_model, templates)
   M.buffer_helper = buffer_helper
   M.template_sender = template_sender
   M.adapter_model = adapter_model
+  M.templates = templates
 
   log.fmt_trace("commands.setup. adapter_model=%s", adapter_model)
 
@@ -203,7 +201,7 @@ end
 M.set_spelllang = function()
   local code = M.template_sender.send(
     M.adapter_model["set_spelllang"],
-    tpl_recognize_language,
+    M.templates.recognize_language,
     M.buffer_helper.text_under_cursor()
   )
   if code then
@@ -219,7 +217,7 @@ M.interact = function()
     if command then
       local template_subs = command .. "\n\n" .. M.buffer_helper.visual_selection()
       log.fmt_trace("interact content=%s", template_subs)
-      M.template_sender.stream(M.adapter_model["interact"], tpl_interact, template_subs)
+      M.template_sender.stream(M.adapter_model["interact"], M.templates.interact, template_subs)
     end
   end)
 end

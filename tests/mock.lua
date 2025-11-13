@@ -1,6 +1,3 @@
-local tpl_grammar = require("taal.templates.grammar")
-local tpl_lang = require("taal.templates.recognize_language")
-
 local default_values = {
   buffer_helper = {
     buffer_nr = 1,
@@ -17,6 +14,30 @@ local default_values = {
 }
 
 local M = {}
+
+M.adapter_model = {
+  improve_grammar = {
+    adapter = "",
+    model = "",
+  },
+  suggest_grammar = {
+    adapter = "",
+    model = "",
+  },
+  set_spelllang = {
+    adapter = "",
+    model = "",
+  },
+  interact = {
+    adapter = "",
+    model = "",
+  },
+}
+
+M.templates = {
+  grammar = "grammar",
+  recognize_language = "recognize_language",
+}
 
 M.reset = function()
   M.values = vim.deepcopy(default_values)
@@ -74,9 +95,9 @@ local template_sender_mock = {
     callback(M.values.buffer_helper.scratch_buf, M.values.template_sender.ai_text)
   end,
   send = function(_adapter_model, template, _user_input)
-    if template == tpl_grammar then
+    if template == M.templates.grammar then
       return M.values.template_sender.ai_text
-    elseif template == tpl_lang then
+    elseif template == M.templates.recognize_language then
       return M.values.template_sender.lang_code
     end
 
@@ -87,25 +108,6 @@ local template_sender_mock = {
 M.buffhelp = args_store_super("buffer_helper", buffer_helper_mock)
 
 M.template_sender = args_store_super("template_sender", template_sender_mock)
-
-M.adapter_model = {
-  improve_grammar = {
-    adapter = "",
-    model = "",
-  },
-  suggest_grammar = {
-    adapter = "",
-    model = "",
-  },
-  set_spelllang = {
-    adapter = "",
-    model = "",
-  },
-  interact = {
-    adapter = "",
-    model = "",
-  },
-}
 
 M.reset()
 
