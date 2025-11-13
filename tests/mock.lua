@@ -42,7 +42,7 @@ end
 M.buffhelp = setmetatable({}, {
   __index = function(_, key)
     return function(...)
-      M.add_check_value(key .. "_info", ...)
+      M.add_check_value(key .. "_args", ...)
       if buffhelp_functions[key] then
         return buffhelp_functions[key]()
       end
