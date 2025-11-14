@@ -96,7 +96,7 @@ This plugin needs to be set up with `require("taal").setup({})`. The setup arg `
 	
     -- function that can be overriden to take control over the template, i.e.,
     -- the prompt, that will be sent to the LLM
-    -- see docs/taal.txt (or `:h taal.txt`) for detailed information
+    -- see doc/taal.txt (or `:h taal.txt`) for detailed information
     template_fn = function(_command, default_template, _user_input)
       return default_template
     end,
