@@ -63,7 +63,7 @@ The user configuration table supports these fields:
     the selected text in visual mode.
 
   Note: The returned template will be processed by the relevant adapter 
-  before it is send to the LLM. The returned template must therefore adhere to
+  before it is sent to the LLM. The returned template must therefore adhere to
   the above structure. The element <message> is mandatory, the rest is
   optional.
 
