@@ -211,7 +211,7 @@ T["interact.normal_behaviour"] = function()
   eq(Mock.args_store.template_sender.stream[2], Mock.templates.interact)
   eq(
     Mock.args_store.template_sender.stream[3],
-    user_input .. "\n\n" .. Mock.values.buffer_helper.visual_selection
+    { user_input, Mock.values.buffer_helper.visual_selection }
   )
 
   vim.ui.input = old_input

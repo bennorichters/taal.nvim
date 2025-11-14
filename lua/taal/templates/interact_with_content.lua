@@ -6,5 +6,5 @@ return {
     .. "- Provides concise, factual, and precise answers.\n"
     .. "- States when information is unavailable.\n"
     .. "- Formats all responses in Markdown.",
-  message = "%s",
+  message = "%s\n\n%s",
 }

@@ -215,7 +215,7 @@ end
 M.interact = function()
   vim.ui.input({ prompt = "Give instructions: " }, function(command)
     if command then
-      local template_subs = command .. "\n\n" .. M.buffer_helper.visual_selection()
+      local template_subs = { command, M.buffer_helper.visual_selection() }
       log.fmt_trace("interact content=%s", template_subs)
       M.template_sender.stream(M.adapter_model["interact"], M.templates.interact, template_subs)
     end
