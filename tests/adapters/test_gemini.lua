@@ -55,7 +55,7 @@ T["adapters.gemini"]["template"] = function()
   eq(adapter.template(template), expected)
 end
 
-T["adapters.gemini"]["template.multiple_message_stubs"] = function()
+T["adapters.gemini"]["template.multiple_message_placeholders"] = function()
   local template_mms = vim.deepcopy(template)
   local expected_mms = vim.deepcopy(expected)
 

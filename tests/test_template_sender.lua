@@ -160,8 +160,8 @@ T["template_sender"]["stream.done_with_delta"] = function()
 end
 
 T["template_sender"]["stream.user_input_list"] = function()
-  local adapter_multiple_stubs_stream = vim.deepcopy(adapter_mock)
-  adapter_multiple_stubs_stream.template_stream = function()
+  local adapter_multiple_placeholders_stream = vim.deepcopy(adapter_mock)
+  adapter_multiple_placeholders_stream.template_stream = function()
     return { foo = "0 %s 1 %s 2" }
   end
 
@@ -182,7 +182,7 @@ T["template_sender"]["stream.user_input_list"] = function()
   end
 
   local ts = require("taal.template_sender")(post, ResponseWriterMock, 10)
-  ts.stream({ adapter = adapter_multiple_stubs_stream, model = "m" }, nil, user_input)
+  ts.stream({ adapter = adapter_multiple_placeholders_stream, model = "m" }, nil, user_input)
 
   vim.schedule_wrap = orig_schedule_wrap
 end

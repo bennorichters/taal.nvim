@@ -34,7 +34,7 @@ T["adapters.claude"]["template"] = function()
   eq(adapter.template(template, "m"), expected)
 end
 
-T["adapters.claude"]["template.multiple_message_stubs"] = function()
+T["adapters.claude"]["template.multiple_message_placeholders"] = function()
   local template_mms = vim.deepcopy(template)
   local expected_mms = vim.deepcopy(expected)
 

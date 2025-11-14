@@ -1,12 +1,12 @@
 local function format(template, user_input)
-  local stubs = {}
+  local placeholders = {}
   for _, v in ipairs(user_input) do
     local json = vim.fn.json_encode(v)
     local stripped = string.sub(json, 2, string.len(json) - 1)
-    table.insert(stubs, stripped)
+    table.insert(placeholders, stripped)
   end
 
-  return string.format(vim.fn.json_encode(template), unpack(stubs))
+  return string.format(vim.fn.json_encode(template), unpack(placeholders))
 end
 
 return function(template, user_input)
