@@ -64,8 +64,7 @@ The user configuration table supports these fields:
 
   Note: The returned template will be processed by the relevant adapter 
   before it is send to the LLM. The returned template must therefore adhere to
-  the above structure. The element <message> is mandatory, the rest is
-  optional.
+  the above structure. 
 
   See: lua/taal/templates for the default templates.
 - {adapters} (`table<'claude'|'gemini'|'openai', table<'url',string>>`) url
