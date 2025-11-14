@@ -14,6 +14,7 @@ local template = {
     { user = "b", assistant = "c" },
     { user = "d", assistant = "e" },
   },
+  message = "%s",
 }
 
 local expected = {
@@ -34,7 +35,7 @@ T["adapters.claude"]["template"] = function()
 end
 
 T["adapters.claude"]["template_no_examples"] = function()
-  eq(adapter.template({ system = "a" }, "m"), {
+  eq(adapter.template({ system = "a", message = "%s" }, "m"), {
     model = "m",
     max_tokens = 1024,
     system = "a",

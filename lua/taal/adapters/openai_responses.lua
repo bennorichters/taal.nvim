@@ -14,7 +14,9 @@ local function transform_template(template, model)
     end
   end
 
-  table.insert(result.input, { role = "user", content = "%s" })
+  if template.message then
+    table.insert(result.input, { role = "user", content = template.message })
+  end
 
   return result
 end

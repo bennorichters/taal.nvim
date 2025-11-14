@@ -15,6 +15,7 @@ local template = {
     { user = "b", assistant = "c" },
     { user = "d", assistant = "e" },
   },
+  message = "%s",
 }
 
 local expected = {

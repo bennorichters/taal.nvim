@@ -30,4 +30,5 @@ return {
       assistant = "The moon is brighter than it was yesterday.",
     },
   },
+  message = "%s",
 }

@@ -19,4 +19,5 @@ return {
       assistant = "hu",
     },
   },
+  message = "%s",
 }

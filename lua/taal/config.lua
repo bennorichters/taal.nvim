@@ -11,6 +11,12 @@ M.defaults = {
   log_level = "error",
   timeout = 6000,
 
+  templates = {
+    grammar = nil,
+    interact = nil,
+    recognize_language = nil,
+  },
+
   adapters = {
     claude = {
       url = "https://api.anthropic.com",

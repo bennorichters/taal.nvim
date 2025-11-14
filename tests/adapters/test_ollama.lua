@@ -14,6 +14,7 @@ local template = {
     { user = "b", assistant = "c" },
     { user = "d", assistant = "e" },
   },
+  message = "%s",
 }
 
 local expected = {
@@ -35,7 +36,7 @@ T["adapters.ollama"]["template"] = function()
 end
 
 T["adapters.ollama"]["template_no_examples"] = function()
-  eq(adapter.template({ system = "a" }, "m"), {
+  eq(adapter.template({ system = "a", message = "%s" }, "m"), {
     model = "m",
     stream = false,
     messages = {

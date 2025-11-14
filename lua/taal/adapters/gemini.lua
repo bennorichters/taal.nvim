@@ -14,7 +14,9 @@ local function convert(template)
     end
   end
 
-  table.insert(result.contents, { role = "user", parts = { { text = "%s" } } })
+  if template.message then
+    table.insert(result.contents, { role = "user", parts = { { text = template.message } } })
+  end
 
   return result
 end

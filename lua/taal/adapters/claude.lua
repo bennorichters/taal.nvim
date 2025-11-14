@@ -16,7 +16,9 @@ local function convert(template, model)
     end
   end
 
-  table.insert(result.messages, { role = "user", content = "%s" })
+  if template.message then
+    table.insert(result.messages, { role = "user", content = template.message })
+  end
 
   return result
 end
