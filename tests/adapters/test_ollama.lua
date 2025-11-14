@@ -35,6 +35,17 @@ T["adapters.ollama"]["template"] = function()
   eq(adapter.template(template, "m"), expected_copy)
 end
 
+T["adapters.ollama"]["template.multiple_message_stubs"] = function()
+  local template_mms = vim.deepcopy(template)
+  local expected_mms = vim.deepcopy(expected)
+
+  local mms = "%s 1 %s 2 %s 3"
+  template_mms.message = mms
+  expected_mms.messages[6].content = "%s 1 %s 2 %s 3"
+  expected_mms.stream = false
+  eq(adapter.template(template_mms, "m"), expected_mms)
+end
+
 T["adapters.ollama"]["template_no_examples"] = function()
   eq(adapter.template({ system = "a", message = "%s" }, "m"), {
     model = "m",

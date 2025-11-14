@@ -31,6 +31,16 @@ T["adapters.openai_responses"]["template"] = function()
   eq(adapter.template(template, "m"), expected)
 end
 
+T["adapters.openai_responses"]["template.multiple_message_stubs"] = function()
+  local template_mms = vim.deepcopy(template)
+  local expected_mms = vim.deepcopy(expected)
+
+  local mms = "%s 1 %s 2 %s 3"
+  template_mms.message = mms
+  expected_mms.input[6].content = "%s 1 %s 2 %s 3"
+  eq(adapter.template(template_mms, "m"), expected_mms)
+end
+
 T["adapters.openai_responses"]["template_stream"] = function()
   local expected_stream = vim.deepcopy(expected)
   expected_stream.stream = true

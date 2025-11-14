@@ -55,6 +55,16 @@ T["adapters.gemini"]["template"] = function()
   eq(adapter.template(template), expected)
 end
 
+T["adapters.gemini"]["template.multiple_message_stubs"] = function()
+  local template_mms = vim.deepcopy(template)
+  local expected_mms = vim.deepcopy(expected)
+
+  local mms = "%s 1 %s 2 %s 3"
+  template_mms.message = mms
+  expected_mms.contents[5].parts[1].text = "%s 1 %s 2 %s 3"
+  eq(adapter.template(template_mms, "m"), expected_mms)
+end
+
 T["adapters.gemini"]["template_no_examples"] = function() end
 
 T["adapters.gemini"]["template_stream"] = function() end
