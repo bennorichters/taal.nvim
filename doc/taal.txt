@@ -45,6 +45,23 @@ Config options ~
 The user configuration table supports these fields:
 - {log_level} (`'trace'|'info'|'debug'|'error'`, default: `'error'`)
 - {timeout} (`integer`, default: `6000`) timeout for LLM requests in ms
+- {template_fn} (`fn(command: string, default_template: table, user_input: table)`) 
+  - `command` can be <grammar>, <interact> or <language> and refers to the
+    user command that triggered this call
+  - `default_template` the template that is the default choice for this `command` 
+  - `user_input` an array (table) of user input. These values are used to
+
+  Return: (`table`) a table with these elements:
+  - <system> (`string`) message to set the stage for the LLM
+  - <examples> (`table`) an array of alternating user and assistant messages
+    that serve as an example
+  - <message> (`string`) the message that is sent to the LLM. This message can
+    hold stubs that will be replaced by `user_input`. For the commands <grammar>
+    and <language> `user_input` has one item (the text under cursor), for
+    <interact> it has two items; the command the user is prompted for and the
+    selected text in visual mode.
+
+  See lua/taal/templates for the default templates.
 - {adapters} (`table<'claude'|'gemini'|'openai', table<'url',string>>`) url
   per adapter
 - {adapter} (`'claude'|'gemini'|'openai'`, default: `'gemini'`) default
