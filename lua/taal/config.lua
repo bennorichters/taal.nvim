@@ -11,11 +11,9 @@ M.defaults = {
   log_level = "error",
   timeout = 6000,
 
-  templates = {
-    grammar = nil,
-    interact = nil,
-    recognize_language = nil,
-  },
+  template_fn = function(_command, default_template, _user_input)
+    return default_template
+  end,
 
   adapters = {
     claude = {

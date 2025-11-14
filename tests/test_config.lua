@@ -24,6 +24,24 @@ T["config"]["setup.change_timeout"] = function()
   eq(config.settings, expected)
 end
 
+T["config"]["template_fn.default"] = function()
+  config.setup()
+
+  local fn = config.settings.template_fn
+  local default_template = { foo = "bar" }
+  local template = fn("grammar", default_template, { "fooz", "barz" })
+  eq(template, default_template)
+end
+
+-- T["config"]["template_fn.grammar"] = function()
+--   -- config.setup({template})
+--
+--   local fn = config.template_fn()
+--   local default_template = { foo = "bar" }
+--   local template = fn("grammar", default_template, "fooz", "barz")
+--   eq(template, default_template)
+-- end
+
 T["config"]["setup.adapter.grammar"] = function()
   config.setup({ commands = { grammar = { adapter = "claude" } } })
   local expected = vim.fn.deepcopy(config.defaults)
