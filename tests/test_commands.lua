@@ -4,7 +4,7 @@ local Mock = require("tests.mock")
 
 local eq = MiniTest.expect.equality
 
-Cmd.setup(Mock.buffhelp, Mock.template_sender, Mock.adapter_model, Mock.templates)
+Cmd.setup(Mock.buffhelp, Mock.template_sender, Mock.adapter_model, Mock.template_fn)
 
 Helpers.enable_log()
 T = MiniTest.new_set({ hooks = {
@@ -71,7 +71,7 @@ T["grammar_scratch"] = function()
 
   Cmd.grammar({ fargs = { "scratch" } })
 
-  eq(Mock.args_store.template_sender.stream[1], Mock.templates.grammar)
+  eq(Mock.args_store.template_sender.stream[1], Mock.values.template_sender.templates.grammar)
   eq(Mock.args_store.template_sender_stream_select_called, true)
 
   local scratch_buf = Mock.values.buffer_helper.scratch_buf
@@ -192,7 +192,7 @@ T["set_spelllang.normal_behaviour"] = function()
 
   Cmd.set_spelllang()
   eq(vim.o.spelllang, "hu")
-  eq(Mock.args_store.template_sender.send[2], Mock.templates.recognize_language)
+  eq(Mock.args_store.template_sender.send[2], Mock.values.template_sender.templates.language)
 
   vim.o.spelllang = old_spelllang
 end
@@ -208,7 +208,7 @@ T["interact.normal_behaviour"] = function()
 
   Cmd.interact()
 
-  eq(Mock.args_store.template_sender.stream[2], Mock.templates.interact)
+  eq(Mock.args_store.template_sender.stream[2], Mock.values.template_sender.templates.interact)
   eq(
     Mock.args_store.template_sender.stream[3],
     { user_input, Mock.values.buffer_helper.visual_selection }

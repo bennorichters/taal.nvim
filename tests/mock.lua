@@ -12,6 +12,11 @@ local default_values = {
     ai_text = "The moon is brighter then yesterday.",
     interact = "interact_response",
     lang_code = "hu",
+    templates = {
+    grammar = "tpl_grammar",
+    interact = "tpl_interact",
+    language = "tpl_language",
+    }
   },
 }
 
@@ -36,11 +41,17 @@ M.adapter_model = {
   },
 }
 
-M.templates = {
-  grammar = "grammar",
-  interact = "interact",
-  recognize_language = "recognize_language",
-}
+M.template_fn = function(command, _default_template, _user_input)
+  if command == "grammar" then
+    return M.values.template_sender.templates.grammar
+  elseif command == "interact" then
+    return M.values.template_sender.templates.interact
+  elseif command == "set_spelllang" then
+    return M.values.template_sender.templates.language
+  end
+
+  error("unexpected command: " .. command)
+end
 
 M.reset = function()
   M.values = vim.deepcopy(default_values)
@@ -104,13 +115,13 @@ local template_sender_mock = {
     end
   end,
   send = function(_adapter_model, template, _user_input)
-    if template == M.templates.grammar then
+    if template == M.values.template_sender.templates.grammar then
       return M.values.template_sender.ai_text
-    elseif template == M.templates.recognize_language then
+    elseif template == M.values.template_sender.templates.language then
       return M.values.template_sender.lang_code
     end
 
-    error("unexpected template")
+    error("unexpected template: " .. vim.inspect(template))
   end,
 }
 
