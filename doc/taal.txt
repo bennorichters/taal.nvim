@@ -62,7 +62,11 @@ The user configuration table supports these fields:
     for <interact> it has two items; the command the user is prompted for and
     the selected text in visual mode.
 
-  See lua/taal/templates for the default templates.
+  Note: The returned template will be processed by the relevant adapter 
+  before it is send to the LLM. The returned template must therefore adhere to
+  the above structure.
+
+  See: lua/taal/templates for the default templates.
 - {adapters} (`table<'claude'|'gemini'|'openai', table<'url',string>>`) url
   per adapter
 - {adapter} (`'claude'|'gemini'|'openai'`, default: `'gemini'`) default
