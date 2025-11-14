@@ -1,10 +1,5 @@
+local format_template = require("taal.template_formatter")
 local log = require("taal.log")
-
-local function format_template(template, user_input)
-  local json = vim.fn.json_encode(user_input)
-  local stripped = string.sub(json, 2, string.len(json) - 1)
-  return string.format(vim.fn.json_encode(template), stripped)
-end
 
 local function on_chunk_wrap(parse_stream, writer, done_callback)
   return function(error, stream_data)
