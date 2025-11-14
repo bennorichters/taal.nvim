@@ -23,7 +23,7 @@ local adapter_mock = {
     return '{fooz = "barz"}'
   end,
   template_stream = function()
-    return '{fooz = "barz"}'
+    return '{fooz = "barz_stream"}'
   end,
   parse = function(_)
     return "42"
@@ -71,7 +71,8 @@ T["template_sender"]["stream"] = function()
     eq(tablelength(opts), 4)
     eq(opts.headers, { foo = "bar" })
     eq(opts.raw, { "--tcp-nodelay", "--no-buffer" })
-    eq(opts.body, '"{fooz = \\"barz\\"}"')
+    local body = vim.fn.json_decode(opts.body)
+    eq(body, adapter_mock.template_stream())
 
     opts.stream()
 
@@ -154,6 +155,34 @@ T["template_sender"]["stream.done_with_delta"] = function()
 
   eq(check_write, "43")
   eq(call_back_check, true)
+
+  vim.schedule_wrap = orig_schedule_wrap
+end
+
+T["template_sender"]["stream.user_input_list"] = function()
+  local adapter_multiple_stubs_stream = vim.deepcopy(adapter_mock)
+  adapter_multiple_stubs_stream.template_stream = function()
+    return { foo = "0 %s 1 %s 2" }
+  end
+
+  local user_input = { "barx", "bary" }
+
+  local function post(_, opts)
+    local body = vim.fn.json_decode(opts.body)
+    eq(body, { foo = "0 barx 1 bary 2" })
+    return { status = 200, body = "{}" }
+  end
+
+  local orig_schedule_wrap = vim.schedule_wrap
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.schedule_wrap = function(fn)
+    return function()
+      fn()
+    end
+  end
+
+  local ts = require("taal.template_sender")(post, ResponseWriterMock, 10)
+  ts.stream({ adapter = adapter_multiple_stubs_stream, model = "m" }, nil, user_input)
 
   vim.schedule_wrap = orig_schedule_wrap
 end
