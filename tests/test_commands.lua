@@ -197,4 +197,22 @@ T["set_spelllang.normal_behaviour"] = function()
   vim.o.spelllang = old_spelllang
 end
 
+T["interact.normal_behaviour"] = function()
+  local old_input = vim.ui.input
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.ui.input = function(_opts, on_confirm)
+    return on_confirm("user input")
+  end
+
+  Cmd.interact()
+
+  eq(Mock.args_store.template_sender.stream[2], Mock.templates.interact)
+  eq(
+    Mock.args_store.template_sender.stream[3],
+    "user input\n\n" .. Mock.values.buffer_helper.visual_selection
+  )
+
+  vim.ui.input = old_input
+end
+
 return T

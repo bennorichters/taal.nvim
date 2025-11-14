@@ -6,9 +6,11 @@ local default_values = {
     line_nr = 1,
     scratch_buf = 42,
     user_text = "The moon is more bright then yesterdate.",
+    visual_selection = "foo bar",
   },
   template_sender = {
     ai_text = "The moon is brighter then yesterday.",
+    interact = "interact_response",
     lang_code = "hu",
   },
 }
@@ -36,6 +38,7 @@ M.adapter_model = {
 
 M.templates = {
   grammar = "grammar",
+  interact = "interact",
   recognize_language = "recognize_language",
 }
 
@@ -84,6 +87,9 @@ local buffer_helper_mock = {
   text_under_cursor = function()
     return M.values.buffer_helper.user_text
   end,
+  visual_selection = function()
+    return M.values.buffer_helper.visual_selection
+  end,
 }
 
 local template_sender_mock = {
@@ -92,7 +98,10 @@ local template_sender_mock = {
     vim.ui.select = function()
       M.args_store.template_sender_stream_select_called = true
     end
-    callback(M.values.buffer_helper.scratch_buf, M.values.template_sender.ai_text)
+
+    if callback then
+      callback(M.values.buffer_helper.scratch_buf, M.values.template_sender.ai_text)
+    end
   end,
   send = function(_adapter_model, template, _user_input)
     if template == M.templates.grammar then
