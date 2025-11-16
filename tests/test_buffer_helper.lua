@@ -24,4 +24,12 @@ T["buffer_helper.current_line_nr"] = function()
   eq(line_nr, 2)
 end
 
+T["buffer_helper.current_column_nr"] = function()
+  child.api.nvim_buf_set_lines(0, 0, -1, true, { "abc" })
+  child.type_keys("l")
+
+  local column_nr = child.lua_get("h.current_column_nr()")
+  eq(column_nr, 2)
+end
+
 return T
