@@ -129,4 +129,28 @@ T["buffer_helper.show_hover"] = function()
   eq(#bufs, 1)
 end
 
+T["buffer_helper.visual_selection"] = function()
+  local buf_nr = child.lua_get("h.current_buffer_nr()")
+  child.api.nvim_buf_set_lines(buf_nr, 0, -1, true, { "abcd", "efgh", "ijkl", "mnop" })
+  child.type_keys("ljvjl")
+  local txt = child.lua_get("h.visual_selection()")
+  eq(txt, "fgh\nij")
+end
+
+T["buffer_helper.set_lines"] = function()
+  local buf_nr = child.lua_get("h.current_buffer_nr()")
+  child.api.nvim_buf_set_lines(buf_nr, 0, -1, true, { "abcd", "efgh", "ijkl", "mnop" })
+  child.lua("h.set_lines(2, 'foo')")
+
+  eq(get_lines(buf_nr), { "abcd", "foo", "ijkl", "mnop" })
+end
+
+T["buffer_helper.replace_text"] = function()
+  local buf_nr = child.lua_get("h.current_buffer_nr()")
+  child.api.nvim_buf_set_lines(buf_nr, 0, -1, true, { "abcd", "efgh", "ijkl", "mnop" })
+  child.lua("h.replace_text(" .. buf_nr .. ", 2, 1, 3, 'bar')")
+
+  eq(get_lines(buf_nr), { "abcd", "ebarh", "ijkl", "mnop" })
+end
+
 return T
