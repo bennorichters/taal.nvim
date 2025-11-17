@@ -69,4 +69,41 @@ T["buffer_helper.delete_hl_group"] = function()
   eq(mark, {})
 end
 
+T["buffer_helper.add_inlay"] = function()
+  local buf_nr = child.lua_get("h.current_buffer_nr()")
+  local ns = child.lua_get("h.namespace_inlay")
+
+  child.api.nvim_buf_set_lines(buf_nr, 0, -1, true, { "abc def ghi jkl" })
+  local id = child.lua_get([[h.add_inlay({
+    buf_nr = h.current_buffer_nr(),
+    line_nr = 1,
+    col_end = 4,
+    alt_text = "foo",
+  })]])
+
+  local mark = child.api.nvim_buf_get_extmark_by_id(0, ns, id, {})
+
+  eq(mark[1], 0)
+  eq(mark[2], 4)
+end
+
+T["buffer_helper.delete_inlay"] = function()
+  local buf_nr = child.lua_get("h.current_buffer_nr()")
+  local ns = child.lua_get("h.namespace_inlay")
+
+  child.api.nvim_buf_set_lines(buf_nr, 0, -1, true, { "abc def ghi jkl" })
+  local id = child.lua_get([[h.add_inlay({
+    buf_nr = h.current_buffer_nr(),
+    line_nr = 1,
+    col_end = 4,
+    alt_text = "foo",
+  })]])
+
+  child.lua("h.delete_inlay(" .. buf_nr .. ", " .. id .. ")")
+
+  local mark = child.api.nvim_buf_get_extmark_by_id(0, ns, id, {})
+
+  eq(mark, {})
+end
+
 return T
