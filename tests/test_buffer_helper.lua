@@ -106,4 +106,27 @@ T["buffer_helper.delete_inlay"] = function()
   eq(mark, {})
 end
 
+T["buffer_helper.text_under_cursor"] = function()
+  local buf_nr = child.lua_get("h.current_buffer_nr()")
+  child.api.nvim_buf_set_lines(buf_nr, 0, -1, true, { "abc", "def", "ghi", "jkl" })
+  child.type_keys("j")
+  local txt = child.lua_get("h.text_under_cursor()")
+  eq(txt, "def")
+end
+
+T["buffer_helper.show_hover"] = function()
+  local buf_nr = child.lua_get("h.current_buffer_nr()")
+  child.lua("h.show_hover('foo')")
+
+  local bufs = child.api.nvim_list_bufs()
+  eq(#bufs, 2)
+
+  local other = (bufs[1] == buf_nr) and bufs[2] or bufs[1]
+  eq(get_lines(other), { "foo" })
+
+  child.type_keys("i")
+  bufs = child.api.nvim_list_bufs()
+  eq(#bufs, 1)
+end
+
 return T
