@@ -33,15 +33,6 @@ T["config"]["template_fn.default"] = function()
   eq(template, default_template)
 end
 
--- T["config"]["template_fn.grammar"] = function()
---   -- config.setup({template})
---
---   local fn = config.template_fn()
---   local default_template = { foo = "bar" }
---   local template = fn("grammar", default_template, "fooz", "barz")
---   eq(template, default_template)
--- end
-
 T["config"]["setup.adapter.grammar"] = function()
   config.setup({ commands = { grammar = { adapter = "claude" } } })
   local expected = vim.fn.deepcopy(config.defaults)
