@@ -32,4 +32,41 @@ T["buffer_helper.current_column_nr"] = function()
   eq(column_nr, 2)
 end
 
+T["buffer_helper.add_hl_group"] = function()
+  local ns = child.lua_get("h.namespace_hl")
+
+  child.api.nvim_buf_set_lines(0, 0, -1, true, { "abcdefghijkl" })
+  local id = child.lua_get([[h.add_hl_group({
+    buf_nr = 0,
+    line_nr = 1,
+    col_start = 1,
+    col_end = 3,
+    hl_group = "TaalIssue"
+  })]])
+
+  local mark = child.api.nvim_buf_get_extmark_by_id(0, ns, id, {})
+
+  eq(mark[1], 0)
+  eq(mark[2], 1)
+end
+
+T["buffer_helper.delete_hl_group"] = function()
+  local ns = child.lua_get("h.namespace_hl")
+
+  child.api.nvim_buf_set_lines(0, 0, -1, true, { "abcdefghijkl" })
+  local id = child.lua_get([[h.add_hl_group({
+    buf_nr = 0,
+    line_nr = 1,
+    col_start = 1,
+    col_end = 3,
+    hl_group = "TaalIssue"
+  })]])
+
+  child.lua("h.delete_hl_group(0, " .. id .. ")")
+
+  local mark = child.api.nvim_buf_get_extmark_by_id(0, ns, id, {})
+
+  eq(mark, {})
+end
+
 return T
