@@ -1,7 +1,7 @@
 local log = require("taal.log")
 local start_data = "data: "
 
-local function convert(template)
+local function convert(template, _model)
   local result = { contents = {} }
 
   if template.system then
