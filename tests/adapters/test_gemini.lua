@@ -72,21 +72,27 @@ T["adapters.gemini"]["template.multiple_message_placeholders"] = function()
   eq(adapter.template(template_mms, "m"), expected_mms)
 end
 
-T["adapters.gemini"]["template_no_examples"] = function() end
+T["adapters.gemini"]["template_no_examples"] = function()
+  eq(adapter.template({ system = "a", message = "b" }), {
+    system_instruction = { parts = { { text = "a" } } },
+    contents = { { role = "user", parts = { { text = "b" } } } },
+  })
+end
 
-T["adapters.gemini"]["template_stream"] = function() end
+T["adapters.gemini"]["template_stream"] = function()
+  local expected_stream = vim.deepcopy(expected)
+  eq(adapter.template_stream(template, "m"), expected_stream)
+end
 
 T["adapters.gemini"]["parse"] = function()
   local json = { candidates = { { content = { parts = { { text = "a" } } } } } }
   eq(adapter.parse(json), "a")
 end
 
-T["adapters.gemini"]["parse.no_content"] = function() end
-
-T["adapters.gemini"]["parse.content_not_done"] = function() end
-
-T["adapters.gemini"]["parse.empty_content_not_done"] = function() end
-
-T["adapters.gemini"]["parse.content_done"] = function() end
+T["adapters.gemini"]["parse.no_content"] = function()
+  local done, content = adapter.parse_stream("")
+  eq(done, false)
+  eq(content, nil)
+end
 
 return T
