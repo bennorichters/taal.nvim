@@ -3,7 +3,7 @@ local log = require("taal.log")
 local function convert(template, model)
   local result = {
     model = model,
-    messages = { { role = "system", content = template.system } },
+    messages = template.system and { { role = "system", content = template.system } } or {},
   }
 
   if template.examples then

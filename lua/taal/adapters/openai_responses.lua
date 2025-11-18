@@ -4,7 +4,7 @@ local start_data = "data: "
 local function transform_template(template, model)
   local result = {
     model = model,
-    input = { { role = "system", content = template.system } },
+    input = template.system and { { role = "system", content = template.system } } or {},
   }
 
   if template.examples then

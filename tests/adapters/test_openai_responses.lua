@@ -41,6 +41,13 @@ T["adapters.openai_responses"]["template.multiple_message_placeholders"] = funct
   eq(adapter.template(template_mms, "m"), expected_mms)
 end
 
+T["adapters.openai_responses"]["template.message_only"] = function()
+  eq(
+    adapter.template({ message = "a" }, "m"),
+    { model = "m", input = { { role = "user", content = "a" } } }
+  )
+end
+
 T["adapters.openai_responses"]["template_stream"] = function()
   local expected_stream = vim.deepcopy(expected)
   expected_stream.stream = true

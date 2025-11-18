@@ -55,6 +55,16 @@ T["adapters.claude"]["template_no_examples"] = function()
   })
 end
 
+T["adapters.claude"]["template_only_message"] = function()
+  eq(adapter.template({ message = "%s" }, "m"), {
+    model = "m",
+    max_tokens = 1024,
+    messages = {
+      { role = "user", content = "%s" },
+    },
+  })
+end
+
 T["adapters.claude"]["template_stream"] = function()
   local expected_stream = vim.deepcopy(expected)
   expected_stream.stream = true

@@ -57,6 +57,16 @@ T["adapters.ollama"]["template_no_examples"] = function()
   })
 end
 
+T["adapters.ollama"]["template_message_only"] = function()
+  eq(adapter.template({ message = "%s" }, "m"), {
+    model = "m",
+    stream = false,
+    messages = {
+      { role = "user", content = "%s" },
+    },
+  })
+end
+
 T["adapters.ollama"]["template_stream"] = function()
   local expected_stream = vim.deepcopy(expected)
   expected_stream.stream = true

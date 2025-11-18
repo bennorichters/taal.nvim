@@ -55,6 +55,13 @@ T["adapters.gemini"]["template"] = function()
   eq(adapter.template(template), expected)
 end
 
+T["adapters.gemini"]["template.message_only"] = function()
+  eq(
+    adapter.template({ message = "a" }),
+    { contents = { { role = "user", parts = { { text = "a" } } } } }
+  )
+end
+
 T["adapters.gemini"]["template.multiple_message_placeholders"] = function()
   local template_mms = vim.deepcopy(template)
   local expected_mms = vim.deepcopy(expected)

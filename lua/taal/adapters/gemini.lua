@@ -2,10 +2,11 @@ local log = require("taal.log")
 local start_data = "data: "
 
 local function convert(template)
-  local result = {
-    system_instruction = { parts = { { text = template.system } } },
-    contents = {},
-  }
+  local result = { contents = {} }
+
+  if template.system then
+    result.system_instruction = { parts = { { text = template.system } } }
+  end
 
   if template.examples then
     for _, example in ipairs(template.examples) do
