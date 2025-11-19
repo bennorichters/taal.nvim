@@ -71,8 +71,6 @@ T["adapters.openai_responses"]["post_headers"] = function()
 end
 
 T["adapters.openai_responses"]["parse"] = function()
-  local p = adapter.parse
-
   eq(
     adapter.parse({
       output = {
@@ -87,6 +85,10 @@ T["adapters.openai_responses"]["parse"] = function()
     }),
     "42"
   )
+end
+
+T["adapters.openai_responses"]["parse.invalid"] = function()
+  eq( adapter.parse(""), nil)
 end
 
 T["adapters.openai_responses"]["parse_stream"] = function()
