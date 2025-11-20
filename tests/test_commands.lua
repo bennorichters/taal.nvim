@@ -69,10 +69,17 @@ end
 T["grammar_scratch"] = function()
   local buf = vim.api.nvim_get_current_buf()
 
+  local select_called = false
+  local old_select = vim.ui.select
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.ui.select = function()
+    select_called = true
+  end
+
   Cmd.grammar({ fargs = { "scratch" } })
 
   eq(Mock.args_store.template_sender.stream[1][1], Mock.values.template_sender.templates.grammar)
-  eq(Mock.args_store.template_sender_stream_select_called, true)
+  eq(select_called, true)
 
   local scratch_buf = Mock.values.buffer_helper.scratch_buf
 
@@ -92,6 +99,8 @@ T["grammar_scratch"] = function()
   info3 = get_info3(buf)
   info4 = get_info4(scratch_buf)
   eq(Mock.args_store.buffer_helper.add_hl_group, { { info1 }, { info2 }, { info3 }, { info4 } })
+
+  vim.ui.select = old_select
 end
 
 T["grammar_inlay"] = function()

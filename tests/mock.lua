@@ -112,11 +112,6 @@ local buffer_helper_mock = {
 
 local template_sender_mock = {
   stream = function(_adapter_model, _template, _user_input, callback)
-    ---@diagnostic disable-next-line: duplicate-set-field
-    vim.ui.select = function()
-      M.args_store.template_sender_stream_select_called = true
-    end
-
     if callback then
       callback(M.values.buffer_helper.scratch_buf, M.values.template_sender.ai_text)
     end
