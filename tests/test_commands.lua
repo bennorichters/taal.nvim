@@ -94,6 +94,21 @@ T["grammar_scratch"] = function()
   eq(Mock.args_store.buffer_helper.add_hl_group, { info1, info2, info3, info4 })
 end
 
+T["grammar_inlay"] = function()
+  Cmd.grammar({ fargs = { "inlay" } })
+
+  local buf_nr = Mock.buffhelp.current_buffer_nr()
+  local info1 = get_info1(buf_nr)
+  info1.hl_id = 101
+  info1.inlay_id = 201
+
+  local info3 = get_info3(buf_nr)
+  info3.hl_id = 102
+  info3.inlay_id = 202
+
+  eq(Cmd.all_diff_info, { info1, info3 })
+end
+
 T["hover.first_word"] = function()
   local buf_nr = Mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)

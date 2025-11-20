@@ -3,6 +3,7 @@ local default_values = {
     buffer_nr = 1,
     column_nr = 1,
     hl_id = 100,
+    inlay_id = 200,
     line_nr = 1,
     scratch_buf = 42,
     user_text = "The moon is more bright then yesterdate.",
@@ -94,6 +95,10 @@ local buffer_helper_mock = {
   add_hl_group = function()
     M.values.buffer_helper.hl_id = M.values.buffer_helper.hl_id + 1
     return M.values.buffer_helper.hl_id
+  end,
+  add_inlay = function()
+    M.values.buffer_helper.inlay_id = M.values.buffer_helper.inlay_id + 1
+    return M.values.buffer_helper.inlay_id
   end,
   text_under_cursor = function()
     return M.values.buffer_helper.user_text
