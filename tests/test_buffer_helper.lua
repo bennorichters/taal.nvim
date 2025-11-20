@@ -5,15 +5,11 @@ local child, T = Helpers.new_child_with_set([[
   h.setup()
 ]])
 
-local get_lines = function(buf)
-  return child.api.nvim_buf_get_lines(buf, 0, -1, true)
-end
-
 T["buffer_helper.current_buffer_nr"] = function()
   local buf_nr = child.lua_get("h.current_buffer_nr()")
   child.api.nvim_buf_set_lines(buf_nr, 0, -1, true, { "a", "b", "c" })
 
-  eq({ "a", "b", "c" }, get_lines(0))
+  eq({ "a", "b", "c" }, Helpers.get_lines(child, 0))
 end
 
 T["buffer_helper.current_line_nr"] = function()
@@ -122,7 +118,7 @@ T["buffer_helper.show_hover"] = function()
   eq(#bufs, 2)
 
   local other = (bufs[1] == buf_nr) and bufs[2] or bufs[1]
-  eq(get_lines(other), { "foo" })
+  eq(Helpers.get_lines(child, other), { "foo" })
 
   child.type_keys("i")
   bufs = child.api.nvim_list_bufs()
@@ -142,7 +138,7 @@ T["buffer_helper.set_lines"] = function()
   child.api.nvim_buf_set_lines(buf_nr, 0, -1, true, { "abcd", "efgh", "ijkl", "mnop" })
   child.lua("h.set_lines(2, 'foo')")
 
-  eq(get_lines(buf_nr), { "abcd", "foo", "ijkl", "mnop" })
+  eq(Helpers.get_lines(child, buf_nr), { "abcd", "foo", "ijkl", "mnop" })
 end
 
 T["buffer_helper.replace_text"] = function()
@@ -150,7 +146,7 @@ T["buffer_helper.replace_text"] = function()
   child.api.nvim_buf_set_lines(buf_nr, 0, -1, true, { "abcd", "efgh", "ijkl", "mnop" })
   child.lua("h.replace_text(" .. buf_nr .. ", 2, 1, 3, 'bar')")
 
-  eq(get_lines(buf_nr), { "abcd", "ebarh", "ijkl", "mnop" })
+  eq(Helpers.get_lines(child, buf_nr), { "abcd", "ebarh", "ijkl", "mnop" })
 end
 
 return T

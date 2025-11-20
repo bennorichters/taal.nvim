@@ -25,4 +25,8 @@ M.enable_log = function()
   log.trace("test log started")
 end
 
+M.get_lines = function(child, buf_nr)
+  return child.api.nvim_buf_get_lines(buf_nr, 0, -1, true)
+end
+
 return M
