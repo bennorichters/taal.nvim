@@ -71,7 +71,7 @@ T["grammar_scratch"] = function()
 
   Cmd.grammar({ fargs = { "scratch" } })
 
-  eq(Mock.args_store.template_sender.stream[1], Mock.values.template_sender.templates.grammar)
+  eq(Mock.args_store.template_sender.stream[1][1], Mock.values.template_sender.templates.grammar)
   eq(Mock.args_store.template_sender_stream_select_called, true)
 
   local scratch_buf = Mock.values.buffer_helper.scratch_buf
@@ -91,7 +91,7 @@ T["grammar_scratch"] = function()
   info2 = get_info2(scratch_buf)
   info3 = get_info3(buf)
   info4 = get_info4(scratch_buf)
-  eq(Mock.args_store.buffer_helper.add_hl_group, { info1, info2, info3, info4 })
+  eq(Mock.args_store.buffer_helper.add_hl_group, { { info1 }, { info2 }, { info3 }, { info4 } })
 end
 
 T["grammar_inlay"] = function()
@@ -117,7 +117,7 @@ T["hover.first_word"] = function()
   Mock.values.buffer_helper.column_nr = 15
 
   Cmd.hover()
-  eq(Mock.args_store.buffer_helper.show_hover, { "brighter" })
+  eq(Mock.args_store.buffer_helper.show_hover, { { "brighter" } })
 end
 
 T["hover.before_first_word"] = function()
@@ -138,7 +138,7 @@ T["hover.empty_word"] = function()
   Mock.values.buffer_helper.column_nr = 15
 
   Cmd.hover()
-  eq(Mock.args_store.buffer_helper.show_hover, { "[REMOVE]" })
+  eq(Mock.args_store.buffer_helper.show_hover, { { "[REMOVE]" } })
 end
 
 T["apply_suggestion.apply_to_first_word"] = function()
@@ -161,17 +161,20 @@ T["apply_suggestion.apply_to_first_word"] = function()
     col_start = 26,
     hl_group = "TaalIssue",
     line_nr = 1,
+    hl_id = 52,
   }
 
-  info3_updated.hl_id = 52
-  eq(Mock.args_store.buffer_helper.add_hl_group, { info3_updated })
+  eq(Mock.args_store.buffer_helper.delete_hl_group, { { buf_nr, 51 }, { buf_nr, 52 } })
+  eq(Mock.args_store.buffer_helper.delete_inlay, nil)
+
+  eq(Mock.args_store.buffer_helper.add_hl_group, { { info3_updated } })
 
   info3_updated.hl_id = 101
   eq(Cmd.all_diff_info, { info3_updated })
 
   eq(
     Mock.args_store.buffer_helper.replace_text,
-    { buf_nr, 1, info1.col_start, info1.col_end, info1.alt_text }
+    { { buf_nr, 1, info1.col_start, info1.col_end, info1.alt_text } }
   )
 end
 
@@ -190,16 +193,59 @@ T["apply_suggestion.apply_to_second_word"] = function()
 
   eq(Cmd.all_diff_info, { info1 })
 
-  -- add_hl_group should not have been called and this check value is not set
-  eq(not Mock.args_store.buffer_helper.add_hl_group, true)
+  eq(Mock.args_store.buffer_helper.delete_hl_group, { { buf_nr, 52 } })
+  eq(Mock.args_store.buffer_helper.delete_inlay, nil)
+
+  -- add_hl_group should not have been called
+  eq(Mock.args_store.buffer_helper.add_hl_group, nil)
 
   -- delete_hl_group should have been called once
-  eq(Mock.args_store.buffer_helper.delete_hl_group, { 1, 52 })
+  eq(Mock.args_store.buffer_helper.delete_hl_group, { { 1, 52 } })
 
   eq(
     Mock.args_store.buffer_helper.replace_text,
-    { buf_nr, 1, info3.col_start, info3.col_end, info3.alt_text }
+    { { buf_nr, 1, info3.col_start, info3.col_end, info3.alt_text } }
   )
+end
+
+T["apply_suggestion.apply_to_first_word.inlay"] = function()
+  Mock.values.buffer_helper.column_nr = 15
+
+  local buf_nr = Mock.buffhelp.current_buffer_nr()
+
+  local info1 = get_info1(buf_nr)
+  info1.hl_id = 51
+  info1.inlay_id = 61
+
+  local info3 = get_info3(buf_nr)
+  info3.hl_id = 52
+  info3.inlay_id = 62
+
+  Cmd.all_diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
+
+  Cmd.apply_suggestion()
+
+  local info3_updated = {
+    alt_text = "yesterday.",
+    buf_nr = 1,
+    col_end = 37,
+    col_start = 26,
+    hl_group = "TaalIssue",
+    line_nr = 1,
+    hl_id = 52,
+    inlay_id = 62,
+  }
+
+  eq(Mock.args_store.buffer_helper.delete_hl_group, { { buf_nr, 51 }, { buf_nr, 52 } })
+  eq(Mock.args_store.buffer_helper.delete_inlay, { { buf_nr, 61 }, { buf_nr, 62 } })
+
+  eq(Mock.args_store.buffer_helper.add_hl_group, { { info3_updated } })
+  info3_updated.hl_id = 101
+
+  eq(Mock.args_store.buffer_helper.add_inlay, { { info3_updated } })
+  info3_updated.inlay_id = 201
+
+  eq(Cmd.all_diff_info, { info3_updated })
 end
 
 T["set_spelllang.normal_behaviour"] = function()
@@ -207,7 +253,7 @@ T["set_spelllang.normal_behaviour"] = function()
 
   Cmd.set_spelllang()
   eq(vim.o.spelllang, "hu")
-  eq(Mock.args_store.template_sender.send[2], Mock.values.template_sender.templates.language)
+  eq(Mock.args_store.template_sender.send[1][2], Mock.values.template_sender.templates.language)
 
   vim.o.spelllang = old_spelllang
 end
@@ -223,9 +269,9 @@ T["interact.normal_behaviour"] = function()
 
   Cmd.interact()
 
-  eq(Mock.args_store.template_sender.stream[2], Mock.values.template_sender.templates.interact)
+  eq(Mock.args_store.template_sender.stream[1][2], Mock.values.template_sender.templates.interact)
   eq(
-    Mock.args_store.template_sender.stream[3],
+    Mock.args_store.template_sender.stream[1][3],
     { user_input, Mock.values.buffer_helper.visual_selection }
   )
 

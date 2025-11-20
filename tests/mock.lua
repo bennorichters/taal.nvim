@@ -14,10 +14,10 @@ local default_values = {
     interact = "interact_response",
     lang_code = "hu",
     templates = {
-    grammar = "tpl_grammar",
-    interact = "tpl_interact",
-    language = "tpl_language",
-    }
+      grammar = "tpl_grammar",
+      interact = "tpl_interact",
+      language = "tpl_language",
+    },
   },
 }
 
@@ -63,10 +63,12 @@ local function add_args_to_store(group_name, key, ...)
   M.args_store[group_name] = M.args_store[group_name] or {}
   M.args_store[group_name][key] = M.args_store[group_name][key] or {}
 
+  local args = {}
   for i = 1, select("#", ...) do
     local value = select(i, ...)
-    table.insert(M.args_store[group_name][key], vim.deepcopy(value))
+    table.insert(args, vim.deepcopy(value))
   end
+  table.insert(M.args_store[group_name][key], args)
 end
 
 local args_store_super = function(name, mock)
