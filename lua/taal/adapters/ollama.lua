@@ -3,6 +3,7 @@ local log = require("taal.log")
 local function convert(template, model)
   local result = {
     model = model,
+    options = { temperature = 0 },
     messages = template.system and { { role = "system", content = template.system } } or {},
   }
 

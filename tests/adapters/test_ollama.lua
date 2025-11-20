@@ -19,6 +19,7 @@ local template = {
 
 local expected = {
   model = "m",
+  options = { temperature = 0 },
   messages = {
     { role = "system", content = "a" },
     { role = "user", content = "b" },
@@ -49,6 +50,7 @@ end
 T["adapters.ollama"]["template_no_examples"] = function()
   eq(adapter.template({ system = "a", message = "%s" }, "m"), {
     model = "m",
+    options = { temperature = 0 },
     stream = false,
     messages = {
       { role = "system", content = "a" },
@@ -60,6 +62,7 @@ end
 T["adapters.ollama"]["template_message_only"] = function()
   eq(adapter.template({ message = "%s" }, "m"), {
     model = "m",
+    options = { temperature = 0 },
     stream = false,
     messages = {
       { role = "user", content = "%s" },
