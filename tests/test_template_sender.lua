@@ -17,7 +17,7 @@ local adapter_mock = {
     return "endpoint"
   end,
   post_headers = function()
-    return { headers = { foo = "bar" } }
+    return { foo = "bar" }
   end,
   template = function()
     return '{fooz = "barz"}'

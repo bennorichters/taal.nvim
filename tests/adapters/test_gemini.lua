@@ -34,16 +34,14 @@ T["adapters.gemini"]["endpoint"] = function()
   eq(adapter:endpoint("m", true), "url/v1beta/models/m:streamGenerateContent?alt=sse")
 end
 
-T["adapters.gemini"]["post_headers"] = function()
+T["adapters.gemini"][""] = function()
   local env_var = "GEMINI_API_KEY"
   local old_env_api_key = os.getenv(env_var)
   vim.fn.setenv(env_var, "test_key")
 
   eq(adapter.post_headers(), {
-    headers = {
-      content_type = "application/json",
-      x_goog_api_key = "test_key",
-    },
+    content_type = "application/json",
+    x_goog_api_key = "test_key",
   })
 
   if old_env_api_key then

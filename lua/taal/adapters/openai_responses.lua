@@ -28,7 +28,7 @@ return {
 
   post_headers = function()
     local key = os.getenv("OPENAI_API_KEY")
-    return { headers = { content_type = "application/json", authorization = "Bearer " .. key } }
+    return { content_type = "application/json", authorization = "Bearer " .. key }
   end,
 
   template = function(template, model)

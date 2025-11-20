@@ -31,11 +31,9 @@ return {
   post_headers = function()
     local key = os.getenv("CLAUDE_API_KEY")
     return {
-      headers = {
-        content_type = "application/json",
-        anthropic_version = "2023-06-01",
-        x_api_key = key,
-      },
+      content_type = "application/json",
+      anthropic_version = "2023-06-01",
+      x_api_key = key,
     }
   end,
 

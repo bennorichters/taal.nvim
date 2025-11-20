@@ -32,10 +32,7 @@ return function(post, response_writer, timeout)
   local function send_request(endpoint, headers, body, extra_opts)
     log.fmt_trace("posting with endpoint=%s, body=%s, extra_opts=%s", endpoint, body, extra_opts)
 
-    local opts = {
-      headers = headers.headers, -- TODO: ugly
-      body = body,
-    }
+    local opts = { headers = headers, body = body }
 
     if extra_opts then
       opts = vim.tbl_deep_extend("error", opts, extra_opts)

@@ -58,7 +58,7 @@ return {
 
   post_headers = function()
     local key = os.getenv("GEMINI_API_KEY")
-    return { headers = { content_type = "application/json", x_goog_api_key = key } }
+    return { content_type = "application/json", x_goog_api_key = key }
   end,
 
   template = convert,

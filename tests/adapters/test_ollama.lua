@@ -77,7 +77,7 @@ T["adapters.ollama"]["template_stream"] = function()
 end
 
 T["adapters.ollama"]["post_headers"] = function()
-  eq(adapter.post_headers(), { headers = { content_type = "application/json" } })
+  eq(adapter.post_headers(), { content_type = "application/json" })
 end
 
 T["adapters.ollama"]["parse"] = function()

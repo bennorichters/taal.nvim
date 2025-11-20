@@ -27,7 +27,7 @@ return {
   end,
 
   post_headers = function()
-    return { headers = { content_type = "application/json" } }
+    return { content_type = "application/json" }
   end,
 
   template = function(template, model)

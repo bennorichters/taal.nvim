@@ -77,11 +77,9 @@ T["adapters.claude"]["post_headers"] = function()
   vim.fn.setenv(env_var, "test_key")
 
   eq(adapter.post_headers(), {
-    headers = {
-      content_type = "application/json",
-      anthropic_version = "2023-06-01",
-      x_api_key = "test_key",
-    },
+    content_type = "application/json",
+    anthropic_version = "2023-06-01",
+    x_api_key = "test_key",
   })
 
   if old_env_api_key then

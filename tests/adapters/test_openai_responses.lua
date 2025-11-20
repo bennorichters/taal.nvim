@@ -59,10 +59,8 @@ T["adapters.openai_responses"]["post_headers"] = function()
   vim.fn.setenv("OPENAI_API_KEY", "test_key")
 
   eq(adapter.post_headers(), {
-    headers = {
-      content_type = "application/json",
-      authorization = "Bearer " .. "test_key",
-    },
+    content_type = "application/json",
+    authorization = "Bearer " .. "test_key",
   })
 
   if old_env_api_key then
@@ -88,7 +86,7 @@ T["adapters.openai_responses"]["parse"] = function()
 end
 
 T["adapters.openai_responses"]["parse.invalid"] = function()
-  eq( adapter.parse(""), nil)
+  eq(adapter.parse(""), nil)
 end
 
 T["adapters.openai_responses"]["parse_stream"] = function()
