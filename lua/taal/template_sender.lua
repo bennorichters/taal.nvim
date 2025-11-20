@@ -52,7 +52,8 @@ return function(post, response_writer, timeout)
     local adapter = adapter_model.adapter
 
     local endpoint = adapter:endpoint(adapter_model.model)
-    local headers = adapter.post_headers().headers
+    local post_headers_result = adapter.post_headers()
+    local headers = post_headers_result.headers
 
     local adapter_template = adapter.template(template, adapter_model.model)
     local body_content = format_template(adapter_template, user_input)
@@ -96,7 +97,8 @@ return function(post, response_writer, timeout)
     local adapter = adapter_model.adapter
 
     local endpoint = adapter:endpoint(adapter_model.model, true)
-    local headers = adapter.post_headers().headers
+    local post_headers_result = adapter.post_headers()
+    local headers = post_headers_result.headers
 
     local adapter_template = adapter.template_stream(template, adapter_model.model)
     local body_content = format_template(adapter_template, user_input)
