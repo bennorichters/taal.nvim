@@ -28,7 +28,7 @@ local function on_chunk_wrap(parse_stream, writer, done_callback)
   end
 end
 
-return function(post, response_writer, timeout)
+return function(post, ResponseWriter, timeout)
   local function send_request(endpoint, headers, body, extra_opts)
     log.fmt_trace("posting with endpoint=%s, body=%s, extra_opts=%s", endpoint, body, extra_opts)
 
@@ -98,7 +98,7 @@ return function(post, response_writer, timeout)
     local adapter_template = adapter.template_stream(template, adapter_model.model)
     local body_content = format_template(adapter_template, user_input)
 
-    local writer = response_writer:new()
+    local writer = ResponseWriter:new()
     writer:create_scratch_buffer()
 
     local on_chunk = on_chunk_wrap(adapter.parse_stream, writer, callback)

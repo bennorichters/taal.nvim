@@ -6,7 +6,7 @@ M.setup = function(user_cfg)
   local config = require("taal.config")
   local log = require("taal.log")
   local post = require("plenary.curl").post
-  local response_writer = require("taal.response_writer")
+  local ResponseWriter = require("taal.response_writer")
   local template_sender_factory = require("taal.template_sender")
 
   config.setup(user_cfg)
@@ -15,7 +15,7 @@ M.setup = function(user_cfg)
   log.trace("taal.nvim log started")
   log.fmt_info("user config: %s", user_cfg)
 
-  local template_sender = template_sender_factory(post, response_writer, config.settings.timeout)
+  local template_sender = template_sender_factory(post, ResponseWriter, config.settings.timeout)
   buffer_helper.setup()
 
   commands.setup(
