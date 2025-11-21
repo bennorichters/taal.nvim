@@ -1,10 +1,10 @@
-local Cmd = require("taal.commands")
+local cmd = require("taal.commands")
 local Helpers = require("tests.helpers")
 local Mock = require("tests.mock")
 
 local eq = MiniTest.expect.equality
 
-Cmd.setup(Mock.buffhelp, Mock.template_sender, Mock.adapter_model, Mock.template_fn)
+cmd.setup(Mock.buffhelp, Mock.template_sender, Mock.adapter_model, Mock.template_fn)
 
 Helpers.enable_log()
 T = MiniTest.new_set({ hooks = {
@@ -55,7 +55,7 @@ local function get_info4(buf)
 end
 
 T["grammar"] = function()
-  Cmd.grammar({ fargs = {} })
+  cmd.grammar({ fargs = {} })
 
   local buf_nr = Mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
@@ -63,7 +63,7 @@ T["grammar"] = function()
   local info3 = get_info3(buf_nr)
   info3.hl_id = 102
 
-  eq(Cmd.all_diff_info, { info1, info3 })
+  eq(cmd.all_diff_info, { info1, info3 })
 end
 
 T["grammar_scratch"] = function()
@@ -76,7 +76,7 @@ T["grammar_scratch"] = function()
     select_called = true
   end
 
-  Cmd.grammar({ fargs = { "scratch" } })
+  cmd.grammar({ fargs = { "scratch" } })
 
   eq(Mock.args_store.template_sender.stream[1][1], Mock.values.template_sender.templates.grammar)
   eq(select_called, true)
@@ -92,7 +92,7 @@ T["grammar_scratch"] = function()
   local info4 = get_info4(scratch_buf)
   info4.hl_id = 104
 
-  eq(Cmd.all_diff_info, { info1, info2, info3, info4 })
+  eq(cmd.all_diff_info, { info1, info2, info3, info4 })
 
   info1 = get_info1(buf)
   info2 = get_info2(scratch_buf)
@@ -104,7 +104,7 @@ T["grammar_scratch"] = function()
 end
 
 T["grammar_inlay"] = function()
-  Cmd.grammar({ fargs = { "inlay" } })
+  cmd.grammar({ fargs = { "inlay" } })
 
   local buf_nr = Mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
@@ -115,26 +115,26 @@ T["grammar_inlay"] = function()
   info3.hl_id = 102
   info3.inlay_id = 202
 
-  eq(Cmd.all_diff_info, { info1, info3 })
+  eq(cmd.all_diff_info, { info1, info3 })
 end
 
 T["hover.first_word"] = function()
   local buf_nr = Mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
-  Cmd.all_diff_info = { vim.deepcopy(info1) }
+  cmd.all_diff_info = { vim.deepcopy(info1) }
 
   Mock.values.buffer_helper.column_nr = 15
 
-  Cmd.hover()
+  cmd.hover()
   eq(Mock.args_store.buffer_helper.show_hover, { { "brighter" } })
 end
 
 T["hover.before_first_word"] = function()
   local buf_nr = Mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
-  Cmd.all_diff_info = { vim.deepcopy(info1) }
+  cmd.all_diff_info = { vim.deepcopy(info1) }
 
-  Cmd.hover()
+  cmd.hover()
   eq(Mock.args_store.buffer_helper.show_hover, nil)
 end
 
@@ -142,11 +142,11 @@ T["hover.empty_word"] = function()
   local buf_nr = Mock.buffhelp.current_buffer_nr()
   local info1 = get_info1(buf_nr)
   info1.alt_text = ""
-  Cmd.all_diff_info = { vim.deepcopy(info1) }
+  cmd.all_diff_info = { vim.deepcopy(info1) }
 
   Mock.values.buffer_helper.column_nr = 15
 
-  Cmd.hover()
+  cmd.hover()
   eq(Mock.args_store.buffer_helper.show_hover, { { "[REMOVE]" } })
 end
 
@@ -159,9 +159,9 @@ T["apply_suggestion.apply_to_first_word"] = function()
   local info3 = get_info3(buf_nr)
   info3.hl_id = 52
 
-  Cmd.all_diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
+  cmd.all_diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
 
-  Cmd.apply_suggestion()
+  cmd.apply_suggestion()
 
   local info3_updated = {
     alt_text = "yesterday.",
@@ -179,7 +179,7 @@ T["apply_suggestion.apply_to_first_word"] = function()
   eq(Mock.args_store.buffer_helper.add_hl_group, { { info3_updated } })
 
   info3_updated.hl_id = 101
-  eq(Cmd.all_diff_info, { info3_updated })
+  eq(cmd.all_diff_info, { info3_updated })
 
   eq(
     Mock.args_store.buffer_helper.replace_text,
@@ -196,11 +196,11 @@ T["apply_suggestion.apply_to_second_word"] = function()
   local info3 = get_info3(buf_nr)
   info3.hl_id = 52
 
-  Cmd.all_diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
+  cmd.all_diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
 
-  Cmd.apply_suggestion()
+  cmd.apply_suggestion()
 
-  eq(Cmd.all_diff_info, { info1 })
+  eq(cmd.all_diff_info, { info1 })
 
   eq(Mock.args_store.buffer_helper.delete_hl_group, { { buf_nr, 52 } })
   eq(Mock.args_store.buffer_helper.delete_inlay, nil)
@@ -230,9 +230,9 @@ T["apply_suggestion.apply_to_first_word.inlay"] = function()
   info3.hl_id = 52
   info3.inlay_id = 62
 
-  Cmd.all_diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
+  cmd.all_diff_info = { vim.deepcopy(info1), vim.deepcopy(info3) }
 
-  Cmd.apply_suggestion()
+  cmd.apply_suggestion()
 
   local info3_updated = {
     alt_text = "yesterday.",
@@ -254,13 +254,13 @@ T["apply_suggestion.apply_to_first_word.inlay"] = function()
   eq(Mock.args_store.buffer_helper.add_inlay, { { info3_updated } })
   info3_updated.inlay_id = 201
 
-  eq(Cmd.all_diff_info, { info3_updated })
+  eq(cmd.all_diff_info, { info3_updated })
 end
 
 T["set_spelllang.normal_behaviour"] = function()
   local old_spelllang = vim.o.spelllang
 
-  Cmd.set_spelllang()
+  cmd.set_spelllang()
   eq(vim.o.spelllang, "hu")
   eq(Mock.args_store.template_sender.send[1][2], Mock.values.template_sender.templates.language)
 
@@ -276,7 +276,7 @@ T["interact.normal_behaviour"] = function()
     return on_confirm(user_input)
   end
 
-  Cmd.interact()
+  cmd.interact()
 
   eq(Mock.args_store.template_sender.stream[1][2], Mock.values.template_sender.templates.interact)
   eq(
