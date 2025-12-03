@@ -147,7 +147,7 @@ This example uses Gemini and the model gemini-2.5-flash as the default LLM (beca
   require("taal").setup({ 
     commands = {
       interact = { 
-	    adapter = "claude", model="claude-sonnet-4-5-20250929", 
+	    adapter = "claude", model = "claude-sonnet-4-5-20250929", 
       }
     }
   })
