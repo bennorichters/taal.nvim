@@ -49,7 +49,7 @@ M.add_hl_group = function(info)
 end
 
 M.delete_hl_group = function(buf_nr, hl_id)
-  log.fmt_trace("delete_hl_group buf_nr=%s, hl_id=%s", M.namespace_hl, buf_nr, hl_id)
+  log.fmt_trace("delete_hl_group buf_nr=%s, hl_id=%s", buf_nr, hl_id)
   vim.api.nvim_buf_del_extmark(buf_nr, M.namespace_hl, hl_id)
 end
 
@@ -68,7 +68,7 @@ M.add_inlay = function(info)
 end
 
 M.delete_inlay = function(buf_nr, inlay_id)
-  log.fmt_trace("delete_inlay buf_nr=%s, inlay_id=%s", M.namespace_hl, buf_nr, inlay_id)
+  log.fmt_trace("delete_inlay buf_nr=%s, inlay_id=%s", buf_nr, inlay_id)
   vim.api.nvim_buf_del_extmark(buf_nr, M.namespace_inlay, inlay_id)
 end
 
