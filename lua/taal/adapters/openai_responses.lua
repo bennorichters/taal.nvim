@@ -27,7 +27,7 @@ return {
   end,
 
   post_headers = function()
-    local key = os.getenv("OPENAI_API_KEY")
+    local key = os.getenv("OPENAI_API_KEY") or ""
     return { content_type = "application/json", authorization = "Bearer " .. key }
   end,
 
