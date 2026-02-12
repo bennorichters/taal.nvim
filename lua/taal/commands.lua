@@ -109,6 +109,8 @@ end
 local function grammar_inline(inlay)
   local original = M.buffer_helper.text_under_cursor()
   local template = M.template_fn("grammar", tpl_grammar, { original })
+  vim.notify("Checking grammar...", vim.log.levels.INFO)
+  vim.cmd("redraw")
   local ai_text = M.template_sender.send(M.adapter_model["grammar"], template, original)
 
   if not ai_text then
@@ -213,6 +215,8 @@ end
 M.set_spelllang = function()
   local text_under_cursor = M.buffer_helper.text_under_cursor()
   local template = M.template_fn("set_spelllang", tpl_language, text_under_cursor)
+  vim.notify("Detecting language...", vim.log.levels.INFO)
+  vim.cmd("redraw")
   local code = M.template_sender.send(M.adapter_model["set_spelllang"], template, text_under_cursor)
   if code then
     log.fmt_info("setting spelllang to: %s", code)
