@@ -2,7 +2,7 @@
 
 ## Project overview
 
-taal.nvim is a Neovim plugin written in Lua that uses LLMs (Claude, Gemini, OpenAI) to check and improve grammar and spelling of natural language text. It highlights errors, shows word-level diffs, and can apply suggestions individually or all at once.
+taal.nvim is a Neovim plugin written in Lua that uses LLMs (Claude, Gemini, OpenAI) to check and improve grammar and spelling of natural language text. It highlights errors, shows word-level diffs, and can apply suggestions individually or all at once. There is also an Ollama adapter, but it is not documented for end users in README.md because it is not reliable enough for production use. It is useful for testing since it's free.
 
 ## Directory structure
 
