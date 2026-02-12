@@ -267,6 +267,32 @@ T["set_spelllang.normal_behaviour"] = function()
   vim.o.spelllang = old_spelllang
 end
 
+T["interact.no_visual_selection"] = function()
+  local old_input = vim.ui.input
+  local notify_called = false
+  local old_notify = vim.notify
+
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.ui.input = function(_opts, on_confirm)
+    return on_confirm("user input")
+  end
+
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.notify = function()
+    notify_called = true
+  end
+
+  Mock.values.buffer_helper.visual_selection = nil
+
+  cmd.interact()
+
+  eq(Mock.args_store.template_sender, nil)
+  eq(notify_called, true)
+
+  vim.ui.input = old_input
+  vim.notify = old_notify
+end
+
 T["interact.normal_behaviour"] = function()
   local old_input = vim.ui.input
 

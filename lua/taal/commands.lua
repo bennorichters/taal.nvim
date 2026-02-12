@@ -223,9 +223,15 @@ M.set_spelllang = function()
 end
 
 M.interact = function()
+  local selection = M.buffer_helper.visual_selection()
+  if not selection then
+    vim.notify("No visual selection found.", vim.log.levels.WARN)
+    return
+  end
+
   vim.ui.input({ prompt = "Give instructions: " }, function(command)
     if command then
-      local template_subs = { command, M.buffer_helper.visual_selection() }
+      local template_subs = { command, selection }
       log.fmt_trace("interact content=%s", template_subs)
       local template = M.template_fn("interact", tpl_interact, template_subs)
       M.template_sender.stream(M.adapter_model["interact"], template, template_subs)
