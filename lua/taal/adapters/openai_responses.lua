@@ -47,8 +47,8 @@ return {
       return nil
     end
 
-    if not type(json.output) == "table" then
-      log.fmt_error("output in body is not a table: %s")
+    if type(json.output) ~= "table" then
+      log.fmt_error("output in body is not a table: %s", json)
       return nil
     end
 

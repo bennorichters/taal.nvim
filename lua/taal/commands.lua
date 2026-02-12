@@ -31,7 +31,9 @@ local function delete_suggestions()
   end
 
   for i = #M.all_diff_info, 1, -1 do
-    table.remove(M.all_diff_info, i)
+    if M.all_diff_info[i].buf_nr == buf_nr then
+      table.remove(M.all_diff_info, i)
+    end
   end
 end
 

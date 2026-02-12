@@ -93,7 +93,7 @@ return {
     if
       not (json.delta and json.delta.type and json.delta.type == "text_delta" and json.delta.text)
     then
-      json.fmt_trace('no json.delta.type="text_delta" with json.delta.text found. json=%s', json)
+      log.fmt_trace('no json.delta.type="text_delta" with json.delta.text found. json=%s', json)
       return false, nil
     end
 
